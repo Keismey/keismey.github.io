@@ -16,3 +16,21 @@ Une seule appli à installer sur le téléphone. Chaque jeu s'ouvre dedans, le g
 - `games.js` — la liste des jeux et la lecture de leur progression
 - `sw.js` — mode hors ligne du hub (ne touche pas aux jeux)
 - `fonts/` — Alegreya et Alegreya Sans (licence SIL OFL, voir `fonts/OFL.txt`)
+
+## Prévenir les joueurs (alertes)
+
+Les joueurs qui ont touché « Me prévenir » reçoivent une notification pour chaque nouvelle entrée
+de `announcements.json`. Ajouter une entrée **à la fin** de la liste, avec un `id` unique :
+
+```json
+{
+  "id": "2026-11-02-abysses-1-1",
+  "date": "2026-11-02",
+  "url": "/Abysses/",
+  "fr": { "title": "Abysses 1.1", "body": "Nouvelle zone : …" },
+  "en": { "title": "Abysses 1.1", "body": "New area: …" }
+}
+```
+
+Pas de serveur : le hub vérifie en arrière-plan (hub installé, Android/Chrome, environ une fois par jour)
+et à chaque ouverture. Seules les annonces publiées après l'activation sont notifiées, 3 au plus d'un coup.
