@@ -1,0 +1,22 @@
+{
+  "id": "/",
+  "name": "Keismey Studio",
+  "short_name": "Keismey",
+  "description": "Tous les jeux de Keismey Studio, au même endroit.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#10181b",
+  "theme_color": "#10181b",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Abysses", "url": "/Abysses/", "icons": [{ "src": "/Abysses/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Les Chasseurs de Brume-Haute", "short_name": "Brume-Haute", "url": "/Les-Chasseurs-de-Brume-Haute/", "icons": [{ "src": "/Les-Chasseurs-de-Brume-Haute/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+  ]
+}

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keismey Studio</title>
+<meta name="description" content="Tous les jeux de Keismey Studio, au même endroit.">
+<meta name="theme-color" content="#10181b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Keismey">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preload" href="fonts/alegreya.woff" as="font" type="font/woff" crossorigin>
+<style>
+@font-face{font-family:"Alegreya";src:url(fonts/alegreya.woff) format("woff");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Alegreya";src:url(fonts/alegreya-italic.woff) format("woff");font-weight:400 900;font-style:italic;font-display:swap}
+@font-face{font-family:"Alegreya Sans";src:url(fonts/alegreya-sans-400.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Alegreya Sans";src:url(fonts/alegreya-sans-700.woff) format("woff");font-weight:700;font-display:swap}
+
+:root{
+  --ink:#10181b;
+  --parch:#efe6d0;
+  --muted:rgba(239,230,208,.7);
+  --faint:rgba(239,230,208,.14);
+  --ember:#e8923a;
+  --bg:var(--ink);
+  --accent:var(--ember);
+  --serif:"Alegreya",Georgia,"Times New Roman",serif;
+  --sans:"Alegreya Sans","Segoe UI",Roboto,system-ui,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;background:var(--ink)}
+body{
+  margin:0;min-height:100vh;min-height:100dvh;
+  background:var(--bg);color:var(--parch);
+  font:400 1.0625rem/1.5 var(--sans);
+  transition:background-color .9s ease;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+}
+/* halo : la couverture du jeu à l'écran, très floue, éclaire la pièce */
+.halo{position:fixed;inset:-20vh -20vw auto;height:90vh;z-index:0;pointer-events:none;
+  background-size:cover;background-position:center;filter:blur(70px) saturate(1.3);opacity:.32;
+  transition:opacity .6s ease;mask-image:linear-gradient(#000 30%,transparent);-webkit-mask-image:linear-gradient(#000 30%,transparent)}
+.halo.swap{opacity:0}
+
+.wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 40px)}
+
+header{display:flex;align-items:center;gap:12px;min-height:48px}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.mark img{width:36px;height:36px;border-radius:10px;display:block}
+.mark span{font:italic 700 1.375rem/1 var(--serif);letter-spacing:.01em}
+.mark small{display:block;font:400 .8125rem/1.2 var(--sans);color:var(--muted);font-style:normal;letter-spacing:0;margin-top:3px}
+header .grow{flex:1}
+.install{font:700 .9375rem/1 var(--sans);color:var(--ink);background:var(--parch);border:0;border-radius:999px;
+  padding:11px 16px;min-height:40px;cursor:pointer}
+.install[hidden]{display:none}
+
+h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter-spacing:-.01em;max-width:14ch}
+.lede{margin:0 0 30px;color:var(--muted);max-width:36ch}
+
+.games{display:grid;gap:44px}
+@media (min-width:880px){.games{grid-template-columns:1fr 1fr;gap:40px 32px}}
+
+.game{--g-accent:var(--accent)}
+.cover{position:relative;display:block;aspect-ratio:16/10;border-radius:22px;overflow:hidden;background:rgba(0,0,0,.35);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.06) inset}
+.cover>img:first-child{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.45))}
+.cover .icon{position:absolute;left:14px;bottom:14px;z-index:1;width:54px;height:54px;border-radius:14px;
+  box-shadow:0 6px 18px rgba(0,0,0,.5);object-fit:cover}
+.badge{position:absolute;right:12px;top:12px;z-index:1;font:700 .8125rem/1 var(--sans);
+  background:var(--g-accent);color:var(--ink);padding:7px 11px;border-radius:999px}
+
+.genre{margin:18px 0 2px;color:var(--g-accent);font-weight:700;font-size:.9375rem}
+.game h2{font:700 clamp(1.875rem,7.5vw,2.625rem)/1.04 var(--serif);margin:0 0 8px;letter-spacing:-.005em;text-wrap:balance}
+.tagline{margin:0 0 14px;color:var(--muted);max-width:44ch}
+
+.state{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px;padding:0;list-style:none}
+.state li{font-size:.9375rem;padding:5px 11px;border-radius:999px;background:var(--faint);line-height:1.3}
+.state li.lead{background:none;padding-left:0;color:var(--parch);font-weight:700}
+.state li.quiet{background:none;padding-left:0;color:var(--muted)}
+
+.actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px}
+.play{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;
+  border-radius:999px;background:var(--g-accent);color:var(--ink);text-decoration:none;
+  font:700 1.0625rem/1 var(--sans);box-shadow:0 10px 26px -12px var(--g-accent)}
+.play svg{width:16px;height:16px}
+.play:active{transform:scale(.97)}
+.alt{color:var(--muted);font-size:.9375rem;text-underline-offset:3px}
+.updated{width:100%;margin:12px 0 0;color:var(--muted);font-size:.875rem}
+
+footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--faint);color:var(--muted);font-size:.875rem;display:grid;gap:8px}
+footer p{margin:0;max-width:52ch}
+.ios[hidden]{display:none}
+
+a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offset:3px;border-radius:12px}
+.play:focus-visible{border-radius:999px}
+
+/* une seule entrée en scène, au chargement */
+@media (prefers-reduced-motion:no-preference){
+  .enter .game{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+  .enter .game:nth-child(2){animation-delay:.08s}.enter .game:nth-child(3){animation-delay:.16s}.enter .game:nth-child(n+4){animation-delay:.22s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}}
+}
+@media (prefers-reduced-motion:reduce){body,.halo{transition:none}}
+</style>
+</head>
+<body>
+<div class="halo" id="halo" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <a class="mark" href="./" aria-label="Keismey Studio, accueil">
+      <img src="icons/icon-192.png" alt="" width="36" height="36">
+      <span>Keismey Studio<small id="count"></small></span>
+    </a>
+    <div class="grow"></div>
+    <button class="install" id="install" hidden>Installer</button>
+  </header>
+
+  <h1>À quoi on joue&nbsp;?</h1>
+  <p class="lede">Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.</p>
+
+  <main class="games enter" id="games"></main>
+
+  <footer>
+    <p class="ios" id="ios-hint" hidden>Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.</p>
+    <p>Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.</p>
+  </footer>
+</div>
+
+<script src="games.js"></script>
+<script>
+(() => {
+  const STORE = 'keismey-hub';
+  const OWNER = 'Keismey';
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const val = v => typeof v === 'function' ? v() : v;
+
+  const load = () => { try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return {}; } };
+  const save = d => { try { localStorage.setItem(STORE, JSON.stringify(d)); } catch (e) {} };
+  let hub = load();
+  hub.launched = hub.launched || {};
+
+  const games = (window.GAMES || []).slice();
+  $('#count').textContent = games.length + (games.length > 1 ? ' jeux' : ' jeu');
+
+  /* ---------- dates de mise à jour (GitHub) ---------- */
+  function ago(iso) {
+    const d = new Date(iso), now = new Date();
+    const day = x => new Date(x.getFullYear(), x.getMonth(), x.getDate());
+    const n = Math.round((day(now) - day(d)) / 864e5);
+    if (n <= 0) return "aujourd'hui";
+    if (n === 1) return 'hier';
+    if (n < 30) return 'il y a ' + n + ' jours';
+    return 'le ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  async function pushes() {
+    const c = hub.gh;
+    if (c && Date.now() - c.at < 20 * 60e3) return c.map;
+    try {
+      const r = await fetch('https://api.github.com/users/' + OWNER + '/repos?per_page=100', { headers: { Accept: 'application/vnd.github+json' } });
+      if (!r.ok) throw 0;
+      const map = {};
+      for (const x of await r.json()) map[x.name.toLowerCase()] = x.pushed_at;
+      hub.gh = { at: Date.now(), map }; save(hub);
+      return map;
+    } catch (e) { return c ? c.map : null; }
+  }
+
+  /* ---------- rendu ---------- */
+  const playIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>';
+
+  function card(g, pushedAt) {
+    let state = null;
+    try { state = g.progress ? g.progress() : null; } catch (e) { state = null; }
+    const last = hub.launched[g.id];
+    const fresh = pushedAt && last && new Date(pushedAt).getTime() > last;
+    const cta = state ? 'Reprendre' : 'Jouer';
+    const icon = g.icon || (g.path + 'icons/icon-192.png');
+    const stateHtml = state
+      ? '<li class="lead">Partie en cours</li>' + state.map(s => '<li>' + esc(s) + '</li>').join('')
+      : '<li class="quiet">Pas encore de partie</li>';
+    const extra = (g.extra || []).map(x => '<a class="alt" data-launch="' + esc(g.id) + '" href="' + esc(x.path) + '">' + esc(x.label) + '</a>').join('');
+    return '<article class="game" data-id="' + esc(g.id) + '" style="--g-accent:' + esc(g.accent || 'var(--ember)') + '">' +
+      '<a class="cover" data-launch="' + esc(g.id) + '" href="' + esc(g.path) + '" tabindex="-1" aria-hidden="true">' +
+        '<img src="' + esc(val(g.cover)) + '" alt="" loading="lazy" decoding="async" style="object-position:' + esc(g.focus || 'center') + '">' +
+        '<img class="icon" src="' + esc(icon) + '" alt="" loading="lazy">' +
+        (fresh ? '<span class="badge">Nouvelle version</span>' : '') +
+      '</a>' +
+      '<p class="genre">' + esc(g.genre || '') + '</p>' +
+      '<h2>' + esc(g.name) + '</h2>' +
+      '<p class="tagline">' + esc(g.tagline || '') + '</p>' +
+      '<ul class="state">' + stateHtml + '</ul>' +
+      '<div class="actions">' +
+        '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(g.path) + '">' + playIcon + cta + '</a>' + extra +
+        (pushedAt ? '<p class="updated">Mis à jour ' + ago(pushedAt) + '</p>' : '') +
+      '</div>' +
+    '</article>';
+  }
+
+  let map = (hub.gh && hub.gh.map) || null;
+  let lastHtml = '';
+  function render() {
+    hub = load(); hub.launched = hub.launched || {};
+    const order = games.map((g, i) => [g, i]).sort((a, b) => ((hub.launched[b[0].id] || 0) - (hub.launched[a[0].id] || 0)) || a[1] - b[1]).map(x => x[0]);
+    const html = order.map(g => card(g, map && map[(g.repo || '').toLowerCase()])).join('');
+    if (html === lastHtml) return;
+    lastHtml = html;
+    $('#games').innerHTML = html;
+    current = null;
+    watch();
+  }
+
+  /* ---------- la pièce prend la couleur du jeu à l'écran ---------- */
+  const meta = document.querySelector('meta[name=theme-color]');
+  const halo = $('#halo');
+  let current = null, io;
+  function setActive(id) {
+    if (id === current) return;
+    current = id;
+    const g = games.find(x => x.id === id); if (!g) return;
+    document.documentElement.style.setProperty('--bg', g.color || '#10181b');
+    document.documentElement.style.setProperty('--accent', g.accent || '#e8923a');
+    meta.setAttribute('content', g.color || '#10181b');
+    halo.classList.add('swap');
+    setTimeout(() => { halo.style.backgroundImage = 'url("' + val(g.cover) + '")'; halo.classList.remove('swap'); }, 250);
+  }
+  function watch() {
+    if (io) io.disconnect();
+    const els = [...document.querySelectorAll('.game')];
+    if (!els.length) return;
+    setActive(els[0].dataset.id);
+    if (!('IntersectionObserver' in window)) return;
+    const seen = new Map();
+    io = new IntersectionObserver(es => {
+      es.forEach(e => seen.set(e.target.dataset.id, e.intersectionRatio));
+      let best = null, r = 0.35;
+      seen.forEach((v, k) => { if (v > r) { r = v; best = k; } });
+      if (best) setActive(best);
+    }, { threshold: [0, .2, .35, .5, .65, .8, 1] });
+    els.forEach(el => io.observe(el));
+  }
+
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-launch]');
+    if (!a) return;
+    hub = load(); hub.launched = hub.launched || {};
+    hub.launched[a.dataset.launch] = Date.now();
+    save(hub);
+  });
+
+  render();
+  setTimeout(() => $('#games').classList.remove('enter'), 1200);
+  pushes().then(m => { if (m) { map = m; setTimeout(render, Math.max(0, 1250 - performance.now())); } });
+  // retour depuis un jeu : rafraîchir la progression
+  addEventListener('pageshow', e => { if (e.persisted) render(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
+
+  /* ---------- installation ---------- */
+  const standalone = matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone;
+  let deferred = null;
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; $('#install').hidden = false; });
+  $('#install').addEventListener('click', async () => {
+    if (!deferred) return;
+    deferred.prompt();
+    await deferred.userChoice.catch(() => {});
+    deferred = null; $('#install').hidden = true;
+  });
+  addEventListener('appinstalled', () => { $('#install').hidden = true; });
+  if (!standalone && /iphone|ipad|ipod/i.test(navigator.userAgent)) $('#ios-hint').hidden = false;
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+})();
+</script>
+</body>
+</html>
