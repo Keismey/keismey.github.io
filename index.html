@@ -60,6 +60,12 @@ header .grow{flex:1}
 .install{font:700 .9375rem/1 var(--sans);color:var(--ink);background:var(--parch);border:0;border-radius:999px;
   padding:11px 16px;min-height:40px;cursor:pointer}
 .install[hidden]{display:none}
+.lang{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset}
+.lang button{min-width:40px;min-height:34px;padding:0 10px;border:0;border-radius:999px;background:none;color:var(--muted);
+  font:700 .875rem/1 var(--sans);letter-spacing:.04em;cursor:pointer;transition:background-color .2s,color .2s}
+.lang button[aria-pressed=true]{background:var(--parch);color:var(--ink)}
+.fronly{margin:-6px 0 14px;color:var(--muted);font-size:.875rem;font-style:italic}
+.list .fronly{display:none}
 
 h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter-spacing:-.01em;max-width:14ch}
 .lede{margin:0 0 22px;color:var(--muted);max-width:36ch}
@@ -145,27 +151,31 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 <div class="halo" id="halo" aria-hidden="true"></div>
 <div class="wrap">
   <header>
-    <a class="mark" href="./" aria-label="Keismey Studio, accueil">
+    <a class="mark" href="./" data-i18n-aria="home" aria-label="Keismey Studio, accueil">
       <img src="icons/icon-192.png" alt="" width="36" height="36">
       <span>Keismey Studio<small id="count"></small></span>
     </a>
     <div class="grow"></div>
-    <button class="install" id="install" hidden>Installer</button>
+    <button class="install" id="install" data-i18n="install" hidden>Installer</button>
+    <div class="lang" role="group" data-i18n-aria="lang" aria-label="Langue">
+      <button type="button" data-lang="fr" lang="fr" aria-pressed="true" aria-label="Français">FR</button>
+      <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+    </div>
   </header>
 
-  <h1>À quoi on joue&nbsp;?</h1>
-  <p class="lede">Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.</p>
+  <h1 data-i18n="title">À quoi on joue&nbsp;?</h1>
+  <p class="lede" data-i18n="lede">Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.</p>
 
-  <div class="view" role="group" aria-label="Affichage des jeux">
-    <button type="button" data-view="grand" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="8" rx="2" fill="currentColor"/><rect x="1.5" y="11.5" width="13" height="3" rx="1.5" fill="currentColor" opacity=".55"/></svg>Grand</button>
-    <button type="button" data-view="liste" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="3" width="7" height="2" rx="1" fill="currentColor"/><rect x="1.5" y="10" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="11" width="7" height="2" rx="1" fill="currentColor"/></svg>Liste</button>
+  <div class="view" role="group" data-i18n-aria="view" aria-label="Affichage des jeux">
+    <button type="button" data-view="grand" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="8" rx="2" fill="currentColor"/><rect x="1.5" y="11.5" width="13" height="3" rx="1.5" fill="currentColor" opacity=".55"/></svg><span data-i18n="big">Grand</span></button>
+    <button type="button" data-view="liste" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="3" width="7" height="2" rx="1" fill="currentColor"/><rect x="1.5" y="10" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="11" width="7" height="2" rx="1" fill="currentColor"/></svg><span data-i18n="list">Liste</span></button>
   </div>
 
   <main class="games enter" id="games"></main>
 
   <footer>
-    <p class="ios" id="ios-hint" hidden>Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.</p>
-    <p>Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.</p>
+    <p class="ios" id="ios-hint" data-i18n="ios" hidden>Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.</p>
+    <p data-i18n="foot">Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.</p>
   </footer>
 </div>
 
@@ -184,17 +194,62 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   hub.launched = hub.launched || {};
 
   const games = (window.GAMES || []).slice();
-  $('#count').textContent = games.length + (games.length > 1 ? ' jeux' : ' jeu');
+
+  /* ---------- langue ---------- */
+  const STR = {
+    fr: {
+      home: 'Keismey Studio, accueil', lang: 'Langue', install: 'Installer',
+      title: 'À quoi on joue\u00a0?',
+      lede: "Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.",
+      view: 'Affichage des jeux', big: 'Grand', list: 'Liste',
+      ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
+      foot: "Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.",
+      games: n => n + (n > 1 ? ' jeux' : ' jeu'),
+      play: 'Jouer', resume: 'Reprendre', inProgress: 'Partie en cours', noSave: 'Pas encore de partie',
+      fresh: 'Nouvelle version', updated: 'Mis à jour ', frOnly: '', sep: ' : ',
+      today: "aujourd'hui", yesterday: 'hier', daysAgo: n => 'il y a ' + n + ' jours', on: d => 'le ' + d, locale: 'fr-FR'
+    },
+    en: {
+      home: 'Keismey Studio, home', lang: 'Language', install: 'Install',
+      title: 'What are we playing?',
+      lede: 'The last game you launched comes first. Your progress shows up here as soon as you have a save.',
+      view: 'Game layout', big: 'Large', list: 'List',
+      ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
+      foot: 'Games open inside the hub. Swipe back to return here.',
+      games: n => n + (n === 1 ? ' game' : ' games'),
+      play: 'Play', resume: 'Resume', inProgress: 'Game in progress', noSave: 'No save yet',
+      fresh: 'New version', updated: 'Updated ', frOnly: 'In French only for now.', sep: ': ',
+      today: 'today', yesterday: 'yesterday', daysAgo: n => n + ' days ago', on: d => 'on ' + d, locale: 'en-GB'
+    }
+  };
+  let lang = hub.lang === 'en' ? 'en' : 'fr';
+  const T = () => STR[lang];
+  function applyLang() {
+    const t = T();
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t[el.dataset.i18n]; });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t[el.dataset.i18nAria]));
+    document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
+    $('#count').textContent = t.games(games.length);
+  }
+  applyLang();
+  document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
+    if (b.dataset.lang === lang) return;
+    lang = b.dataset.lang;
+    hub = load(); hub.launched = hub.launched || {}; hub.lang = lang; save(hub);
+    applyLang(); render();
+  }));
 
   /* ---------- dates de mise à jour (GitHub) ---------- */
   function ago(iso) {
     const d = new Date(iso), now = new Date();
     const day = x => new Date(x.getFullYear(), x.getMonth(), x.getDate());
     const n = Math.round((day(now) - day(d)) / 864e5);
-    if (n <= 0) return "aujourd'hui";
-    if (n === 1) return 'hier';
-    if (n < 30) return 'il y a ' + n + ' jours';
-    return 'le ' + d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    const t = T();
+    if (n <= 0) return t.today;
+    if (n === 1) return t.yesterday;
+    if (n < 30) return t.daysAgo(n);
+    return t.on(d.toLocaleDateString(t.locale, { day: 'numeric', month: 'long', year: 'numeric' }));
   }
   async function pushes() {
     const c = hub.gh;
@@ -213,29 +268,34 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   const playIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>';
 
   function card(g, pushedAt) {
+    const t = T();
+    const L = (lang === 'en' && g.en) || {};
+    const pick = k => (L[k] !== undefined ? L[k] : g[k]);
     let state = null;
-    try { state = g.progress ? g.progress() : null; } catch (e) { state = null; }
+    try { state = g.progress ? g.progress(lang) : null; } catch (e) { state = null; }
     const last = hub.launched[g.id];
     const fresh = pushedAt && last && new Date(pushedAt).getTime() > last;
-    const cta = state ? 'Reprendre' : 'Jouer';
+    const cta = state ? t.resume : t.play;
+    const path = pick('path');
     const icon = g.icon || (g.path + 'icons/icon-192.png');
     const stateHtml = state
-      ? '<li class="lead">Partie en cours</li>' + state.map(s => '<li>' + esc(s) + '</li>').join('')
-      : '<li class="quiet">Pas encore de partie</li>';
-    const extra = (g.extra || []).map(x => '<a class="alt" data-launch="' + esc(g.id) + '" href="' + esc(x.path) + '">' + esc(x.label) + '</a>').join('');
+      ? '<li class="lead">' + t.inProgress + '</li>' + state.map(s => '<li>' + esc(s) + '</li>').join('')
+      : '<li class="quiet">' + t.noSave + '</li>';
+    const extra = (pick('extra') || []).map(x => '<a class="alt" data-launch="' + esc(g.id) + '" href="' + esc(x.path) + '">' + esc(x.label) + '</a>').join('');
     return '<article class="game' + (state ? ' has-save' : '') + '" data-id="' + esc(g.id) + '" style="--g-accent:' + esc(g.accent || 'var(--ember)') + '">' +
-      '<a class="cover" data-launch="' + esc(g.id) + '" href="' + esc(g.path) + '" tabindex="-1" aria-hidden="true">' +
+      '<a class="cover" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" tabindex="-1" aria-hidden="true">' +
         '<img src="' + esc(val(g.cover)) + '" alt="" loading="lazy" decoding="async" style="object-position:' + esc(g.focus || 'center') + '">' +
         '<img class="icon" src="' + esc(icon) + '" alt="" loading="lazy">' +
-        (fresh ? '<span class="badge" title="Nouvelle version">Nouvelle version</span>' : '') +
+        (fresh ? '<span class="badge" title="' + t.fresh + '">' + t.fresh + '</span>' : '') +
       '</a>' +
-      '<p class="genre">' + esc(g.genre || '') + '</p>' +
-      '<h2>' + esc(g.name) + '</h2>' +
-      '<p class="tagline">' + esc(g.tagline || '') + '</p>' +
+      '<p class="genre">' + esc(pick('genre') || '') + '</p>' +
+      '<h2>' + esc(pick('name')) + '</h2>' +
+      '<p class="tagline">' + esc(pick('tagline') || '') + '</p>' +
+      (L.frOnly && t.frOnly ? '<p class="fronly">' + t.frOnly + '</p>' : '') +
       '<ul class="state">' + stateHtml + '</ul>' +
       '<div class="actions">' +
-        '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(g.path) + '" aria-label="' + esc(cta + ' : ' + g.name) + '">' + playIcon + '<span class="lbl">' + cta + '</span></a>' + extra +
-        (pushedAt ? '<p class="updated">Mis à jour ' + ago(pushedAt) + '</p>' : '') +
+        '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" aria-label="' + esc(cta + t.sep + pick('name')) + '">' + playIcon + '<span class="lbl">' + cta + '</span></a>' + extra +
+        (pushedAt ? '<p class="updated">' + t.updated + ago(pushedAt) + '</p>' : '') +
       '</div>' +
     '</article>';
   }
