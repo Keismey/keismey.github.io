@@ -62,10 +62,18 @@ header .grow{flex:1}
 .install[hidden]{display:none}
 
 h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter-spacing:-.01em;max-width:14ch}
-.lede{margin:0 0 30px;color:var(--muted);max-width:36ch}
+.lede{margin:0 0 22px;color:var(--muted);max-width:36ch}
+
+/* choix de l'affichage : grand ou liste */
+.view{display:inline-flex;gap:4px;padding:4px;margin:0 0 26px;border-radius:999px;background:rgba(0,0,0,.28);
+  box-shadow:0 0 0 1px var(--faint) inset}
+.view button{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 15px;border:0;border-radius:999px;
+  background:none;color:var(--muted);font:700 .9375rem/1 var(--sans);cursor:pointer;transition:background-color .2s,color .2s}
+.view button svg{width:16px;height:16px}
+.view button[aria-pressed=true]{background:var(--parch);color:var(--ink)}
 
 .games{display:grid;gap:44px}
-@media (min-width:880px){.games{grid-template-columns:1fr 1fr;gap:40px 32px}}
+@media (min-width:880px){.games:not(.list){grid-template-columns:1fr 1fr;gap:40px 32px}}
 
 .game{--g-accent:var(--accent)}
 .cover{position:relative;display:block;aspect-ratio:16/10;border-radius:22px;overflow:hidden;background:rgba(0,0,0,.35);
@@ -94,6 +102,28 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .play:active{transform:scale(.97)}
 .alt{color:var(--muted);font-size:.9375rem;text-underline-offset:3px}
 .updated{width:100%;margin:12px 0 0;color:var(--muted);font-size:.875rem}
+
+/* ---------- mode liste ---------- */
+.games.list{gap:10px;max-width:760px}
+.list .game{display:grid;grid-template-columns:64px 1fr auto;grid-template-areas:"cover title play" "cover meta play";
+  align-items:center;column-gap:14px;padding:10px 12px 10px 10px;border-radius:20px;background:rgba(0,0,0,.22);
+  box-shadow:0 0 0 1px var(--faint) inset}
+.list .cover{grid-area:cover;width:64px;aspect-ratio:1;border-radius:16px;box-shadow:0 6px 16px -6px rgba(0,0,0,.7);align-self:center}
+.list .cover>img:first-child,.list .cover::after{display:none}
+.list .cover .icon{inset:0;width:100%;height:100%;border-radius:0;box-shadow:none}
+.list .badge{font-size:0;padding:0;width:12px;height:12px;top:4px;right:4px;box-shadow:0 0 0 2px var(--ink)}
+.list .game h2{grid-area:title;align-self:end;font-size:1.3125rem;line-height:1.15;margin:0;text-wrap:pretty}
+.list .genre,.list .state{grid-area:meta;align-self:start;margin:2px 0 0;font-size:.9375rem}
+.list .has-save .genre,.list .game:not(.has-save) .state{display:none}
+.list .state{display:block;color:var(--muted)}
+.list .state li{display:inline;padding:0;background:none;font-size:inherit}
+.list .state li.lead{display:none}
+.list .state li:not(.lead):not(:last-child)::after{content:", "}
+.list .tagline,.list .alt,.list .updated{display:none}
+.list .actions{display:contents}
+.list .play{grid-area:play;width:52px;min-height:52px;padding:0;box-shadow:0 8px 20px -10px var(--g-accent)}
+.list .play svg{width:18px;height:18px;margin-left:3px}
+.list .play .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--faint);color:var(--muted);font-size:.875rem;display:grid;gap:8px}
 footer p{margin:0;max-width:52ch}
@@ -125,6 +155,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 
   <h1>À quoi on joue&nbsp;?</h1>
   <p class="lede">Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.</p>
+
+  <div class="view" role="group" aria-label="Affichage des jeux">
+    <button type="button" data-view="grand" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="8" rx="2" fill="currentColor"/><rect x="1.5" y="11.5" width="13" height="3" rx="1.5" fill="currentColor" opacity=".55"/></svg>Grand</button>
+    <button type="button" data-view="liste" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="3" width="7" height="2" rx="1" fill="currentColor"/><rect x="1.5" y="10" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="11" width="7" height="2" rx="1" fill="currentColor"/></svg>Liste</button>
+  </div>
 
   <main class="games enter" id="games"></main>
 
@@ -188,18 +223,18 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       ? '<li class="lead">Partie en cours</li>' + state.map(s => '<li>' + esc(s) + '</li>').join('')
       : '<li class="quiet">Pas encore de partie</li>';
     const extra = (g.extra || []).map(x => '<a class="alt" data-launch="' + esc(g.id) + '" href="' + esc(x.path) + '">' + esc(x.label) + '</a>').join('');
-    return '<article class="game" data-id="' + esc(g.id) + '" style="--g-accent:' + esc(g.accent || 'var(--ember)') + '">' +
+    return '<article class="game' + (state ? ' has-save' : '') + '" data-id="' + esc(g.id) + '" style="--g-accent:' + esc(g.accent || 'var(--ember)') + '">' +
       '<a class="cover" data-launch="' + esc(g.id) + '" href="' + esc(g.path) + '" tabindex="-1" aria-hidden="true">' +
         '<img src="' + esc(val(g.cover)) + '" alt="" loading="lazy" decoding="async" style="object-position:' + esc(g.focus || 'center') + '">' +
         '<img class="icon" src="' + esc(icon) + '" alt="" loading="lazy">' +
-        (fresh ? '<span class="badge">Nouvelle version</span>' : '') +
+        (fresh ? '<span class="badge" title="Nouvelle version">Nouvelle version</span>' : '') +
       '</a>' +
       '<p class="genre">' + esc(g.genre || '') + '</p>' +
       '<h2>' + esc(g.name) + '</h2>' +
       '<p class="tagline">' + esc(g.tagline || '') + '</p>' +
       '<ul class="state">' + stateHtml + '</ul>' +
       '<div class="actions">' +
-        '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(g.path) + '">' + playIcon + cta + '</a>' + extra +
+        '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(g.path) + '" aria-label="' + esc(cta + ' : ' + g.name) + '">' + playIcon + '<span class="lbl">' + cta + '</span></a>' + extra +
         (pushedAt ? '<p class="updated">Mis à jour ' + ago(pushedAt) + '</p>' : '') +
       '</div>' +
     '</article>';
@@ -247,6 +282,22 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     }, { threshold: [0, .2, .35, .5, .65, .8, 1] });
     els.forEach(el => io.observe(el));
   }
+
+  /* ---------- grand / liste ---------- */
+  function applyView(v, animate) {
+    const go = () => {
+      $('#games').classList.toggle('list', v === 'liste');
+      document.querySelectorAll('.view button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+    };
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (animate && !calm && document.startViewTransition) document.startViewTransition(go); else go();
+  }
+  applyView(hub.view === 'liste' ? 'liste' : 'grand', false);
+  document.querySelectorAll('.view button').forEach(b => b.addEventListener('click', () => {
+    const v = b.dataset.view;
+    hub = load(); hub.launched = hub.launched || {}; hub.view = v; save(hub);
+    applyView(v, true);
+  }));
 
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-launch]');
