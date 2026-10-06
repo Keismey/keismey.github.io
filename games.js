@@ -74,6 +74,33 @@ window.GAMES = [
       if (typeof s.zenny === 'number') out.push(fmt(s.zenny, lang) + ' z');
       return out;
     }
+  },
+  {
+    id: 'legion-eternelle',
+    name: 'Légion Éternelle',
+    genre: 'Idle RPG',
+    tagline: 'Ta légion se bat même quand tu dors. Équipe-la, garde tes ultimes pour les boss et repousse le mur.',
+    path: '/legion-eternelle/?lang=fr',
+    repo: 'legion-eternelle',
+    icon: '/legion-eternelle/assets/icon-192.png',
+    cover: '/legion-eternelle/assets/title-bg.webp',
+    focus: '50% 78%',
+    color: '#0b0b10',
+    accent: '#f2c94c',
+    // le jeu est bilingue : ?lang= choisit la langue d'une nouvelle partie
+    en: {
+      genre: 'Idle RPG',
+      tagline: 'Your legion fights even while you sleep. Gear it up, save your ultimates for the bosses and push back the wall.',
+      path: '/legion-eternelle/?lang=en'
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('legionEternelle_v2') || 'null');
+      if (!s) return null;
+      const en = lang === 'en', out = [];
+      if (s.bestLevel) out.push((en ? 'Best level ' : 'Record niveau ') + s.bestLevel);
+      if (s.awakenings) out.push(s.awakenings + (en ? (s.awakenings > 1 ? ' awakenings' : ' awakening') : (s.awakenings > 1 ? ' Éveils' : ' Éveil')));
+      return out;
+    }
   }
 ];
 
