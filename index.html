@@ -131,7 +131,17 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .list .play svg{width:18px;height:18px;margin-left:3px}
 .list .play .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--faint);color:var(--muted);font-size:.875rem;display:grid;gap:8px}
+.support{margin-top:56px;padding:22px 20px;border-radius:22px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset;
+  display:grid;gap:14px;justify-items:start}
+.support h2{margin:0;font:700 1.5rem/1.15 var(--serif)}
+.support p{margin:0;color:var(--muted);max-width:46ch}
+.kofi{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:999px;
+  background:var(--parch);color:var(--ink);text-decoration:none;font:700 1rem/1 var(--sans)}
+.kofi svg{width:20px;height:20px}
+.kofi:active{transform:scale(.97)}
+.kofi:focus-visible{border-radius:999px}
+.support small{color:var(--muted);font-size:.8125rem}
+footer{margin-top:32px;padding-top:20px;border-top:1px solid var(--faint);color:var(--muted);font-size:.875rem;display:grid;gap:8px}
 footer p{margin:0;max-width:52ch}
 .ios[hidden]{display:none}
 
@@ -173,6 +183,16 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 
   <main class="games enter" id="games"></main>
 
+  <section class="support" aria-labelledby="support-title">
+    <h2 id="support-title" data-i18n="supTitle">Gratuit, sans pub</h2>
+    <p data-i18n="supText">Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.</p>
+    <a class="kofi" href="https://ko-fi.com/keismey" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="currentColor"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3.5c0 1 1 1 1 2M11.5 3.5c0 1 1 1 1 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span data-i18n="supBtn">Soutenir sur Ko-fi</span>
+    </a>
+    <small data-i18n="supAi">Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.</small>
+  </section>
+
   <footer>
     <p class="ios" id="ios-hint" data-i18n="ios" hidden>Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.</p>
     <p data-i18n="foot">Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.</p>
@@ -204,6 +224,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       view: 'Affichage des jeux', big: 'Grand', list: 'Liste',
       ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
       foot: "Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.",
+      supTitle: 'Gratuit, sans pub', supBtn: 'Soutenir sur Ko-fi',
+      supText: "Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.",
+      supAi: "Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.",
       games: n => n + (n > 1 ? ' jeux' : ' jeu'),
       play: 'Jouer', resume: 'Reprendre', inProgress: 'Partie en cours', noSave: 'Pas encore de partie',
       fresh: 'Nouvelle version', updated: 'Mis à jour ', frOnly: '', sep: ' : ',
@@ -216,6 +239,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       view: 'Game layout', big: 'Large', list: 'List',
       ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
       foot: 'Games open inside the hub. Swipe back to return here.',
+      supTitle: 'Free, no ads', supBtn: 'Support me on Ko-fi',
+      supText: 'Every game is free and will stay that way. If one of them gave you a good time, you can help fund the next ones.',
+      supAi: 'Games designed and tested by me, built with the help of AI.',
       games: n => n + (n === 1 ? ' game' : ' games'),
       play: 'Play', resume: 'Resume', inProgress: 'Game in progress', noSave: 'No save yet',
       fresh: 'New version', updated: 'Updated ', frOnly: 'In French only for now.', sep: ': ',
