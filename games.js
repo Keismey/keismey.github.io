@@ -9,8 +9,12 @@
   - color   : couleur de fond quand le jeu est à l'écran
   - accent  : couleur du bouton « Jouer »
   - extra   : liens secondaires (autre langue, etc.)
+  - en      : ce qui change quand le hub est en anglais (genre, tagline, path, extra…).
+              Sans path anglais, le jeu s'ouvre dans sa version française (frOnly: true l'indique).
   - progress: lit la sauvegarde du jeu (même adresse = même stockage) et renvoie
               une liste de petites infos à afficher, ou null s'il n'y a pas de partie.
+              Reçoit la langue du hub ('fr' ou 'en'). Lecture seule : le hub n'écrit jamais
+              dans les sauvegardes des jeux.
 */
 window.GAMES = [
   {
@@ -25,12 +29,18 @@ window.GAMES = [
     color: '#05232b',
     accent: '#46c9b4',
     extra: [{ label: 'Play in English', path: '/Abysses/en.html' }],
-    progress() {
+    en: {
+      genre: 'Night fishing',
+      tagline: 'Fish by night, sell your catch in the village and uncover the secrets of the abyss.',
+      path: '/Abysses/en.html',
+      extra: [{ label: 'Jouer en Français', path: '/Abysses/' }]
+    },
+    progress(lang) {
       const s = JSON.parse(localStorage.getItem('ab_save') || 'null');
       if (!s) return null;
-      const out = [];
-      if (s.day) out.push('Jour ' + s.day);
-      if (typeof s.gold === 'number') out.push(fmt(s.gold) + ' or');
+      const en = lang === 'en', out = [];
+      if (s.day) out.push((en ? 'Day ' : 'Jour ') + s.day);
+      if (typeof s.gold === 'number') out.push(fmt(s.gold, lang) + (en ? ' gold' : ' or'));
       return out;
     }
   },
@@ -49,16 +59,22 @@ window.GAMES = [
     focus: '50% 60%',
     color: '#1d2a22',
     accent: '#a9c46a',
-    progress() {
+    // pas encore de version anglaise : le jeu s'ouvre en français
+    en: {
+      genre: 'Turn-based hunting',
+      tagline: 'Track monsters turn by turn, forge your gear from their remains and climb the ranks.',
+      frOnly: true
+    },
+    progress(lang) {
       const s = JSON.parse(localStorage.getItem('grande-traque-v1') || 'null');
       if (!s) return null;
-      const out = [];
+      const en = lang === 'en', out = [];
       const hunts = s.cleared ? Object.values(s.cleared).reduce((a, n) => a + (Number(n) || 0), 0) : 0;
-      out.push(hunts + (hunts > 1 ? ' chasses réussies' : ' chasse réussie'));
-      if (typeof s.zenny === 'number') out.push(fmt(s.zenny) + ' z');
+      out.push(hunts + (en ? (hunts === 1 ? ' successful hunt' : ' successful hunts') : (hunts > 1 ? ' chasses réussies' : ' chasse réussie')));
+      if (typeof s.zenny === 'number') out.push(fmt(s.zenny, lang) + ' z');
       return out;
     }
   }
 ];
 
-function fmt(n) { return Number(n).toLocaleString('fr-FR'); }
+function fmt(n, lang) { return Number(n).toLocaleString(lang === 'en' ? 'en-GB' : 'fr-FR'); }
