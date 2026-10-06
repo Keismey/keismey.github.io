@@ -51,7 +51,7 @@ body{
 .wrap{position:relative;z-index:1;max-width:1120px;margin:0 auto;
   padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 40px)}
 
-header{display:flex;align-items:center;gap:12px;min-height:48px}
+header{display:flex;align-items:center;flex-wrap:wrap;gap:10px 8px;min-height:48px}
 .mark{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
 .mark img{width:36px;height:36px;border-radius:10px;display:block}
 .mark span{font:italic 700 1.375rem/1 var(--serif);letter-spacing:.01em}
@@ -61,7 +61,7 @@ header .grow{flex:1}
   padding:11px 16px;min-height:40px;cursor:pointer}
 .install[hidden]{display:none}
 .lang{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset}
-.lang button{min-width:40px;min-height:34px;padding:0 10px;border:0;border-radius:999px;background:none;color:var(--muted);
+.lang button{min-width:38px;min-height:34px;padding:0 9px;border:0;border-radius:999px;background:none;color:var(--muted);
   font:700 .875rem/1 var(--sans);letter-spacing:.04em;cursor:pointer;transition:background-color .2s,color .2s}
 .lang button[aria-pressed=true]{background:var(--parch);color:var(--ink)}
 .fronly{margin:-6px 0 14px;color:var(--muted);font-size:.875rem;font-style:italic}
@@ -71,11 +71,20 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .lede{margin:0 0 22px;color:var(--muted);max-width:36ch}
 
 /* choix de l'affichage : grand ou liste */
-.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:0 0 26px}
-.bell{display:inline-flex;align-items:center;gap:7px;min-height:46px;padding:0 15px 0 12px;border:0;border-radius:999px;
+.toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 26px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nw{white-space:nowrap}
+.bell{display:inline-grid;place-items:center;width:40px;height:40px;padding:0;border:0;border-radius:999px;
   background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset;color:var(--muted);font:700 .9375rem/1 var(--sans);cursor:pointer;
   transition:background-color .2s,color .2s}
 .bell[hidden]{display:none}
+.favfilter{display:inline-flex;align-items:center;gap:7px;min-height:46px;padding:0 15px 0 12px;border:0;border-radius:999px;
+  background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset;color:var(--muted);font:700 .9375rem/1 var(--sans);cursor:pointer;
+  transition:background-color .2s,color .2s}
+.favfilter svg{width:18px;height:18px;fill:none}
+.favfilter[aria-pressed=true]{background:var(--parch);color:var(--ink);box-shadow:none}
+.favfilter[aria-pressed=true] svg{fill:currentColor}
+.favfilter:focus-visible{border-radius:999px}
 .bell svg{width:18px;height:18px}
 .bell .on{display:none}
 .bell[aria-pressed=true]{background:var(--parch);color:var(--ink);box-shadow:none}
@@ -121,19 +130,27 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .play svg{width:16px;height:16px}
 .play:active{transform:scale(.97)}
 .alt{color:var(--muted);font-size:.9375rem;text-underline-offset:3px}
+.star{display:inline-grid;place-items:center;width:52px;height:52px;padding:0;border:0;border-radius:999px;cursor:pointer;
+  background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset;color:var(--muted);transition:color .2s,transform .15s}
+.star svg{width:22px;height:22px;fill:none}
+.star[aria-pressed=true]{color:var(--g-accent)}
+.star[aria-pressed=true] svg{fill:currentColor}
+.star:active{transform:scale(.92)}
+.star:focus-visible{border-radius:999px}
+.empty{margin:8px 0 0;padding:22px 20px;border-radius:20px;color:var(--muted);background:rgba(0,0,0,.22);box-shadow:0 0 0 1px var(--faint) inset;max-width:52ch}
 .updated{width:100%;margin:12px 0 0;color:var(--muted);font-size:.875rem}
 
 /* ---------- mode liste ---------- */
 .games.list{gap:10px;max-width:760px}
-.list .game{display:grid;grid-template-columns:64px 1fr auto;grid-template-areas:"cover title play" "cover meta play";
-  align-items:center;column-gap:14px;padding:10px 12px 10px 10px;border-radius:20px;background:rgba(0,0,0,.22);
+.list .game{display:grid;grid-template-columns:56px 1fr auto auto;grid-template-areas:"cover title fav play" "cover meta fav play";
+  align-items:center;column-gap:10px;padding:10px 12px 10px 10px;border-radius:20px;background:rgba(0,0,0,.22);
   box-shadow:0 0 0 1px var(--faint) inset}
-.list .cover{grid-area:cover;width:64px;aspect-ratio:1;border-radius:16px;box-shadow:0 6px 16px -6px rgba(0,0,0,.7);align-self:center}
+.list .cover{grid-area:cover;width:56px;aspect-ratio:1;border-radius:16px;box-shadow:0 6px 16px -6px rgba(0,0,0,.7);align-self:center}
 .list .cover>img:first-child,.list .cover::after{display:none}
 .list .cover .icon{inset:0;width:100%;height:100%;border-radius:0;box-shadow:none}
 .list .badge{font-size:0;padding:0;width:12px;height:12px;top:4px;right:4px;box-shadow:0 0 0 2px var(--ink)}
-.list .game h2{grid-area:title;align-self:end;font-size:1.3125rem;line-height:1.15;margin:0;text-wrap:pretty}
-.list .genre,.list .state{grid-area:meta;align-self:start;margin:2px 0 0;font-size:.9375rem}
+.list .game h2{grid-area:title;align-self:end;font-size:1.1875rem;line-height:1.15;margin:0;text-wrap:pretty}
+.list .genre,.list .state{grid-area:meta;align-self:start;margin:2px 0 0;font-size:.875rem;line-height:1.3}
 .list .has-save .genre,.list .game:not(.has-save) .state{display:none}
 .list .state{display:block;color:var(--muted)}
 .list .state li{display:inline;padding:0;background:none;font-size:inherit}
@@ -141,6 +158,7 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .list .state li:not(.lead):not(:last-child)::after{content:", "}
 .list .tagline,.list .alt,.list .updated{display:none}
 .list .actions{display:contents}
+.list .star{grid-area:fav;width:36px;height:44px;background:none;box-shadow:none;margin-right:-4px}
 .list .play{grid-area:play;width:52px;min-height:52px;padding:0;box-shadow:0 8px 20px -10px var(--g-accent)}
 .list .play svg{width:18px;height:18px;margin-left:3px}
 .list .play .lbl{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -190,6 +208,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     </a>
     <div class="grow"></div>
     <button class="install" id="install" data-i18n="install" hidden>Installer</button>
+    <button type="button" class="bell" id="bell" aria-pressed="false" hidden>
+      <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="currentColor"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span id="bell-label" class="sr">Me prévenir</span>
+    </button>
     <div class="lang" role="group" data-i18n-aria="lang" aria-label="Langue">
       <button type="button" data-lang="fr" lang="fr" aria-pressed="true" aria-label="Français">FR</button>
       <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
@@ -197,18 +220,14 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   </header>
 
   <h1 data-i18n="title">À quoi on joue&nbsp;?</h1>
-  <p class="lede" data-i18n="lede">Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.</p>
+  <p class="lede" data-i18n="lede">Tes favoris restent en haut, puis le dernier jeu lancé. Ta progression s'affiche ici dès que tu as une partie.</p>
 
   <div class="toolbar">
   <div class="view" role="group" data-i18n-aria="view" aria-label="Affichage des jeux">
     <button type="button" data-view="grand" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="8" rx="2" fill="currentColor"/><rect x="1.5" y="11.5" width="13" height="3" rx="1.5" fill="currentColor" opacity=".55"/></svg><span data-i18n="big">Grand</span></button>
     <button type="button" data-view="liste" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="3" width="7" height="2" rx="1" fill="currentColor"/><rect x="1.5" y="10" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="11" width="7" height="2" rx="1" fill="currentColor"/></svg><span data-i18n="list">Liste</span></button>
   </div>
-  <button type="button" class="bell" id="bell" aria-pressed="false" hidden>
-    <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="currentColor"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    <span id="bell-label">Me prévenir</span>
-  </button>
+  <button type="button" class="favfilter" id="favfilter" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="favFilter">Favoris</span></button>
   </div>
 
   <main class="games enter" id="games"></main>
@@ -258,11 +277,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     fr: {
       home: 'Keismey Studio, accueil', lang: 'Langue', install: 'Installer',
       title: 'À quoi on joue\u00a0?',
-      lede: "Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.",
+      lede: "Tes favoris restent en haut, puis le dernier jeu lancé. Ta progression s'affiche ici dès que tu as une partie.",
       view: 'Affichage des jeux', big: 'Grand', list: 'Liste',
       ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
       foot: "Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.",
       supTitle: 'Gratuit, sans pub', supBtn: 'Soutenir sur Ko-fi', fab: 'Soutenir',
+      favFilter: 'Favoris', favAdd: n => 'Ajouter ' + n + ' aux favoris', favRemove: n => 'Retirer ' + n + ' des favoris',
+      favEmpty: "Aucun favori pour l'instant. Touche l'étoile d'un jeu pour le retrouver ici, toujours en haut de la liste.",
       bellOff: 'Me prévenir', bellOn: 'Alertes activées',
       bellTitleOff: 'Recevoir une notification pour les nouveaux jeux et les grosses mises à jour',
       bellTitleOn: 'Alertes activées : touche pour les couper',
@@ -280,11 +301,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     en: {
       home: 'Keismey Studio, home', lang: 'Language', install: 'Install',
       title: 'What are we playing?',
-      lede: 'The last game you launched comes first. Your progress shows up here as soon as you have a save.',
+      lede: 'Your favorites stay on top, then the last game you launched. Your progress shows up here as soon as you have a save.',
       view: 'Game layout', big: 'Large', list: 'List',
       ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
       foot: 'Games open inside the hub. Swipe back to return here.',
       supTitle: 'Free, no ads', supBtn: 'Support me on Ko-fi', fab: 'Support',
+      favFilter: 'Favorites', favAdd: n => 'Add ' + n + ' to favorites', favRemove: n => 'Remove ' + n + ' from favorites',
+      favEmpty: 'No favorites yet. Tap the star on a game to keep it here, always at the top of the list.',
       bellOff: 'Notify me', bellOn: 'Alerts on',
       bellTitleOff: 'Get a notification for new games and big updates',
       bellTitleOn: 'Alerts on: tap to turn them off',
@@ -345,6 +368,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   }
 
   /* ---------- rendu ---------- */
+  const starIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
   const playIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>';
 
   function card(g, pushedAt) {
@@ -361,6 +385,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     const stateHtml = state
       ? '<li class="lead">' + t.inProgress + '</li>' + state.map(s => '<li>' + esc(s) + '</li>').join('')
       : '<li class="quiet">' + t.noSave + '</li>';
+    const fav = !!(hub.favs && hub.favs[g.id]);
+    const starBtn = '<button type="button" class="star" data-fav="' + esc(g.id) + '" aria-pressed="' + fav + '" aria-label="' + esc((fav ? t.favRemove : t.favAdd)(pick('name'))) + '">' + starIcon + '</button>';
     const extra = (pick('extra') || []).map(x => '<a class="alt" data-launch="' + esc(g.id) + '" href="' + esc(x.path) + '">' + esc(x.label) + '</a>').join('');
     return '<article class="game' + (state ? ' has-save' : '') + '" data-id="' + esc(g.id) + '" style="--g-accent:' + esc(g.accent || 'var(--ember)') + '">' +
       '<a class="cover" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" tabindex="-1" aria-hidden="true">' +
@@ -369,12 +395,12 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
         (fresh ? '<span class="badge" title="' + t.fresh + '">' + t.fresh + '</span>' : '') +
       '</a>' +
       '<p class="genre">' + esc(pick('genre') || '') + '</p>' +
-      '<h2>' + esc(pick('name')) + '</h2>' +
+      '<h2>' + esc(pick('name')).replace(/(\S+-\S+)/g, '<span class="nw">$1</span>') + '</h2>' +
       '<p class="tagline">' + esc(pick('tagline') || '') + '</p>' +
       (L.frOnly && t.frOnly ? '<p class="fronly">' + t.frOnly + '</p>' : '') +
       '<ul class="state">' + stateHtml + '</ul>' +
       '<div class="actions">' +
-        '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" aria-label="' + esc(cta + t.sep + pick('name')) + '">' + playIcon + '<span class="lbl">' + cta + '</span></a>' + extra +
+        '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" aria-label="' + esc(cta + t.sep + pick('name')) + '">' + playIcon + '<span class="lbl">' + cta + '</span></a>' + starBtn + extra +
         (pushedAt ? '<p class="updated">' + t.updated + ago(pushedAt) + '</p>' : '') +
       '</div>' +
     '</article>';
@@ -383,9 +409,17 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   let map = (hub.gh && hub.gh.map) || null;
   let lastHtml = '';
   function render() {
-    hub = load(); hub.launched = hub.launched || {};
-    const order = games.map((g, i) => [g, i]).sort((a, b) => ((hub.launched[b[0].id] || 0) - (hub.launched[a[0].id] || 0)) || a[1] - b[1]).map(x => x[0]);
-    const html = order.map(g => card(g, map && map[(g.repo || '').toLowerCase()])).join('');
+    hub = load(); hub.launched = hub.launched || {}; hub.favs = hub.favs || {};
+    const isFav = g => (hub.favs[g.id] ? 1 : 0);
+    let order = games.map((g, i) => [g, i]).sort((a, b) =>
+      (isFav(b[0]) - isFav(a[0])) ||                                         // favoris toujours en haut
+      ((hub.launched[b[0].id] || 0) - (hub.launched[a[0].id] || 0)) ||       // puis le dernier lancé
+      a[1] - b[1]).map(x => x[0]);
+    if (hub.favOnly) order = order.filter(isFav);
+    $('#favfilter').setAttribute('aria-pressed', String(!!hub.favOnly));
+    const html = order.length
+      ? order.map(g => card(g, map && map[(g.repo || '').toLowerCase()])).join('')
+      : '<p class="empty">' + esc(T().favEmpty) + '</p>';
     if (html === lastHtml) return;
     lastHtml = html;
     $('#games').innerHTML = html;
@@ -439,6 +473,26 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     applyView(v, true);
   }));
 
+  /* ---------- favoris ---------- */
+  function rerender() {
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!calm && document.startViewTransition) return document.startViewTransition(render).updateCallbackDone.catch(() => {});
+    render(); return Promise.resolve();
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-fav]');
+    if (!b) return;
+    const id = b.dataset.fav;
+    hub = load(); hub.favs = hub.favs || {};
+    if (hub.favs[id]) delete hub.favs[id]; else hub.favs[id] = true;
+    save(hub);
+    rerender().then(() => { const nb = document.querySelector('[data-fav="' + id + '"]'); if (nb) nb.focus({ preventScroll: true }); });
+  });
+  $('#favfilter').addEventListener('click', () => {
+    hub = load(); hub.favOnly = !hub.favOnly; save(hub);
+    rerender();
+  });
+
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-launch]');
     if (!a) return;
@@ -485,6 +539,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     bell.setAttribute('aria-pressed', String(notifOn));
     $('#bell-label').textContent = notifOn ? t.bellOn : t.bellOff;
     bell.title = notifOn ? t.bellTitleOn : t.bellTitleOff;
+    bell.setAttribute('aria-label', bell.title);
   }
   async function readState() {
     try { const r = await (await caches.open(STATE_CACHE)).match(STATE_KEY); return r ? await r.json() : {}; } catch (e) { return {}; }
