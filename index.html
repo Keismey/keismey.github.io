@@ -141,6 +141,15 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .kofi:active{transform:scale(.97)}
 .kofi:focus-visible{border-radius:999px}
 .support small{color:var(--muted);font-size:.8125rem}
+.fab{position:fixed;z-index:5;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);
+  display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px 0 14px;border:0;border-radius:999px;
+  background:var(--parch);color:var(--ink);font:700 .9375rem/1 var(--sans);cursor:pointer;
+  box-shadow:0 10px 28px -8px rgba(0,0,0,.65);transition:opacity .25s ease,transform .25s ease}
+.fab svg{width:20px;height:20px}
+.fab.off{opacity:0;transform:translateY(12px);pointer-events:none}
+.fab:focus-visible{border-radius:999px}
+.support.flash{animation:flash 1.2s ease}
+@keyframes flash{0%,100%{box-shadow:0 0 0 1px var(--faint) inset}30%{box-shadow:0 0 0 2px var(--parch) inset}}
 footer{margin-top:32px;padding-top:20px;border-top:1px solid var(--faint);color:var(--muted);font-size:.875rem;display:grid;gap:8px}
 footer p{margin:0;max-width:52ch}
 .ios[hidden]{display:none}
@@ -193,6 +202,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     <small data-i18n="supAi">Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.</small>
   </section>
 
+  <button type="button" class="fab off" id="fab" aria-controls="support-title">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="currentColor"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3.5c0 1 1 1 1 2M11.5 3.5c0 1 1 1 1 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <span data-i18n="fab">Soutenir</span>
+  </button>
+
   <footer>
     <p class="ios" id="ios-hint" data-i18n="ios" hidden>Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.</p>
     <p data-i18n="foot">Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.</p>
@@ -224,7 +238,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       view: 'Affichage des jeux', big: 'Grand', list: 'Liste',
       ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
       foot: "Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.",
-      supTitle: 'Gratuit, sans pub', supBtn: 'Soutenir sur Ko-fi',
+      supTitle: 'Gratuit, sans pub', supBtn: 'Soutenir sur Ko-fi', fab: 'Soutenir',
       supText: "Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.",
       supAi: "Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.",
       games: n => n + (n > 1 ? ' jeux' : ' jeu'),
@@ -239,7 +253,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       view: 'Game layout', big: 'Large', list: 'List',
       ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
       foot: 'Games open inside the hub. Swipe back to return here.',
-      supTitle: 'Free, no ads', supBtn: 'Support me on Ko-fi',
+      supTitle: 'Free, no ads', supBtn: 'Support me on Ko-fi', fab: 'Support',
       supText: 'Every game is free and will stay that way. If one of them gave you a good time, you can help fund the next ones.',
       supAi: 'Games designed and tested by me, built with the help of AI.',
       games: n => n + (n === 1 ? ' game' : ' games'),
@@ -399,6 +413,20 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   // retour depuis un jeu : rafraîchir la progression
   addEventListener('pageshow', e => { if (e.persisted) render(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
+
+  /* ---------- bouton flottant « Soutenir » : visible tant que l'encart Ko-fi n'est pas à l'écran ---------- */
+  const fab = $('#fab'), support = document.querySelector('.support');
+  if (fab && support) {
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(es => es.forEach(e => fab.classList.toggle('off', e.isIntersecting)), { threshold: 0.15 }).observe(support);
+    } else fab.classList.remove('off');
+    fab.addEventListener('click', () => {
+      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      support.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'center' });
+      support.classList.remove('flash'); void support.offsetWidth; support.classList.add('flash');
+      setTimeout(() => support.querySelector('.kofi').focus({ preventScroll: true }), calm ? 0 : 500);
+    });
+  }
 
   /* ---------- installation ---------- */
   const standalone = matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone;
