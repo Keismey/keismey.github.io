@@ -71,7 +71,21 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .lede{margin:0 0 22px;color:var(--muted);max-width:36ch}
 
 /* choix de l'affichage : grand ou liste */
-.view{display:inline-flex;gap:4px;padding:4px;margin:0 0 26px;border-radius:999px;background:rgba(0,0,0,.28);
+.toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:0 0 26px}
+.bell{display:inline-flex;align-items:center;gap:7px;min-height:46px;padding:0 15px 0 12px;border:0;border-radius:999px;
+  background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset;color:var(--muted);font:700 .9375rem/1 var(--sans);cursor:pointer;
+  transition:background-color .2s,color .2s}
+.bell[hidden]{display:none}
+.bell svg{width:18px;height:18px}
+.bell .on{display:none}
+.bell[aria-pressed=true]{background:var(--parch);color:var(--ink);box-shadow:none}
+.bell[aria-pressed=true] .on{display:block}.bell[aria-pressed=true] .off{display:none}
+.bell:focus-visible{border-radius:999px}
+.toast{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 76px);transform:translate(-50%,10px);
+  width:min(420px,calc(100% - 32px));padding:14px 16px;border-radius:16px;background:var(--parch);color:var(--ink);
+  font-size:.9375rem;line-height:1.4;box-shadow:0 14px 34px -10px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.view{display:inline-flex;gap:4px;padding:4px;margin:0;border-radius:999px;background:rgba(0,0,0,.28);
   box-shadow:0 0 0 1px var(--faint) inset}
 .view button{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 15px;border:0;border-radius:999px;
   background:none;color:var(--muted);font:700 .9375rem/1 var(--sans);cursor:pointer;transition:background-color .2s,color .2s}
@@ -185,9 +199,16 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   <h1 data-i18n="title">À quoi on joue&nbsp;?</h1>
   <p class="lede" data-i18n="lede">Le dernier jeu lancé passe en premier. Ta progression s'affiche ici dès que tu as une partie.</p>
 
+  <div class="toolbar">
   <div class="view" role="group" data-i18n-aria="view" aria-label="Affichage des jeux">
     <button type="button" data-view="grand" aria-pressed="true"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="1.5" width="13" height="8" rx="2" fill="currentColor"/><rect x="1.5" y="11.5" width="13" height="3" rx="1.5" fill="currentColor" opacity=".55"/></svg><span data-i18n="big">Grand</span></button>
     <button type="button" data-view="liste" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="2" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="3" width="7" height="2" rx="1" fill="currentColor"/><rect x="1.5" y="10" width="4" height="4" rx="1.2" fill="currentColor"/><rect x="7.5" y="11" width="7" height="2" rx="1" fill="currentColor"/></svg><span data-i18n="list">Liste</span></button>
+  </div>
+  <button type="button" class="bell" id="bell" aria-pressed="false" hidden>
+    <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="currentColor"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span id="bell-label">Me prévenir</span>
+  </button>
   </div>
 
   <main class="games enter" id="games"></main>
@@ -206,6 +227,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="currentColor"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3.5c0 1 1 1 1 2M11.5 3.5c0 1 1 1 1 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     <span data-i18n="fab">Soutenir</span>
   </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <footer>
     <p class="ios" id="ios-hint" data-i18n="ios" hidden>Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.</p>
@@ -230,6 +253,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   const games = (window.GAMES || []).slice();
 
   /* ---------- langue ---------- */
+  var bellReady = false;
   const STR = {
     fr: {
       home: 'Keismey Studio, accueil', lang: 'Langue', install: 'Installer',
@@ -239,6 +263,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
       foot: "Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.",
       supTitle: 'Gratuit, sans pub', supBtn: 'Soutenir sur Ko-fi', fab: 'Soutenir',
+      bellOff: 'Me prévenir', bellOn: 'Alertes activées',
+      bellTitleOff: 'Recevoir une notification pour les nouveaux jeux et les grosses mises à jour',
+      bellTitleOn: 'Alertes activées : touche pour les couper',
+      notifOnBg: "C'est noté : tu seras prévenu des nouveaux jeux et des grosses mises à jour.",
+      notifOnOpen: "C'est noté. Installe le hub pour être prévenu même quand il est fermé ; sinon, les alertes arrivent à l'ouverture du hub.",
+      notifOff: 'Alertes coupées.',
+      notifBlocked: 'Les notifications sont bloquées pour ce site. Autorise-les dans les réglages de Chrome, puis réessaie.',
       supText: "Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.",
       supAi: "Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.",
       games: n => n + (n > 1 ? ' jeux' : ' jeu'),
@@ -254,6 +285,13 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
       foot: 'Games open inside the hub. Swipe back to return here.',
       supTitle: 'Free, no ads', supBtn: 'Support me on Ko-fi', fab: 'Support',
+      bellOff: 'Notify me', bellOn: 'Alerts on',
+      bellTitleOff: 'Get a notification for new games and big updates',
+      bellTitleOn: 'Alerts on: tap to turn them off',
+      notifOnBg: "Done: you'll be notified about new games and big updates.",
+      notifOnOpen: 'Done. Install the hub to be notified even when it is closed; otherwise alerts show up when you open the hub.',
+      notifOff: 'Alerts turned off.',
+      notifBlocked: 'Notifications are blocked for this site. Allow them in Chrome settings, then try again.',
       supText: 'Every game is free and will stay that way. If one of them gave you a good time, you can help fund the next ones.',
       supAi: 'Games designed and tested by me, built with the help of AI.',
       games: n => n + (n === 1 ? ' game' : ' games'),
@@ -271,6 +309,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     document.querySelectorAll('[data-i18n-aria]').forEach(el => el.setAttribute('aria-label', t[el.dataset.i18nAria]));
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     $('#count').textContent = t.games(games.length);
+    if (bellReady) paintBell();
   }
   applyLang();
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
@@ -278,6 +317,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     lang = b.dataset.lang;
     hub = load(); hub.launched = hub.launched || {}; hub.lang = lang; save(hub);
     applyLang(); render();
+    if (notifOn) updateState({ lang });
   }));
 
   /* ---------- dates de mise à jour (GitHub) ---------- */
@@ -425,6 +465,72 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       support.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'center' });
       support.classList.remove('flash'); void support.offsetWidth; support.classList.add('flash');
       setTimeout(() => support.querySelector('.kofi').focus({ preventScroll: true }), calm ? 0 : 500);
+    });
+  }
+
+  /* ---------- alertes : nouveaux jeux et grosses mises à jour ----------
+     Pas de serveur : le service worker relit announcements.json en arrière-plan
+     (Periodic Background Sync, hub installé sur Android/Chrome) et à chaque ouverture du hub.
+     L'état (activé, langue, annonces déjà vues) est rangé dans le Cache Storage, lisible par le service worker. */
+  const bell = $('#bell'), toastEl = $('#toast');
+  bellReady = true;
+  const STATE_CACHE = 'ks-state', STATE_KEY = '/__ks-state';
+  let notifOn = false, toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove('show'), 5200);
+  }
+  function paintBell() {
+    const t = T();
+    bell.setAttribute('aria-pressed', String(notifOn));
+    $('#bell-label').textContent = notifOn ? t.bellOn : t.bellOff;
+    bell.title = notifOn ? t.bellTitleOn : t.bellTitleOff;
+  }
+  async function readState() {
+    try { const r = await (await caches.open(STATE_CACHE)).match(STATE_KEY); return r ? await r.json() : {}; } catch (e) { return {}; }
+  }
+  async function updateState(patch) {
+    const st = Object.assign(await readState(), patch);
+    try { await (await caches.open(STATE_CACHE)).put(STATE_KEY, new Response(JSON.stringify(st), { headers: { 'content-type': 'application/json' } })); } catch (e) {}
+    return st;
+  }
+  async function ensurePeriodic(reg) {
+    if (!('periodicSync' in reg)) return false;
+    try {
+      const ps = await navigator.permissions.query({ name: 'periodic-background-sync' });
+      if (ps.state !== 'granted') return false;
+      await reg.periodicSync.register('ks-news', { minInterval: 12 * 3600e3 });
+      return true;
+    } catch (e) { return false; }
+  }
+  async function enableAlerts() {
+    let perm = Notification.permission;
+    if (perm === 'default') perm = await Notification.requestPermission();
+    if (perm !== 'granted') { toast(T().notifBlocked); return; }
+    const reg = await navigator.serviceWorker.ready;
+    let ids = [];
+    try { const r = await fetch('/announcements.json', { cache: 'no-store' }); if (r.ok) ids = (await r.json()).map(n => n.id); } catch (e) {}
+    const st = await readState();
+    // les annonces déjà publiées ne déclenchent rien : seules les prochaines seront notifiées
+    await updateState({ on: true, lang, seen: [...new Set([...(st.seen || []), ...ids])] });
+    notifOn = true; paintBell();
+    toast((await ensurePeriodic(reg)) ? T().notifOnBg : T().notifOnOpen);
+  }
+  async function disableAlerts() {
+    await updateState({ on: false });
+    try { const reg = await navigator.serviceWorker.ready; if ('periodicSync' in reg) await reg.periodicSync.unregister('ks-news'); } catch (e) {}
+    notifOn = false; paintBell(); toast(T().notifOff);
+  }
+  if ('Notification' in window && 'serviceWorker' in navigator && 'caches' in window) {
+    bell.hidden = false; paintBell();
+    bell.addEventListener('click', () => (notifOn ? disableAlerts() : enableAlerts()));
+    readState().then(async st => {
+      notifOn = !!st.on && Notification.permission === 'granted';
+      paintBell();
+      if (!notifOn) return;
+      const reg = await navigator.serviceWorker.ready;
+      await ensurePeriodic(reg);                       // si le hub a été installé depuis
+      if (reg.active) reg.active.postMessage({ type: 'ks-check' });
     });
   }
 
