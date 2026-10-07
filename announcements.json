@@ -11,18 +11,5 @@
       "title": "Keismey Studio",
       "body": "The hub is live: all my games in one place."
     }
-  },
-  {
-    "id": "2026-10-06-test-1",
-    "date": "2026-10-06",
-    "url": "/",
-    "fr": {
-      "title": "Keismey Studio",
-      "body": "Test réussi : tu recevras ici les nouveaux jeux et les grosses mises à jour. 🎣"
-    },
-    "en": {
-      "title": "Keismey Studio",
-      "body": "Test successful: new games and big updates will show up here. 🎣"
-    }
   }
 ]
