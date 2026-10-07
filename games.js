@@ -88,10 +88,12 @@ window.GAMES = [
     color: '#0b0b10',
     accent: '#f2c94c',
     // le jeu est bilingue : ?lang= choisit la langue d'une nouvelle partie
+    extra: [{ label: 'Play in English', path: '/legion-eternelle/?lang=en' }],
     en: {
       genre: 'Idle RPG',
       tagline: 'Your legion fights even while you sleep. Gear it up, save your ultimates for the bosses and push back the wall.',
-      path: '/legion-eternelle/?lang=en'
+      path: '/legion-eternelle/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/legion-eternelle/?lang=fr' }]
     },
     progress(lang) {
       const s = JSON.parse(localStorage.getItem('legionEternelle_v2') || 'null');
