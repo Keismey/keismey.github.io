@@ -134,6 +134,33 @@ window.GAMES = [
       if (best) out.push((en ? 'Record ' : 'Record ') + fmt(best, lang));
       return out;
     }
+  },
+  {
+    id: 'baffus-maximus',
+    name: 'Baffus Maximus',
+    genre: 'Gestion de gladiateur',
+    tagline: 'Entraîne ton gladiateur à coups de mini-jeux, envoie-le dans l’arène et fonde une dynastie de champions.',
+    path: '/Baffus-Maximus/',
+    repo: 'Baffus-Maximus',
+    cover: '/Baffus-Maximus/a/titre.webp',
+    focus: '50% 62%',
+    color: '#24101A',
+    accent: '#E9A93A',
+    // pas de version anglaise : le jeu s'ouvre en français
+    en: {
+      genre: 'Gladiator management',
+      tagline: 'Train your gladiator with mini-games, send him into the arena and found a dynasty of champions.',
+      frOnly: true
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('dpdb_save_v1') || 'null');
+      if (!s || !s.fam) return null;
+      const en = lang === 'en', out = [];
+      out.push((en ? 'House ' : 'Famille ') + s.fam.nom + (s.fam.gen ? (en ? ', gen. ' : ', gén. ') + s.fam.gen : ''));
+      const won = (s.fam.won || []).filter(Boolean).length;
+      out.push((en ? 'Leagues ' : 'Ligues ') + won + '/5');
+      return out;
+    }
   }
 ];
 
