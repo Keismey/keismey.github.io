@@ -18,6 +18,7 @@
   "shortcuts": [
     { "name": "Abysses", "url": "/Abysses/", "icons": [{ "src": "/Abysses/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
     { "name": "Les Chasseurs de Brume-Haute", "short_name": "Brume-Haute", "url": "/Les-Chasseurs-de-Brume-Haute/", "icons": [{ "src": "/Les-Chasseurs-de-Brume-Haute/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
-    { "name": "Légion Éternelle", "short_name": "Légion", "url": "/legion-eternelle/", "icons": [{ "src": "/legion-eternelle/assets/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+    { "name": "Légion Éternelle", "short_name": "Légion", "url": "/legion-eternelle/", "icons": [{ "src": "/legion-eternelle/assets/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Oxyblox", "url": "/Oxyblox/", "icons": [{ "src": "/Oxyblox/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }
