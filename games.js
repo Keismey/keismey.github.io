@@ -140,17 +140,19 @@ window.GAMES = [
     name: 'Baffus Maximus',
     genre: 'Gestion de gladiateur',
     tagline: 'Entraîne ton gladiateur à coups de mini-jeux, envoie-le dans l’arène et fonde une dynastie de champions.',
-    path: '/Baffus-Maximus/',
+    path: '/Baffus-Maximus/?lang=fr',
     repo: 'Baffus-Maximus',
     cover: '/Baffus-Maximus/a/titre.webp',
     focus: '50% 62%',
     color: '#24101A',
     accent: '#E9A93A',
-    // pas de version anglaise : le jeu s'ouvre en français
+    // le jeu est bilingue : ?lang= choisit la langue
+    extra: [{ label: 'Play in English', path: '/Baffus-Maximus/?lang=en' }],
     en: {
       genre: 'Gladiator management',
       tagline: 'Train your gladiator with mini-games, send him into the arena and found a dynasty of champions.',
-      frOnly: true
+      path: '/Baffus-Maximus/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Baffus-Maximus/?lang=fr' }]
     },
     progress(lang) {
       const s = JSON.parse(localStorage.getItem('dpdb_save_v1') || 'null');
