@@ -182,6 +182,50 @@ h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter
 .fab:focus-visible{border-radius:999px}
 .support.flash{animation:flash 1.2s ease}
 @keyframes flash{0%,100%{box-shadow:0 0 0 1px var(--faint) inset}30%{box-shadow:0 0 0 2px var(--parch) inset}}
+/* ---------- contact : avis, bug, idée + réseaux ---------- */
+.contact{margin-top:18px;padding:22px 20px;border-radius:22px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset;
+  display:grid;gap:14px;justify-items:start}
+.contact h2{margin:0;font:700 1.5rem/1.15 var(--serif)}
+.contact p{margin:0;color:var(--muted);max-width:46ch}
+.contact .row{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 20px;border:0;border-radius:999px;cursor:pointer;
+  text-decoration:none;font:700 1rem/1 var(--sans)}
+.btn svg{width:18px;height:18px}
+.btn.solid{background:var(--parch);color:var(--ink)}
+.btn.ghost{background:rgba(0,0,0,.28);color:var(--parch);box-shadow:0 0 0 1px var(--faint) inset}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{border-radius:999px}
+.btn[disabled]{opacity:.6;cursor:default}
+
+dialog.form{width:min(520px,calc(100% - 24px));max-height:calc(100dvh - 24px);margin:auto;padding:0;border:0;border-radius:24px;
+  background:#16211f;color:var(--parch);box-shadow:0 30px 80px -20px rgba(0,0,0,.9),0 0 0 1px var(--faint) inset;overflow:auto}
+dialog.form::backdrop{background:rgba(5,8,10,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.form .in{padding:22px 20px 20px;display:grid;gap:16px}
+.form .top{display:flex;align-items:flex-start;gap:12px}
+.form .top h2{flex:1;margin:0;font:700 1.5rem/1.15 var(--serif)}
+.form .x{display:inline-grid;place-items:center;width:40px;height:40px;margin:-6px -6px 0 0;padding:0;border:0;border-radius:999px;
+  background:none;color:var(--muted);cursor:pointer}
+.form .x svg{width:20px;height:20px}
+.form label{display:grid;gap:6px;font-weight:700;font-size:.9375rem}
+.form input,.form select,.form textarea{width:100%;min-height:48px;padding:12px 14px;border:0;border-radius:14px;
+  background:rgba(0,0,0,.32);color:var(--parch);box-shadow:0 0 0 1px var(--faint) inset;font:400 1rem/1.4 var(--sans)}
+.form select{appearance:none;-webkit-appearance:none;padding-right:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 6l4 4 4-4' fill='none' stroke='%23efe6d0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:16px}
+.form select option{background:#16211f;color:var(--parch)}
+.form textarea{min-height:140px;resize:vertical}
+.form input:focus,.form select:focus,.form textarea:focus{outline:none;box-shadow:0 0 0 2px var(--accent) inset}
+.form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form .note{margin:0;color:var(--muted);font-size:.8125rem}
+.form .msg{margin:0;padding:12px 14px;border-radius:14px;font-size:.9375rem;background:rgba(0,0,0,.28)}
+.form .msg[hidden]{display:none}
+.form .msg.err{box-shadow:0 0 0 1px #e8743a inset}
+.form .done{display:grid;gap:14px;justify-items:start;padding:8px 0 4px}
+.form .done[hidden],.form .fields[hidden]{display:none}
+.form .done p{margin:0;color:var(--muted)}
+.form .fields{display:grid;gap:16px}
+.form .fields .btn{justify-content:center}
+
 footer{margin-top:32px;padding-top:20px;border-top:1px solid var(--faint);color:var(--muted);font-size:.875rem;display:grid;gap:8px}
 footer p{margin:0;max-width:52ch}
 .ios[hidden]{display:none}
@@ -242,6 +286,57 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     <small data-i18n="supAi">Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.</small>
   </section>
 
+  <section class="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title" data-i18n="ctTitle">Un avis, un bug, une idée&nbsp;?</h2>
+    <p data-i18n="ctText">Je lis tous les messages. C'est grâce à vos retours que les jeux s'améliorent.</p>
+    <div class="row">
+      <button type="button" class="btn solid" id="open-form">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <span data-i18n="ctBtn">Écrire au studio</span>
+      </button>
+      <a class="btn ghost" href="https://x.com/KeismeyStudio" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span data-i18n="ctX">Suivre sur X</span>
+      </a>
+    </div>
+  </section>
+
+  <dialog class="form" id="form-dlg" aria-labelledby="form-title">
+    <form class="in" id="contact-form" novalidate>
+      <div class="top">
+        <h2 id="form-title" data-i18n="fmTitle">Écrire au studio</h2>
+        <button type="button" class="x" id="close-form" data-i18n-aria="fmClose" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="fields" id="fm-fields">
+        <label><span data-i18n="fmSubject">Titre</span>
+          <input name="titre" id="fm-subject" maxlength="120" required autocomplete="off">
+        </label>
+        <label><span data-i18n="fmType">Type de message</span>
+          <select name="type" id="fm-type" required>
+            <option value="Retour d'expérience" data-i18n="tFeedback">Retour d'expérience</option>
+            <option value="Bug" data-i18n="tBug">Bug</option>
+            <option value="Demande d'ajout" data-i18n="tRequest">Demande d'ajout</option>
+            <option value="Idée de jeu" data-i18n="tIdea">Idée de jeu</option>
+            <option value="Autre" data-i18n="tOther">Autre</option>
+          </select>
+        </label>
+        <label><span data-i18n="fmBody">Message</span>
+          <textarea name="message" id="fm-body" maxlength="4000" required></textarea>
+        </label>
+        <label class="hp" aria-hidden="true">Ne pas remplir <input name="_honey" tabindex="-1" autocomplete="off"></label>
+        <p class="msg" id="fm-msg" role="alert" hidden></p>
+        <p class="note" data-i18n="fmNote">Pour un bug, précise le jeu et ce que tu faisais. Le type de navigateur est joint automatiquement.</p>
+        <button type="submit" class="btn solid" id="fm-send"><span data-i18n="fmSend">Envoyer</span></button>
+      </div>
+      <div class="done" id="fm-done" hidden>
+        <p data-i18n="fmThanks">Message envoyé, merci&nbsp;! Je le lis dès que possible.</p>
+        <button type="button" class="btn solid" id="fm-ok" data-i18n="fmOk">Fermer</button>
+      </div>
+    </form>
+  </dialog>
+
   <button type="button" class="fab off" id="fab" aria-controls="support-title">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="currentColor"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3.5c0 1 1 1 1 2M11.5 3.5c0 1 1 1 1 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     <span data-i18n="fab">Soutenir</span>
@@ -293,6 +388,14 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       notifBlocked: 'Les notifications sont bloquées pour ce site. Autorise-les dans les réglages de Chrome, puis réessaie.',
       supText: "Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.",
       supAi: "Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.",
+      ctTitle: 'Un avis, un bug, une idée ?', ctText: "Je lis tous les messages. C'est grâce à vos retours que les jeux s'améliorent.",
+      ctBtn: 'Écrire au studio', ctX: 'Suivre sur X',
+      fmTitle: 'Écrire au studio', fmClose: 'Fermer', fmType: 'Type de message', fmSubject: 'Titre', fmBody: 'Message',
+      tFeedback: "Retour d'expérience", tBug: 'Bug', tRequest: "Demande d'ajout", tIdea: 'Idée de jeu', tOther: 'Autre',
+      fmNote: 'Pour un bug, précise le jeu et ce que tu faisais. Le type de navigateur est joint automatiquement.',
+      fmSend: 'Envoyer', fmSending: 'Envoi…', fmThanks: 'Message envoyé, merci ! Je le lis dès que possible.', fmOk: 'Fermer',
+      fmMissing: 'Il manque le titre ou le message.',
+      fmError: "L'envoi n'a pas marché. Vérifie ta connexion et réessaie dans un moment.",
       games: n => n + (n > 1 ? ' jeux' : ' jeu'),
       play: 'Jouer', resume: 'Reprendre', inProgress: 'Partie en cours', noSave: 'Pas encore de partie',
       fresh: 'Nouvelle version', updated: 'Mis à jour ', frOnly: '', sep: ' : ',
@@ -317,6 +420,14 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       notifBlocked: 'Notifications are blocked for this site. Allow them in Chrome settings, then try again.',
       supText: 'Every game is free and will stay that way. If one of them gave you a good time, you can help fund the next ones.',
       supAi: 'Games designed and tested by me, built with the help of AI.',
+      ctTitle: 'Feedback, a bug, an idea?', ctText: 'I read every message. Your feedback is what makes the games better.',
+      ctBtn: 'Write to the studio', ctX: 'Follow on X',
+      fmTitle: 'Write to the studio', fmClose: 'Close', fmType: 'Message type', fmSubject: 'Title', fmBody: 'Message',
+      tFeedback: 'Feedback', tBug: 'Bug', tRequest: 'Feature request', tIdea: 'Game idea', tOther: 'Other',
+      fmNote: 'For a bug, tell me which game and what you were doing. Your browser type is attached automatically.',
+      fmSend: 'Send', fmSending: 'Sending…', fmThanks: 'Message sent, thank you! I will read it as soon as I can.', fmOk: 'Close',
+      fmMissing: 'The title or the message is missing.',
+      fmError: "Sending didn't work. Check your connection and try again in a moment.",
       games: n => n + (n === 1 ? ' game' : ' games'),
       play: 'Play', resume: 'Resume', inProgress: 'Game in progress', noSave: 'No save yet',
       fresh: 'New version', updated: 'Updated ', frOnly: 'In French only for now.', sep: ': ',
@@ -588,6 +699,68 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       if (reg.active) reg.active.postMessage({ type: 'ks-check' });
     });
   }
+
+  /* ---------- formulaire de contact ----------
+     Pas de serveur : FormSubmit relaie le message par e-mail vers la boîte du studio.
+     Au tout premier envoi, FormSubmit envoie un e-mail d'activation à cette adresse :
+     il faut cliquer dessus une fois, sinon rien n'arrive.
+     Pour masquer l'adresse dans le code, remplacer FORM_TO par la clé aléatoire
+     que FormSubmit donne après l'activation. */
+  const FORM_TO = 'keismeystudio@gmail.com';
+  const dlg = $('#form-dlg'), cform = $('#contact-form');
+  const fmMsg = $('#fm-msg'), fmSend = $('#fm-send');
+  function showMsg(txt) { fmMsg.textContent = txt; fmMsg.classList.add('err'); fmMsg.hidden = false; }
+  function resetForm() {
+    cform.reset(); fmMsg.hidden = true;
+    $('#fm-fields').hidden = false; $('#fm-done').hidden = true;
+    fmSend.disabled = false; fmSend.querySelector('span').textContent = T().fmSend;
+  }
+  function openForm() {
+    if ($('#fm-done').hidden === false) resetForm();
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+    setTimeout(() => $('#fm-subject').focus(), 50);
+  }
+  function closeForm() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
+  $('#open-form').addEventListener('click', openForm);
+  $('#close-form').addEventListener('click', closeForm);
+  $('#fm-ok').addEventListener('click', () => { closeForm(); resetForm(); });
+  dlg.addEventListener('click', e => { if (e.target === dlg) closeForm(); });   // toucher le fond ferme
+  cform.addEventListener('submit', async e => {
+    e.preventDefault();
+    const t = T();
+    const fd = new FormData(cform);
+    const titre = String(fd.get('titre') || '').trim();
+    const message = String(fd.get('message') || '').trim();
+    const type = String(fd.get('type') || 'Autre');
+    if (!titre || !message) { showMsg(t.fmMissing); return; }
+    if (fd.get('_honey')) { $('#fm-fields').hidden = true; $('#fm-done').hidden = false; return; }   // robot : on fait semblant
+    fmMsg.hidden = true;
+    fmSend.disabled = true; fmSend.querySelector('span').textContent = t.fmSending;
+    try {
+      const r = await fetch('https://formsubmit.co/ajax/' + FORM_TO, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          _subject: '[Hub] ' + type + ' : ' + titre,
+          _template: 'table',
+          _captcha: 'false',
+          Type: type,
+          Titre: titre,
+          Message: message,
+          Langue: lang.toUpperCase(),
+          Navigateur: navigator.userAgent,
+          Mode: standalone ? 'Hub installé' : 'Navigateur'
+        })
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || String(j.success) === 'false') throw 0;
+      $('#fm-fields').hidden = true; $('#fm-done').hidden = false;
+      $('#fm-ok').focus();
+    } catch (err) {
+      showMsg(t.fmError);
+      fmSend.disabled = false; fmSend.querySelector('span').textContent = t.fmSend;
+    }
+  });
 
   /* ---------- installation ---------- */
   const standalone = matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone;
