@@ -103,6 +103,37 @@ window.GAMES = [
       if (s.awakenings) out.push(s.awakenings + (en ? (s.awakenings > 1 ? ' awakenings' : ' awakening') : (s.awakenings > 1 ? ' Éveils' : ' Éveil')));
       return out;
     }
+  },
+  {
+    id: 'oxyblox',
+    name: 'Oxyblox',
+    genre: 'Shoot’em up & gestion',
+    tagline: 'Construis ton vaisseau bloc par bloc, fais revivre une planète morte et affronte ses gardiens.',
+    path: '/Oxyblox/?lang=fr',
+    repo: 'Oxyblox',
+    icon: '/Oxyblox/icons/icon-192.png',
+    cover: '/Oxyblox/a/title.webp',
+    focus: '50% 64%',
+    color: '#05070d',
+    accent: '#f2a43a',
+    // le jeu est bilingue : ?lang= choisit la langue
+    extra: [{ label: 'Play in English', path: '/Oxyblox/?lang=en' }],
+    en: {
+      genre: 'Shoot ’em up & management',
+      tagline: 'Build your ship block by block, bring a dead planet back to life and take on its guardians.',
+      path: '/Oxyblox/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Oxyblox/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('keismey-epave-stellaire-v2') || 'null');
+      if (!s) return null;
+      const en = lang === 'en', out = [];
+      const n = s.cleared ? Object.keys(s.cleared).filter(k => s.cleared[k]).length : 0;
+      out.push((en ? 'Sectors ' : 'Secteurs ') + n + '/5');
+      const best = s.arena ? Math.max(s.arena.bestC || 0, s.arena.bestA || 0, s.arena.best || 0) : 0;
+      if (best) out.push((en ? 'Record ' : 'Record ') + fmt(best, lang));
+      return out;
+    }
   }
 ];
 
