@@ -142,6 +142,7 @@ window.GAMES = [
     tagline: 'Entraîne ton gladiateur à coups de mini-jeux, envoie-le dans l’arène et fonde une dynastie de champions.',
     path: '/Baffus-Maximus/?lang=fr',
     repo: 'Baffus-Maximus',
+    icon: '/Baffus-Maximus/icons/icon-192.png',
     cover: '/Baffus-Maximus/a/titre.webp',
     focus: '50% 62%',
     color: '#24101A',
