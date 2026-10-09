@@ -704,9 +704,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
      Pas de serveur : FormSubmit relaie le message par e-mail vers la boîte du studio.
      Au tout premier envoi, FormSubmit envoie un e-mail d'activation à cette adresse :
      il faut cliquer dessus une fois, sinon rien n'arrive.
-     Pour masquer l'adresse dans le code, remplacer FORM_TO par la clé aléatoire
-     que FormSubmit donne après l'activation. */
-  const FORM_TO = 'keismeystudio@gmail.com';
+     FORM_TO est la clé FormSubmit qui remplace l'adresse (keismeystudio@gmail.com),
+     pour qu'elle n'apparaisse pas dans le code. */
+  const FORM_TO = 'fc5ba88a39307caadfc8b869acdb7983';
   const dlg = $('#form-dlg'), cform = $('#contact-form');
   const fmMsg = $('#fm-msg'), fmSend = $('#fm-send');
   function showMsg(txt) { fmMsg.textContent = txt; fmMsg.classList.add('err'); fmMsg.hidden = false; }
