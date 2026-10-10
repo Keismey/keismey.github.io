@@ -164,6 +164,36 @@ window.GAMES = [
       out.push((en ? 'Leagues ' : 'Ligues ') + won + '/5');
       return out;
     }
+  },
+  {
+    id: 'paper-sniper',
+    name: 'Paper Sniper',
+    genre: 'Enquête & tir de précision',
+    tagline: 'Identifie ta cible dans une ville en papier, démasque ses sosies et n’aie droit qu’à un seul tir depuis les toits.',
+    path: '/Paper-Sniper/?lang=fr',
+    repo: 'Paper-Sniper',
+    icon: '/Paper-Sniper/icons/icon-192.png',
+    cover: '/Paper-Sniper/a/cover.webp',
+    focus: '50% 48%',
+    color: '#151726',
+    accent: '#b3261e',
+    // le jeu est bilingue : ?lang= choisit la langue
+    extra: [{ label: 'Play in English', path: '/Paper-Sniper/?lang=en' }],
+    en: {
+      genre: 'Investigation & sniping',
+      tagline: 'Identify your target in a paper town, unmask the doubles and take one single shot from the rooftops.',
+      path: '/Paper-Sniper/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Paper-Sniper/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('coupe-papier.v2') || 'null');
+      if (!s || !s.contrats) return null;
+      const en = lang === 'en', out = [];
+      const n = s.reussis || 0;
+      out.push(n + (en ? (n === 1 ? ' contract completed' : ' contracts completed') : (n > 1 ? ' contrats exécutés' : ' contrat exécuté')));
+      if (typeof s.francs === 'number') out.push(fmt(s.francs, lang) + ' F');
+      return out;
+    }
   }
 ];
 
