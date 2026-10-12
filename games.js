@@ -194,6 +194,36 @@ window.GAMES = [
       if (typeof s.francs === 'number') out.push(fmt(s.francs, lang) + ' F');
       return out;
     }
+  },
+  {
+    id: 'derniere-forge',
+    name: 'La Dernière Forge',
+    genre: 'Forge & aventure',
+    tagline: 'Rallume la dernière forge, descends à la mine, chasse les créatures de la Rouille et brise la malédiction.',
+    path: '/La-Derniere-Forge/?lang=fr',
+    repo: 'La-Derniere-Forge',
+    icon: '/La-Derniere-Forge/icons/icon-192.png',
+    cover: '/La-Derniere-Forge/assets/img/decors/titre.webp',
+    focus: '50% 40%',
+    color: '#15110e',
+    accent: '#ff7a2a',
+    // le jeu est bilingue : ?lang= choisit la langue (et la retient)
+    extra: [{ label: 'Play in English', path: '/La-Derniere-Forge/?lang=en' }],
+    en: {
+      name: 'The Last Forge',
+      genre: 'Forge & adventure',
+      tagline: 'Rekindle the last forge, delve into the mine, hunt the creatures of the Rust and break the curse.',
+      path: '/La-Derniere-Forge/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/La-Derniere-Forge/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('derniere-forge-save-v1') || 'null');
+      if (!s || !(s.introSeen >= 0)) return null;
+      const en = lang === 'en', R = ['I', 'II', 'III', 'IV', 'V'];
+      const out = [s.ended ? (en ? 'Epilogue' : 'Épilogue') : (en ? 'Chapter ' : 'Chapitre ') + (R[s.ch] || 'V')];
+      if (typeof s.gold === 'number') out.push(fmt(s.gold, lang) + (en ? ' gold' : ' or'));
+      return out;
+    }
   }
 ];
 
