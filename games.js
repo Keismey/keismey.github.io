@@ -49,8 +49,9 @@ window.GAMES = [
     name: 'Les Chasseurs de Brume-Haute',
     genre: 'Chasse au tour par tour',
     tagline: 'Traque des monstres au tour par tour, forge ton équipement avec leurs restes et monte en rang.',
-    path: '/Les-Chasseurs-de-Brume-Haute/',
+    path: '/Les-Chasseurs-de-Brume-Haute/?lang=fr',
     repo: 'Les-Chasseurs-de-Brume-Haute',
+    icon: '/Les-Chasseurs-de-Brume-Haute/icons/icon-192.png',
     // bannière du jeu, version jour ou nuit selon l'heure
     cover: () => {
       const h = new Date().getHours();
@@ -59,11 +60,14 @@ window.GAMES = [
     focus: '50% 60%',
     color: '#1d2a22',
     accent: '#a9c46a',
-    // pas encore de version anglaise : le jeu s'ouvre en français
+    // le jeu est bilingue : ?lang= choisit la langue (et la retient)
+    extra: [{ label: 'Play in English', path: '/Les-Chasseurs-de-Brume-Haute/?lang=en' }],
     en: {
+      name: 'The Hunters of Brume-Haute',
       genre: 'Turn-based hunting',
       tagline: 'Track monsters turn by turn, forge your gear from their remains and climb the ranks.',
-      frOnly: true
+      path: '/Les-Chasseurs-de-Brume-Haute/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Les-Chasseurs-de-Brume-Haute/?lang=fr' }]
     },
     progress(lang) {
       const s = JSON.parse(localStorage.getItem('grande-traque-v1') || 'null');
