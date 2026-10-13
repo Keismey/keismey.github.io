@@ -228,6 +228,34 @@ window.GAMES = [
       if (typeof s.gold === 'number') out.push(fmt(s.gold, lang) + (en ? ' gold' : ' or'));
       return out;
     }
+  },
+  {
+    id: 'pas-ce-soir',
+    name: 'Pas ce soir',
+    genre: 'Videur de taverne',
+    tagline: 'Trie les aventuriers à la porte, envoie les meilleurs en quête et rachète la taverne au vieux Gustave.',
+    path: '/Pas-ce-soir/?lang=fr',
+    repo: 'Pas-ce-soir',
+    icon: '/Pas-ce-soir/icons/icon-192.png',
+    cover: '/Pas-ce-soir/img/cover.webp',
+    focus: '50% 55%',
+    color: '#140b07',
+    accent: '#e0a040',
+    extra: [{ label: 'Play in English', path: '/Pas-ce-soir/?lang=en' }],
+    en: {
+      genre: 'Tavern bouncer',
+      tagline: 'Sort adventurers at the door, send the best on quests and buy the tavern from old Gustave.',
+      path: '/Pas-ce-soir/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Pas-ce-soir/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('pas-ce-soir-v1') || 'null');
+      if (!s || !s.soiree) return null;
+      const en = lang === 'en', out = [(en ? 'Night ' : 'Soirée ') + s.soiree];
+      if (s.fini) { out.push(en ? 'Landlord' : 'Patron'); if (typeof s.caisse === 'number') out.push(fmt(s.caisse, lang) + (en ? ' gold' : ' or')); }
+      else if (typeof s.epargne === 'number') out.push((en ? 'Savings ' : 'Épargne ') + fmt(s.epargne, lang) + ' / ' + fmt(1000, lang));
+      return out;
+    }
   }
 ];
 
