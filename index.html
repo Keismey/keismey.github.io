@@ -83,8 +83,23 @@ header .grow{flex:1}
 .fronly{margin:-6px 0 14px;color:var(--muted);font-size:.875rem;font-style:italic}
 .list .fronly{display:none}
 
-h1{font:600 clamp(2.25rem,9vw,3.5rem)/1.02 var(--serif);margin:34px 0 6px;letter-spacing:-.01em;max-width:14ch}
-.lede{margin:0 0 22px;color:var(--muted);max-width:36ch}
+/* présentation : quelques textes courts qui défilent (balayage, petits points) */
+.intro{margin:26px 0 22px;max-width:580px}
+.slides{position:relative;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;border-radius:22px;outline-offset:3px}
+.slides::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;box-sizing:border-box;scroll-snap-align:start;padding:18px 20px 20px;border-radius:22px;
+  background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset}
+.slide h2{margin:0 0 6px;font:700 1.5rem/1.15 var(--serif)}
+.slide p{margin:0;color:var(--muted)}
+.slide p b{color:var(--parch);font-weight:700}
+.slide .go{display:inline-block;margin-left:6px;color:var(--accent);font-weight:700;text-decoration:none;white-space:nowrap}
+.slide .go:hover{text-decoration:underline}
+.slide time{display:block;margin-top:6px;font-size:.875rem;color:var(--muted);opacity:.8}
+.dots{display:flex;gap:2px;margin:6px 0 0 -6px}
+.dots button{width:28px;height:28px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}
+.dots button::before{content:"";width:8px;height:8px;border-radius:99px;background:var(--faint);box-shadow:0 0 0 1px rgba(239,230,208,.25) inset;transition:width .25s ease,background-color .25s ease}
+.dots button[aria-current=true]::before{width:22px;background:var(--accent);box-shadow:none}
+@media (prefers-reduced-motion:reduce){.dots button::before{transition:none}}
 
 /* choix de l'affichage : grand ou liste */
 .toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:0 0 26px}
@@ -279,8 +294,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     </div>
   </header>
 
-  <h1 data-i18n="title">À quoi on joue&nbsp;?</h1>
-  <p class="lede" data-i18n="lede">Tes favoris restent en haut, puis le dernier jeu lancé. Ta progression s'affiche ici dès que tu as une partie.</p>
+  <h1 class="sr" data-i18n="siteTitle">Keismey Studio : jeux gratuits dans le navigateur</h1>
+  <section class="intro" id="intro" aria-roledescription="carousel" data-i18n-aria="introLabel" aria-label="Présentation du studio">
+    <div class="slides" id="slides" tabindex="0"></div>
+    <div class="dots" id="dots" role="group"></div>
+  </section>
 
   <div class="toolbar">
   <div class="view" role="group" data-i18n-aria="view" aria-label="Affichage des jeux">
@@ -387,8 +405,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   const STR = {
     fr: {
       home: 'Keismey Studio, accueil', lang: 'Langue', install: 'Installer',
-      title: 'À quoi on joue\u00a0?',
-      lede: "Tes favoris restent en haut, puis le dernier jeu lancé. Ta progression s'affiche ici dès que tu as une partie.",
+      siteTitle: 'Keismey Studio : jeux gratuits dans le navigateur', introLabel: 'Présentation du studio',
+      s1Title: 'À quoi on joue\u00a0?',
+      s1Text: "Pêche de nuit, chasse aux monstres, arène de gladiateurs, forge, taverne… Choisis selon ton humeur. Tes favoris restent en haut et ta progression t'attend sur chaque carte.",
+      s2Title: 'Qui je suis\u00a0?',
+      s2Text: "Un studio d'une seule personne\u00a0: j'imagine les jeux, je les teste, et je les construis avec l'aide de l'IA. Gratuits, sans pub, faits pour tenir dans une poche.",
+      newsTitle: 'Quoi de neuf\u00a0?', newsGo: 'Voir',
+      tipTitle: 'Dans ta poche',
+      tipText: "Installe le hub sur ton écran d'accueil\u00a0: la plupart des jeux se lancent même sans réseau, et tes parties restent sur ton appareil.",
+      slideN: (i, n) => 'Texte ' + i + ' sur ' + n,
       view: 'Affichage des jeux', big: 'Grand', list: 'Liste',
       ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
       foot: "Les jeux s'ouvrent dans le hub. Le geste retour te ramène ici.",
@@ -419,8 +444,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     },
     en: {
       home: 'Keismey Studio, home', lang: 'Language', install: 'Install',
-      title: 'What are we playing?',
-      lede: 'Your favorites stay on top, then the last game you launched. Your progress shows up here as soon as you have a save.',
+      siteTitle: 'Keismey Studio: free games in your browser', introLabel: 'About the studio',
+      s1Title: 'What are we playing?',
+      s1Text: 'Night fishing, monster hunting, a gladiator arena, a forge, a tavern… Pick by mood. Your favorites stay on top and your progress waits on every card.',
+      s2Title: 'Who am I?',
+      s2Text: 'A one-person studio: I come up with the games, I playtest them, and I build them with the help of AI. Free, ad-free, made to fit in a pocket.',
+      newsTitle: "What's new?", newsGo: 'See',
+      tipTitle: 'In your pocket',
+      tipText: 'Add the hub to your home screen: most games start even without a connection, and your saves stay on your device.',
+      slideN: (i, n) => 'Text ' + i + ' of ' + n,
       view: 'Game layout', big: 'Large', list: 'List',
       ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
       foot: 'Games open inside the hub. Swipe back to return here.',
@@ -465,7 +497,77 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     $('#count').textContent = t.games(games.length);
     if (bellReady) paintBell();
+    renderIntro();
   }
+  /* ---------- présentation qui défile ---------- */
+  // Textes 1 et 2 : fixes. Texte 3 : la dernière annonce de announcements.json si elle a moins de 45 jours,
+  // sinon un conseil d'installation. Défilement automatique doux, qui s'arrête dès que la personne y touche.
+  var news = null, introIdx = 0, introTouched = false, introBound = false, introTimer = null;
+  const reduceMotion = () => !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function renderIntro(keep) {
+    const box = document.getElementById('slides'), dotsBox = document.getElementById('dots');
+    if (!box || !dotsBox) return;
+    const t = T();
+    const slides = [
+      '<h2>' + t.s1Title + '</h2><p>' + esc(t.s1Text) + '</p>',
+      '<h2>' + t.s2Title + '</h2><p>' + esc(t.s2Text) + '</p>'
+    ];
+    const m = news && (news[lang] || news.fr || news.en);
+    if (m && (m.title || m.body)) {
+      const when = news.date ? new Date(news.date + 'T12:00:00') : null;
+      const link = news.url && news.url !== '/' ? '<a class="go" href="' + esc(news.url) + '">' + t.newsGo + ' →</a>' : '';
+      slides.push('<h2>' + t.newsTitle + '</h2><p><b>' + esc(m.title || '') + '</b>' + (m.title && m.body ? '. ' : '') + esc(m.body || '') + link + '</p>' +
+        (when && !isNaN(when) ? '<time datetime="' + esc(news.date) + '">' + esc(when.toLocaleDateString(t.locale, { day: 'numeric', month: 'long' })) + '</time>' : ''));
+    } else {
+      slides.push('<h2>' + t.tipTitle + '</h2><p>' + esc(t.tipText) + '</p>');
+    }
+    box.innerHTML = slides.map((h, i) => '<article class="slide" id="slide-' + i + '" role="group" aria-roledescription="slide" aria-label="' + esc(t.slideN(i + 1, slides.length)) + '">' + h + '</article>').join('');
+    dotsBox.innerHTML = slides.map((_, i) => '<button type="button" data-i="' + i + '" aria-label="' + esc(t.slideN(i + 1, slides.length)) + '"></button>').join('');
+    if (!keep) introIdx = 0;
+    introIdx = Math.min(introIdx, box.children.length - 1);
+    box.scrollLeft = box.children[introIdx].offsetLeft; paintDots();
+    if (!introBound) bindIntro();
+  }
+  function paintDots() {
+    document.querySelectorAll('#dots button').forEach((b, i) => b.setAttribute('aria-current', String(i === introIdx)));
+  }
+  function goSlide(i) {
+    const box = document.getElementById('slides'), el = box && box.children[i];
+    if (!el) return;
+    box.scrollTo({ left: el.offsetLeft, behavior: reduceMotion() ? 'auto' : 'smooth' });
+  }
+  function bindIntro() {
+    introBound = true;
+    const box = document.getElementById('slides'), dotsBox = document.getElementById('dots'), root = document.getElementById('intro');
+    let raf = 0;
+    box.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const first = box.children[0], second = box.children[1];
+        const step = first && second ? second.offsetLeft - first.offsetLeft : box.clientWidth;
+        const i = Math.max(0, Math.min(box.children.length - 1, Math.round(box.scrollLeft / (step || 1))));
+        if (i !== introIdx) { introIdx = i; paintDots(); }
+      });
+    }, { passive: true });
+    dotsBox.addEventListener('click', e => { const b = e.target.closest('button[data-i]'); if (b) { introTouched = true; goSlide(+b.dataset.i); } });
+    ['pointerdown', 'touchstart', 'wheel', 'keydown', 'focusin'].forEach(ev => root.addEventListener(ev, () => { introTouched = true; }, { passive: true }));
+    if (!reduceMotion()) {
+      introTimer = setInterval(() => {
+        if (introTouched || document.hidden) return;
+        const r = root.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > innerHeight) return;       // hors de l'écran : on ne fait rien défiler
+        goSlide((introIdx + 1) % box.children.length);
+      }, 8000);
+    }
+  }
+  fetch('/announcements.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : []).then(list => {
+    const now = Date.now();
+    const ok = (Array.isArray(list) ? list : []).filter(n => n && (n.fr || n.en) && n.date && now - new Date(n.date + 'T12:00:00') < 45 * 864e5);
+    ok.sort((a, b) => String(a.date).localeCompare(String(b.date)));   // à date égale, la dernière de la liste reste la plus récente
+    news = ok.length ? ok[ok.length - 1] : null;
+    if (news) renderIntro(true);
+  }).catch(() => {});
+
   applyLang();
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
     if (b.dataset.lang === lang) return;
