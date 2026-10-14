@@ -47,7 +47,7 @@ window.GAMES = [
   {
     id: 'brume-haute',
     name: 'Les Chasseurs de Brume-Haute',
-    genre: 'Chasse au tour par tour',
+    genre: 'RPG de chasse au tour par tour',
     tagline: 'Traque des monstres au tour par tour, forge ton équipement avec leurs restes et monte en rang.',
     path: '/Les-Chasseurs-de-Brume-Haute/?lang=fr',
     repo: 'Les-Chasseurs-de-Brume-Haute',
@@ -64,7 +64,7 @@ window.GAMES = [
     extra: [{ label: 'Play in English', path: '/Les-Chasseurs-de-Brume-Haute/?lang=en' }],
     en: {
       name: 'The Hunters of Brume-Haute',
-      genre: 'Turn-based hunting',
+      genre: 'Turn-based hunting RPG',
       tagline: 'Track monsters turn by turn, forge your gear from their remains and climb the ranks.',
       path: '/Les-Chasseurs-de-Brume-Haute/?lang=en',
       extra: [{ label: 'Jouer en Français', path: '/Les-Chasseurs-de-Brume-Haute/?lang=fr' }]
@@ -232,7 +232,7 @@ window.GAMES = [
   {
     id: 'pas-ce-soir',
     name: 'Pas ce soir',
-    genre: 'Videur de taverne',
+    genre: 'Gestion & décisions de taverne',
     tagline: 'Trie les aventuriers à la porte, envoie les meilleurs en quête et rachète la taverne au vieux Gustave.',
     path: '/Pas-ce-soir/?lang=fr',
     repo: 'Pas-ce-soir',
@@ -243,7 +243,7 @@ window.GAMES = [
     accent: '#e0a040',
     extra: [{ label: 'Play in English', path: '/Pas-ce-soir/?lang=en' }],
     en: {
-      genre: 'Tavern bouncer',
+      genre: 'Tavern management & choices',
       tagline: 'Sort adventurers at the door, send the best on quests and buy the tavern from old Gustave.',
       path: '/Pas-ce-soir/?lang=en',
       extra: [{ label: 'Jouer en Français', path: '/Pas-ce-soir/?lang=fr' }]

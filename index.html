@@ -160,7 +160,10 @@ header .grow{flex:1}
   font:700 1.0625rem/1 var(--sans);box-shadow:0 10px 26px -12px var(--g-accent)}
 .play svg{width:16px;height:16px}
 .play:active{transform:scale(.97)}
-.alt{color:var(--muted);font-size:.9375rem;text-underline-offset:3px}
+.alt{display:inline-flex;align-items:center;gap:7px;height:52px;padding:0 16px;border-radius:999px;background:rgba(0,0,0,.28);
+  box-shadow:0 0 0 1px var(--faint) inset;color:var(--muted);text-decoration:none;font:700 .875rem/1 var(--sans);letter-spacing:.06em}
+.alt svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.alt:active{transform:scale(.95)}
 .star{display:inline-grid;place-items:center;width:52px;height:52px;padding:0;border:0;border-radius:999px;cursor:pointer;
   background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset;color:var(--muted);transition:color .2s,transform .15s}
 .star svg{width:22px;height:22px;fill:none}
@@ -626,10 +629,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     const icon = g.icon || (g.path + 'icons/icon-192.png');
     const stateHtml = state
       ? '<li class="lead">' + t.inProgress + '</li>' + state.map(s => '<li>' + esc(s) + '</li>').join('')
-      : '<li class="quiet">' + t.noSave + '</li>';
+      : '';
     const fav = !!(hub.favs && hub.favs[g.id]);
     const starBtn = '<button type="button" class="star" data-fav="' + esc(g.id) + '" aria-pressed="' + fav + '" aria-label="' + esc((fav ? t.favRemove : t.favAdd)(pick('name'))) + '">' + starIcon + '</button>';
-    const extra = (pick('extra') || []).map(x => '<a class="alt" data-launch="' + esc(g.id) + '" href="' + esc(x.path) + '">' + esc(x.label) + '</a>').join('');
+    const globe = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.4 4 5.6 4 9s-1.4 6.6-4 9c-2.6-2.4-4-5.6-4-9s1.4-6.6 4-9Z"/></svg>';
+    const extra = (pick('extra') || []).map(x => '<a class="alt" data-launch="' + esc(g.id) + '" href="' + esc(x.path) + '" aria-label="' + esc(x.label) + '" title="' + esc(x.label) + '">' + globe + '<span aria-hidden="true">' + (lang === 'fr' ? 'EN' : 'FR') + '</span></a>').join('');
     return '<article class="game' + (state ? ' has-save' : '') + '" data-id="' + esc(g.id) + '" style="--g-accent:' + esc(g.accent || 'var(--ember)') + '">' +
       '<a class="cover" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" tabindex="-1" aria-hidden="true">' +
         '<img src="' + esc(val(g.cover)) + '" alt="" loading="lazy" decoding="async" style="object-position:' + esc(g.focus || 'center') + '">' +
@@ -640,7 +644,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       '<h2>' + esc(pick('name')).replace(/(\S+-\S+)/g, '<span class="nw">$1</span>') + '</h2>' +
       '<p class="tagline">' + esc(pick('tagline') || '') + '</p>' +
       (L.frOnly && t.frOnly ? '<p class="fronly">' + t.frOnly + '</p>' : '') +
-      '<ul class="state">' + stateHtml + '</ul>' +
+      '<ul class="state"' + (state ? '' : ' aria-hidden="true"') + '>' + stateHtml + '</ul>' +
       '<div class="actions">' +
         '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" aria-label="' + esc(cta + t.sep + pick('name')) + '">' + playIcon + '<span class="lbl">' + cta + '</span></a>' + starBtn + extra +
         (pushedAt ? '<p class="updated">' + t.updated + ago(pushedAt) + '</p>' : '') +
