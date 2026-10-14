@@ -560,14 +560,19 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       }, 8000);
     }
   }
-  fetch('/announcements.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : []).then(list => {
-    const now = Date.now();
-    const ok = (Array.isArray(list) ? list : []).filter(n => n && (n.fr || n.en) && n.date && now - new Date(n.date + 'T12:00:00') < 45 * 864e5);
+  // Deux sources : announcements.json (notifie les personnes qui ont activé les alertes) et news.json
+  // (affichée ici seulement, sans notification). Même format ; la plus récente des deux gagne.
+  Promise.all(['/announcements.json', '/news.json'].map(u =>
+    fetch(u, { cache: 'no-cache' }).then(r => r.ok ? r.json() : []).catch(() => []))
+  ).then(lists => {
+    const now = Date.now(), ids = new Set();
+    const ok = [].concat(...lists.map(l => Array.isArray(l) ? l : []))
+      .filter(n => n && (n.fr || n.en) && n.date && now - new Date(n.date + 'T12:00:00') < 45 * 864e5)
+      .filter(n => { if (!n.id) return true; if (ids.has(n.id)) return false; ids.add(n.id); return true; });
     ok.sort((a, b) => String(a.date).localeCompare(String(b.date)));   // à date égale, la dernière de la liste reste la plus récente
     news = ok.length ? ok[ok.length - 1] : null;
     if (news) renderIntro(true);
   }).catch(() => {});
-
   applyLang();
   document.querySelectorAll('.lang button').forEach(b => b.addEventListener('click', () => {
     if (b.dataset.lang === lang) return;

@@ -34,3 +34,10 @@ de `announcements.json`. Ajouter une entrée **à la fin** de la liste, avec un 
 
 Pas de serveur : le hub vérifie en arrière-plan (hub installé, Android/Chrome, environ une fois par jour)
 et à chaque ouverture. Seules les annonces publiées après l'activation sont notifiées, 3 au plus d'un coup.
+
+## Quoi de neuf ? (sans notification)
+
+La carte « Quoi de neuf ? » en haut du hub affiche la nouvelle la plus récente (moins de 45 jours) lue dans
+`announcements.json` **et** dans `news.json`. Même format dans les deux fichiers.
+- `announcements.json` : affichée **et** notifiée aux personnes qui ont activé « Me prévenir ».
+- `news.json` : affichée seulement, aucune notification. À utiliser pour les nouvelles qui ne méritent pas une alerte.

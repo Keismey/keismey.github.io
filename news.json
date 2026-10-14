@@ -1,0 +1,28 @@
+[
+  {
+    "id": "2026-10-12-brume-haute-en",
+    "date": "2026-10-12",
+    "url": "/Les-Chasseurs-de-Brume-Haute/",
+    "fr": {
+      "title": "Brume-Haute parle anglais",
+      "body": "Les Chasseurs de Brume-Haute passent en version anglaise, choisie selon la langue de ton appareil."
+    },
+    "en": {
+      "title": "Brume-Haute speaks English",
+      "body": "The Hunters of Brume-Haute now come in English, picked from your device language."
+    }
+  },
+  {
+    "id": "2026-10-13-trois-jeux",
+    "date": "2026-10-13",
+    "url": "/",
+    "fr": {
+      "title": "Trois nouveaux jeux",
+      "body": "Paper Sniper, La Dernière Forge et Pas ce soir viennent de rejoindre le hub."
+    },
+    "en": {
+      "title": "Three new games",
+      "body": "Paper Sniper, The Last Forge and Pas ce soir just joined the hub."
+    }
+  }
+]
