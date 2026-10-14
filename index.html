@@ -4,7 +4,23 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Keismey Studio</title>
-<meta name="description" content="Tous les jeux de Keismey Studio, au même endroit.">
+<meta name="description" content="Jeux gratuits et sans pub, à jouer dans le navigateur ou à installer sur ton téléphone : pêche, chasse, idle RPG, gestion, enquête… En français et en anglais.">
+<link rel="canonical" href="https://keismey.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Keismey Studio">
+<meta property="og:title" content="Keismey Studio — jeux gratuits dans le navigateur">
+<meta property="og:description" content="Jeux gratuits et sans pub, à jouer dans le navigateur ou à installer sur ton téléphone : pêche, chasse, idle RPG, gestion, enquête… En français et en anglais.">
+<meta property="og:url" content="https://keismey.github.io/">
+<meta property="og:image" content="https://keismey.github.io/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Keismey Studio : un aperçu de ses jeux">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Keismey Studio — jeux gratuits dans le navigateur">
+<meta name="twitter:description" content="Jeux gratuits et sans pub, à jouer dans le navigateur ou à installer sur ton téléphone : pêche, chasse, idle RPG, gestion, enquête… En français et en anglais.">
+<meta name="twitter:image" content="https://keismey.github.io/og.jpg">
 <meta name="theme-color" content="#10181b">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/favicon.png" type="image/png">
@@ -288,7 +304,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 
   <section class="contact" aria-labelledby="contact-title">
     <h2 id="contact-title" data-i18n="ctTitle">Un avis, un bug, une idée&nbsp;?</h2>
-    <p data-i18n="ctText">Je lis tous les messages. C'est grâce à vos retours que les jeux s'améliorent.</p>
+    <p data-i18n="ctText">Je lis tous les messages. C'est grâce à tes retours que les jeux s'améliorent.</p>
     <div class="row">
       <button type="button" class="btn solid" id="open-form">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -388,7 +404,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       notifBlocked: 'Les notifications sont bloquées pour ce site. Autorise-les dans les réglages de Chrome, puis réessaie.',
       supText: "Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.",
       supAi: "Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.",
-      ctTitle: 'Un avis, un bug, une idée ?', ctText: "Je lis tous les messages. C'est grâce à vos retours que les jeux s'améliorent.",
+      ctTitle: 'Un avis, un bug, une idée ?', ctText: "Je lis tous les messages. C'est grâce à tes retours que les jeux s'améliorent.",
       ctBtn: 'Écrire au studio', ctX: 'Suivre sur X',
       fmTitle: 'Écrire au studio', fmClose: 'Fermer', fmType: 'Type de message', fmSubject: 'Titre', fmBody: 'Message',
       tFeedback: "Retour d'expérience", tBug: 'Bug', tRequest: "Demande d'ajout", tIdea: 'Idée de jeu', tOther: 'Autre',
@@ -434,7 +450,12 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       today: 'today', yesterday: 'yesterday', daysAgo: n => n + ' days ago', on: d => 'on ' + d, locale: 'en-GB'
     }
   };
-  let lang = hub.lang === 'en' ? 'en' : 'fr';
+  // Langue : ?lang=fr|en dans l'adresse, sinon le choix déjà fait sur le bouton FR/EN,
+  // sinon celle du navigateur (français si c'est sa première langue, anglais pour les autres).
+  // Seul un clic sur FR/EN est mémorisé : la détection automatique ne fige rien.
+  const askedLang = (() => { try { const q = new URLSearchParams(location.search).get('lang'); return q === 'fr' || q === 'en' ? q : null; } catch (e) { return null; } })();
+  const browserLang = (() => { const l = (navigator.languages && navigator.languages[0]) || navigator.language || 'fr'; return /^fr/i.test(l) ? 'fr' : 'en'; })();
+  let lang = askedLang || (hub.lang === 'fr' || hub.lang === 'en' ? hub.lang : browserLang);
   const T = () => STR[lang];
   function applyLang() {
     const t = T();
