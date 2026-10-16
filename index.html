@@ -692,10 +692,12 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     setTimeout(() => { halo.style.backgroundImage = 'url("' + val(g.cover) + '")'; halo.classList.remove('swap'); }, 250);
   }
   function watch() {
-    if (io) io.disconnect();
+    if (io) { io.disconnect(); io = null; }
     const els = [...document.querySelectorAll('.game')];
     if (!els.length) return;
     setActive(els[0].dataset.id);
+    // en liste, les cartes défilent trop vite : la couleur reste figée sur le premier jeu
+    if ($('#games').classList.contains('list')) return;
     if (!('IntersectionObserver' in window)) return;
     const seen = new Map();
     io = new IntersectionObserver(es => {
@@ -712,6 +714,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     const go = () => {
       $('#games').classList.toggle('list', v === 'liste');
       document.querySelectorAll('.view button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === v)));
+      watch();   // liste : couleur figée sur le 1er jeu ; grand : suit de nouveau le jeu à l'écran
     };
     const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (animate && !calm && document.startViewTransition) document.startViewTransition(go); else go();
