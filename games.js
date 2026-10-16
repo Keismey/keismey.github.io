@@ -262,17 +262,20 @@ window.GAMES = [
     name: 'Last Loop',
     genre: 'Survie & gestion ferroviaire',
     tagline: 'Fais tourner le dernier train, garde tes survivants en vie et fais tomber le Roi des Rails.',
-    path: '/Last-Loop/',
+    path: '/Last-Loop/?lang=fr',
     repo: 'Last-Loop',
     icon: '/Last-Loop/assets/icons/icon-192.png',
     cover: '/Last-Loop/assets/img/title_keyart.webp',
     focus: '50% 45%',
     color: '#1f1e25',
     accent: '#e8a33d',
-    frOnly: true,
+    // le jeu est bilingue : ?lang= choisit la langue (et la retient)
+    extra: [{ label: 'Play in English', path: '/Last-Loop/?lang=en' }],
     en: {
       genre: 'Railway survival & management',
-      tagline: 'Keep the last train running, keep your survivors alive and bring down the Rail King.'
+      tagline: 'Keep the last train running, keep your survivors alive and bring down the Rail King.',
+      path: '/Last-Loop/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Last-Loop/?lang=fr' }]
     },
     progress(lang) {
       const s = JSON.parse(localStorage.getItem('loopexpress.save') || 'null');
