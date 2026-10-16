@@ -256,6 +256,33 @@ window.GAMES = [
       else if (typeof s.epargne === 'number') out.push((en ? 'Savings ' : 'Épargne ') + fmt(s.epargne, lang) + ' / ' + fmt(1000, lang));
       return out;
     }
+  },
+  {
+    id: 'last-loop',
+    name: 'Last Loop',
+    genre: 'Survie & gestion ferroviaire',
+    tagline: 'Fais tourner le dernier train, garde tes survivants en vie et fais tomber le Roi des Rails.',
+    path: '/Last-Loop/',
+    repo: 'Last-Loop',
+    icon: '/Last-Loop/assets/icons/icon-192.png',
+    cover: '/Last-Loop/assets/img/title_keyart.webp',
+    focus: '50% 45%',
+    color: '#1f1e25',
+    accent: '#e8a33d',
+    frOnly: true,
+    en: {
+      genre: 'Railway survival & management',
+      tagline: 'Keep the last train running, keep your survivors alive and bring down the Rail King.'
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('loopexpress.save') || 'null');
+      if (!s || !s.summary) return null;
+      const en = lang === 'en', m = s.summary, out = [];
+      out.push('Zone ' + (m.ring || 1) + ' · ' + (en ? 'Lap ' : 'Tour ') + (m.lap || 1));
+      if (Array.isArray(s.crew)) { const n = s.crew.length; out.push(n + (en ? (n > 1 ? ' survivors' : ' survivor') : (n > 1 ? ' survivants' : ' survivant'))); }
+      if (s.progress && s.progress.bossDown && s.progress.bossDown[1]) out.push(en ? 'Rail King defeated' : 'Roi des Rails vaincu');
+      return out;
+    }
   }
 ];
 
