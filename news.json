@@ -24,5 +24,18 @@
       "title": "Three new games",
       "body": "Paper Sniper, The Last Forge and Pas ce soir just joined the hub."
     }
+  },
+  {
+    "id": "2026-10-17-necromancien",
+    "date": "2026-10-17",
+    "url": "/Le-Necromancien-de-la-Crypte/",
+    "fr": {
+      "title": "Le Nécromancien de la Crypte",
+      "body": "Nouveau jeu : couds des abominations avec les restes des héros et défends ta crypte pendant dix nuits."
+    },
+    "en": {
+      "title": "The Necromancer of the Crypt",
+      "body": "New game: stitch abominations from heroes' remains and defend your crypt for ten nights."
+    }
   }
 ]

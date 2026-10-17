@@ -286,6 +286,36 @@ window.GAMES = [
       if (s.progress && s.progress.bossDown && s.progress.bossDown[1]) out.push(en ? 'Rail King defeated' : 'Roi des Rails vaincu');
       return out;
     }
+  },
+  {
+    id: 'necromancien',
+    name: 'Le Nécromancien de la Crypte',
+    genre: 'Défense de crypte & couture de monstres',
+    tagline: 'Recycle les héros tombés, couds des abominations avec leurs restes et défends ta crypte jusqu’à la cathédrale.',
+    path: '/Le-Necromancien-de-la-Crypte/?lang=fr',
+    repo: 'Le-Necromancien-de-la-Crypte',
+    icon: '/Le-Necromancien-de-la-Crypte/icons/icon-192.png',
+    cover: '/Le-Necromancien-de-la-Crypte/assets/cover.webp',
+    focus: '50% 50%',
+    color: '#140b1e',
+    accent: '#7dff4a',
+    // le jeu est bilingue : ?lang= choisit la langue
+    extra: [{ label: 'Play in English', path: '/Le-Necromancien-de-la-Crypte/?lang=en' }],
+    en: {
+      name: 'The Necromancer of the Crypt',
+      genre: 'Crypt defense & monster stitching',
+      tagline: 'Recycle fallen heroes, stitch abominations from their remains and defend your crypt all the way to the cathedral.',
+      path: '/Le-Necromancien-de-la-Crypte/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Le-Necromancien-de-la-Crypte/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('necro_crypte_save') || 'null');
+      if (!s || !(s.tuto > 0 || s.cleared > 0)) return null;
+      const en = lang === 'en', out = [];
+      out.push(s.titan ? (en ? 'Bone Titan awakened' : 'Titan d’Os réveillé') : (en ? 'Night ' : 'Nuit ') + Math.min(10, (s.cleared || 0) + 1) + ' / 10');
+      if (typeof s.souls === 'number') out.push(fmt(s.souls, lang) + (en ? ' souls' : ' âmes'));
+      return out;
+    }
   }
 ];
 
