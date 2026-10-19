@@ -2,7 +2,16 @@
 
 Le hub des jeux de Keismey Studio : https://keismey.github.io/
 
-Une seule appli à installer sur le téléphone. Chaque jeu s'ouvre dedans, le geste retour ramène au hub.
+Une seule appli à installer sur le téléphone. Chaque jeu s'ouvre dedans.
+
+## Bouton retour du téléphone
+
+Chaque jeu embarque `ks-back.js` (le même fichier partout) : le bouton ou geste retour revient au menu
+précédent du jeu, demande confirmation avant l'écran titre, et depuis l'écran titre ramène au hub, même pour
+un joueur arrivé d'ailleurs (lien partagé, recherche). Si le joueur vient du hub, il y revient comme avec un
+retour normal ; sinon le hub remplace le jeu dans l'historique. Ce que fait le retour sur chaque écran est
+décidé par le jeu (fonction passée à `KSBack.init`). Pour un nouveau jeu : copier `ks-back.js`, le charger
+avant le jeu, l'ajouter au cache hors ligne du jeu et appeler `KSBack.init({ back, lang })`.
 
 ## Ajouter un jeu
 
