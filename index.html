@@ -864,6 +864,16 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   }
   function closeForm() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
   $('#open-form').addEventListener('click', openForm);
+  // lien « Signaler un bug » des jeux : /?contact=bug&jeu=Nom du jeu → formulaire prérempli
+  (() => {
+    let q; try { q = new URLSearchParams(location.search); } catch (e) { return; }
+    if (q.get('contact') !== 'bug') return;
+    const jeu = (q.get('jeu') || '').slice(0, 60);
+    try { const u = new URL(location.href); ['contact', 'jeu'].forEach(k => u.searchParams.delete(k)); history.replaceState(history.state, '', u.pathname + u.search + u.hash); } catch (e) {}
+    openForm();
+    $('#fm-type').value = 'Bug';
+    if (jeu) { $('#fm-subject').value = jeu + ' : '; $('#fm-body').placeholder = lang === 'en' ? 'What were you doing when it happened?' : 'Que faisais-tu quand c’est arrivé ?'; }
+  })();
   $('#close-form').addEventListener('click', closeForm);
   $('#fm-ok').addEventListener('click', () => { closeForm(); resetForm(); });
   dlg.addEventListener('click', e => { if (e.target === dlg) closeForm(); });   // toucher le fond ferme
