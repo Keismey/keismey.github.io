@@ -316,36 +316,6 @@ window.GAMES = [
       if (typeof s.souls === 'number') out.push(fmt(s.souls, lang) + (en ? ' souls' : ' âmes'));
       return out;
     }
-  },
-  {
-    id: 'quatre-sceaux',
-    name: 'Les Quatre Sceaux',
-    genre: 'Cartes & stratégie sans hasard',
-    tagline: 'Pose tes cartes sur trois voies, laisse tes troupes marcher et brise la citadelle adverse. Aucun dé : tout se calcule.',
-    path: '/quatre-sceaux/?lang=fr',
-    repo: 'quatre-sceaux',
-    icon: '/quatre-sceaux/icons/icon-192.png',
-    cover: '/quatre-sceaux/art/title.webp',
-    focus: '50% 30%',
-    color: '#11161b',
-    accent: '#d8b25a',
-    // le jeu est bilingue : ?lang= choisit la langue (et la retient)
-    extra: [{ label: 'Play in English', path: '/quatre-sceaux/?lang=en' }],
-    en: {
-      name: 'The Four Seals',
-      genre: 'Card strategy, no luck',
-      tagline: 'Play your cards on three lanes, let your troops march and break the enemy citadel. No dice: everything can be calculated.',
-      path: '/quatre-sceaux/?lang=en',
-      extra: [{ label: 'Jouer en Français', path: '/quatre-sceaux/?lang=fr' }]
-    },
-    progress(lang) {
-      const s = JSON.parse(localStorage.getItem('sceaux_save_v1') || 'null');
-      if (!s || !s.started || !s.campagne) return null;
-      const en = lang === 'en', c = s.campagne.combat || 0, out = [];
-      out.push((en ? 'Seals ' : 'Sceaux ') + Math.min(4, Math.floor(c / 5)) + '/4');
-      out.push(s.campagne.fini ? (en ? 'Campaign complete' : 'Campagne terminée') : (en ? 'Battle ' : 'Combat ') + (c + 1) + '/21');
-      return out;
-    }
   }
 ];
 
