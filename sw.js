@@ -2,7 +2,7 @@
 // Ne gère QUE les fichiers du hub (et les images qu'il affiche).
 // Les jeux gardent leurs propres service workers dans leurs dossiers.
 // Changer VERSION à chaque mise en ligne qui touche les polices ou les icônes.
-const VERSION = 'hub-1.1.0';
+const VERSION = 'hub-1.1.1';
 const SHELL = 'shell-' + VERSION;
 const IMGS = 'img-v1';
 
@@ -38,7 +38,8 @@ self.addEventListener('fetch', e => {
   // Pages et config du hub : réseau d'abord (mises à jour immédiates), cache si hors ligne
   if (NETWORK_FIRST.has(path)) {
     e.respondWith(
-      fetch(req).then(res => {
+      // no-cache : on revalide auprès du serveur au lieu de servir la copie du navigateur (10 min sur GitHub Pages)
+      fetch(new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })).then(res => {
         if (res.ok) { const copy = res.clone(); caches.open(SHELL).then(c => c.put(path === '/index.html' ? '/' : path, copy)); }
         return res;
       }).catch(() => caches.match(path === '/index.html' ? '/' : path, { ignoreSearch: true }))
