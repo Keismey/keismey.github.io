@@ -37,5 +37,18 @@
       "title": "The Necromancer of the Crypt",
       "body": "New game: stitch abominations from heroes' remains and defend your crypt for ten nights."
     }
+  },
+  {
+    "id": "2026-10-21-cartographe",
+    "date": "2026-10-21",
+    "url": "/Le-Cartographe/",
+    "fr": {
+      "title": "Le Cartographe",
+      "body": "Nouveau jeu : dessine le monde d’après les témoignages des habitants, huit contrées à relever pour le roi."
+    },
+    "en": {
+      "title": "The Cartographer",
+      "body": "New game: draw the world from the villagers’ testimonies, eight regions to chart for the king."
+    }
   }
 ]

@@ -316,6 +316,39 @@ window.GAMES = [
       if (typeof s.souls === 'number') out.push(fmt(s.souls, lang) + (en ? ' souls' : ' âmes'));
       return out;
     }
+  },
+  {
+    id: 'cartographe',
+    name: 'Le Cartographe',
+    genre: 'Déduction & cartographie',
+    tagline: 'Dessine le monde d’après les témoignages des habitants : place les lieux, trace les routes et rends ta carte au roi.',
+    path: '/Le-Cartographe/?lang=fr',
+    repo: 'Le-Cartographe',
+    icon: '/Le-Cartographe/icon-192.png',
+    cover: '/Le-Cartographe/cover.webp',
+    focus: '50% 50%',
+    color: '#15242c',
+    accent: '#d6b25a',
+    // le jeu est bilingue : ?lang= choisit la langue
+    extra: [{ label: 'Play in English', path: '/Le-Cartographe/?lang=en' }],
+    en: {
+      name: 'The Cartographer',
+      genre: 'Deduction & mapmaking',
+      tagline: 'Draw the world from the villagers’ testimonies: place the landmarks, trace the roads and hand your map to the king.',
+      path: '/Le-Cartographe/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Le-Cartographe/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('keismey.cartographe.v1') || 'null');
+      if (!s || !s.progress) return null;
+      const en = lang === 'en', out = [];
+      const ids = Object.keys(s.progress).filter(k => s.progress[k] && s.progress[k].stars >= 1);
+      if (!ids.length && !Object.keys(s.inprogress || {}).length) return null;
+      out.push((en ? 'Regions ' : 'Contrées ') + ids.length + '/8');
+      const stars = ids.reduce((a, k) => a + (s.progress[k].stars || 0), 0);
+      if (stars) out.push(stars + ' ★');
+      return out;
+    }
   }
 ];
 
