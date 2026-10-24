@@ -349,6 +349,43 @@ window.GAMES = [
       if (stars) out.push(stars + ' ★');
       return out;
     }
+  },
+  {
+    id: 'lanterval',
+    name: 'Lanterval',
+    genre: 'RPG à l’aquarelle',
+    tagline: 'Rallume la lanterne de ton village : quatre héros, quatre régions et une brume qui efface les souvenirs.',
+    path: '/Lanterval/?lang=fr',
+    repo: 'Lanterval',
+    icon: '/Lanterval/icon-192.png',
+    cover: '/Lanterval/couverture.webp',
+    focus: '50% 50%',
+    color: '#0b0d1a',
+    accent: '#e9b949',
+    // le jeu est bilingue : ?lang= choisit la langue (et la retient)
+    extra: [{ label: 'Play in English', path: '/Lanterval/?lang=en' }],
+    en: {
+      genre: 'Watercolour RPG',
+      tagline: 'Rekindle your village’s lantern: four heroes, four regions and a mist that wipes away memories.',
+      path: '/Lanterval/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Lanterval/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('lanterval-v1') || 'null');
+      if (!s || !s.v) return null;
+      const en = lang === 'en', out = [], faites = s.etapes || [];
+      if (s.finPartie || (s.finVue && !s.plus)) out.push(en ? 'The End' : 'Fin');
+      else {
+        // acte en cours : le premier dont toutes les étapes ne sont pas finies (10, 8, 10 et 10 étapes)
+        const n = [10, 8, 10, 10];
+        let a = 1;
+        while (a < 4 && faites.filter(e => e.indexOf('a' + a + '.') === 0).length >= n[a - 1]) a++;
+        out.push((en ? 'Act ' : 'Acte ') + a);
+      }
+      if (s.plus) out.push((en ? 'New game+ ' : 'Partie+ ') + s.plus);
+      if (s.chars && s.chars.kael) out.push((en ? 'Level ' : 'Niveau ') + s.chars.kael.lvl);
+      return out;
+    }
   }
 ];
 

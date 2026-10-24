@@ -25,6 +25,7 @@
     { "name": "Pas ce soir", "url": "/Pas-ce-soir/", "icons": [{ "src": "/Pas-ce-soir/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
     { "name": "Last Loop", "url": "/Last-Loop/", "icons": [{ "src": "/Last-Loop/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
     { "name": "Le Nécromancien de la Crypte", "short_name": "Nécromancien", "url": "/Le-Necromancien-de-la-Crypte/", "icons": [{ "src": "/Le-Necromancien-de-la-Crypte/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
-    { "name": "Le Cartographe", "short_name": "Cartographe", "url": "/Le-Cartographe/", "icons": [{ "src": "/Le-Cartographe/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
+    { "name": "Le Cartographe", "short_name": "Cartographe", "url": "/Le-Cartographe/", "icons": [{ "src": "/Le-Cartographe/icon-192.png", "sizes": "192x192", "type": "image/png" }] },
+    { "name": "Lanterval", "url": "/Lanterval/", "icons": [{ "src": "/Lanterval/icon-192.png", "sizes": "192x192", "type": "image/png" }] }
   ]
 }
