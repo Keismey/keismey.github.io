@@ -50,5 +50,18 @@
       "title": "The Cartographer",
       "body": "New game: draw the world from the villagers’ testimonies, eight regions to chart for the king."
     }
+  },
+  {
+    "id": "2026-10-24-lanterval",
+    "date": "2026-10-24",
+    "url": "/Lanterval/",
+    "fr": {
+      "title": "Lanterval",
+      "body": "Nouveau jeu : un RPG à l’aquarelle en quatre actes. Rallume la lanterne de ton village avec Kael, Mira, Sol et Nev."
+    },
+    "en": {
+      "title": "Lanterval",
+      "body": "New game: a watercolour RPG in four acts. Rekindle your village’s lantern with Kael, Mira, Sol and Nev."
+    }
   }
 ]
