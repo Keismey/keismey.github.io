@@ -63,5 +63,18 @@
       "title": "Lanterval",
       "body": "New game: a watercolour RPG in four acts. Rekindle your village’s lantern with Kael, Mira, Sol and Nev."
     }
+  },
+  {
+    "id": "2026-10-25-pico-clinic",
+    "date": "2026-10-25",
+    "url": "/Pico-Clinic/",
+    "fr": {
+      "title": "Pico-Clinic",
+      "body": "Nouveau jeu : dévisse, soude et change les puces pour soigner drones, insectes mécaniques et peluches robots."
+    },
+    "en": {
+      "title": "Pico-Clinic",
+      "body": "New game: unscrew, solder and swap chips to heal drones, mechanical insects and robot plushies."
+    }
   }
 ]
