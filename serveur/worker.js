@@ -19,6 +19,7 @@
      POST /v1/push/key          {}                  → { key }   clé publique VAPID (créée au premier appel, gardée dans la base)
      POST /v1/push/subscribe    { endpoint }        → { ok }    adresse d'abonnement donnée par le navigateur
      POST /v1/push/unsubscribe  { endpoint }        → { ok }
+     POST /v1/push/status       {}                  → état de l'envoi (abonnés par service, dernière annonce, journal du dernier lot)
    Chaque minute (déclencheur Cron « * * * * * »), toutes les 5 minutes seulement si rien n'est en cours :
    le Worker relit announcements.json ; si la dernière annonce est nouvelle, il « réveille » chaque abonné
    par lots de PUSH_BATCH (push sans contenu : le service worker du hub lit lui-même l'annonce et l'affiche).
@@ -69,6 +70,10 @@ export default {
     try {
       if (action === 'login') return reply(200, await login(env, body.credential));
       if (action === 'push/key') return reply(200, { key: (await vapid(env)).pub });
+      if (action === 'push/status') {
+        const per = (await env.DB.prepare("SELECT substr(endpoint, 9, instr(substr(endpoint, 9), '/') - 1) AS host, COUNT(*) AS n FROM push GROUP BY host").all()).results || [];
+        return reply(200, { subs: per, last: await meta(env, 'push_last'), job: await meta(env, 'push_job'), log: await meta(env, 'push_log'), tick: await meta(env, 'push_tick') });
+      }
       if (action === 'push/subscribe' || action === 'push/unsubscribe') {
         const ep = pushEndpoint(body.endpoint);
         if (!ep) return reply(400, { error: 'endpoint' });
@@ -182,6 +187,7 @@ async function vapidHeader(env, endpoint, cache) {
 }
 
 async function pushTick(env, now) {
+  await setMeta(env, 'push_tick', new Date(now).toISOString());   // dernier passage du déclencheur Cron
   let job = await meta(env, 'push_job');
   const minute = Math.floor(now / 60000);
   if (!job && minute % 5 !== 0) return;   // au calme : on ne relit les annonces que toutes les 5 minutes
@@ -199,15 +205,22 @@ async function pushTick(env, now) {
     job = { id: last.id, after: '' };
   }
   const subs = (await env.DB.prepare('SELECT endpoint FROM push WHERE endpoint > ? ORDER BY endpoint LIMIT ?').bind(job.after, PUSH_BATCH).all()).results || [];
-  const cache = {}, gone = [];
+  const cache = {}, gone = [], log = { at: new Date(now).toISOString(), id: job.id, n: subs.length, status: {}, err: [] };
   await Promise.all(subs.map(async s => {
+    const host = new URL(s.endpoint).hostname;
     try {
-      const res = await fetch(s.endpoint, { method: 'POST', headers: {
-        Authorization: await vapidHeader(env, s.endpoint, cache), TTL: '86400', Urgency: 'normal', 'Content-Length': '0'
+      const res = await fetch(s.endpoint, { method: 'POST', body: '', headers: {
+        Authorization: await vapidHeader(env, s.endpoint, cache), TTL: '86400', Urgency: 'normal'
       } });
+      log.status[host + ' ' + res.status] = (log.status[host + ' ' + res.status] || 0) + 1;
       if (res.status === 404 || res.status === 410) gone.push(s.endpoint);   // abonnement expiré ou retiré
-    } catch (e) {}
+      else if (res.status >= 400 && log.err.length < 3) log.err.push(host + ' ' + res.status + ' ' + (await res.text()).slice(0, 200));
+    } catch (e) {
+      log.status[host + ' erreur'] = (log.status[host + ' erreur'] || 0) + 1;
+      if (log.err.length < 3) log.err.push(host + ' ' + String(e && e.message || e).slice(0, 200));
+    }
   }));
+  await setMeta(env, 'push_log', log);
   if (gone.length) await env.DB.batch(gone.map(ep => env.DB.prepare('DELETE FROM push WHERE endpoint = ?').bind(ep)));
   if (subs.length < PUSH_BATCH) await setMeta(env, 'push_job', null);
   else await setMeta(env, 'push_job', { id: job.id, after: subs[subs.length - 1].endpoint });
