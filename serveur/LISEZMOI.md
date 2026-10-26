@@ -27,9 +27,13 @@ Voir `confidentialite.html`.
 5. Dans `ks-studio.js` (hub et jeux) : `SYNC_API = 'https://ks-sync.<sous-domaine>.workers.dev/v1/'`
    et `GOOGLE_ID = '<identifiant client>'`.
 
+6. **Notifications push** : Settings → Triggers → Cron Triggers → Add → `* * * * *` (chaque minute).
+   Les clés VAPID sont créées toutes seules au premier abonnement et restent dans la base.
+
 ## Mettre à jour le serveur
 
-Edit code → coller la nouvelle version de `worker.js` → Deploy. Les données ne bougent pas.
+Edit code → coller la nouvelle version de `worker.js` (depuis sa version brute) → Deploy. Les données ne bougent pas.
+Si `schema.sql` a changé, recoller sa dernière ligne dans la console D1 (`CREATE TABLE IF NOT EXISTS` : sans risque).
 
 ## Tester en local
 

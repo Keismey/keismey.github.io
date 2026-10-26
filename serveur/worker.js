@@ -15,10 +15,19 @@
      POST /v1/put      { t, jeu, base, data }       → { rev, updated }  ou 409 { conflict, rev, updated }
      POST /v1/delete   { t }                        → { ok }            (compte, appareils et sauvegardes)
 
+   Notifications push (cloche du hub), sans compte :
+     POST /v1/push/key          {}                  → { key }   clé publique VAPID (créée au premier appel, gardée dans la base)
+     POST /v1/push/subscribe    { endpoint }        → { ok }    adresse d'abonnement donnée par le navigateur
+     POST /v1/push/unsubscribe  { endpoint }        → { ok }
+   Chaque minute (déclencheur Cron « * * * * * »), toutes les 5 minutes seulement si rien n'est en cours :
+   le Worker relit announcements.json ; si la dernière annonce est nouvelle, il « réveille » chaque abonné
+   par lots de PUSH_BATCH (push sans contenu : le service worker du hub lit lui-même l'annonce et l'affiche).
+
    Réglages du Worker (Settings → Variables and Secrets / Bindings) :
      DB                 liaison vers la base D1 (schema.sql)
      GOOGLE_CLIENT_ID   identifiant client OAuth Google (pas un secret)
      ORIGINS            facultatif : origines autorisées en plus de https://keismey.github.io, séparées par des virgules
+     HUB                facultatif, pour les tests : adresse du hub (par défaut https://keismey.github.io)
      JWKS_URL           facultatif, pour les tests : adresse des clés publiques à la place de celles de Google */
 
 const MAX_DATA = 1000000;          // 1 Mo par jeu
@@ -27,6 +36,8 @@ const SESSION_IDLE = 400 * 86400e3; // un appareil inutilisé plus d'un an est d
 const GOOGLE_JWKS = 'https://www.googleapis.com/oauth2/v3/certs';
 const GOOGLE_ISS = ['accounts.google.com', 'https://accounts.google.com'];
 const JEU_RE = /^[A-Za-z0-9-]{1,48}$/;
+const PUSH_BATCH = 40;             // le forfait gratuit permet 50 requêtes sortantes par exécution
+const PUSH_HOSTS = /^(fcm\.googleapis\.com|updates\.push\.services\.mozilla\.com|[a-z0-9.-]+\.push\.apple\.com|[a-z0-9.-]+\.notify\.windows\.com)$/;
 
 export default {
   async fetch(req, env) {
@@ -57,6 +68,14 @@ export default {
 
     try {
       if (action === 'login') return reply(200, await login(env, body.credential));
+      if (action === 'push/key') return reply(200, { key: (await vapid(env)).pub });
+      if (action === 'push/subscribe' || action === 'push/unsubscribe') {
+        const ep = pushEndpoint(body.endpoint);
+        if (!ep) return reply(400, { error: 'endpoint' });
+        if (action === 'push/subscribe') await env.DB.prepare('INSERT OR IGNORE INTO push (endpoint, created) VALUES (?, ?)').bind(ep, Date.now()).run();
+        else await env.DB.prepare('DELETE FROM push WHERE endpoint = ?').bind(ep).run();
+        return reply(200, { ok: true });
+      }
       const uid = await auth(env, body.t);
       if (!uid) return reply(401, { error: 'session' });
       const now = Date.now();
@@ -112,8 +131,87 @@ export default {
       console.log('erreur', e && e.stack || e);
       return reply(500, { error: 'server' });
     }
+  },
+
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(pushTick(env, event.scheduledTime || Date.now()).catch(e => console.log('push', e && e.stack || e)));
   }
 };
+
+// ---------- notifications push ----------
+
+function pushEndpoint(s) {
+  if (typeof s !== 'string' || s.length > 1000) return null;
+  try {
+    const u = new URL(s);
+    return u.protocol === 'https:' && PUSH_HOSTS.test(u.hostname) ? u.href : null;
+  } catch (e) { return null; }
+}
+
+async function meta(env, k) {
+  const r = await env.DB.prepare('SELECT v FROM meta WHERE k = ?').bind(k).first();
+  return r ? JSON.parse(r.v) : null;
+}
+async function setMeta(env, k, v) {
+  if (v === null) return env.DB.prepare('DELETE FROM meta WHERE k = ?').bind(k).run();
+  return env.DB.prepare('INSERT INTO meta (k, v) VALUES (?, ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v').bind(k, JSON.stringify(v)).run();
+}
+
+// Clés VAPID : créées une fois, la clé privée ne quitte jamais la base
+let VAPID = null;
+async function vapid(env) {
+  if (VAPID) return VAPID;
+  let v = await meta(env, 'vapid');
+  if (!v) {
+    const kp = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+    const raw = new Uint8Array(await crypto.subtle.exportKey('raw', kp.publicKey));
+    v = { pub: b64url(raw), jwk: await crypto.subtle.exportKey('jwk', kp.privateKey) };
+    await env.DB.prepare('INSERT OR IGNORE INTO meta (k, v) VALUES (?, ?)').bind('vapid', JSON.stringify(v)).run();
+    v = await meta(env, 'vapid');   // si deux appels simultanés : on garde celle qui a été enregistrée
+  }
+  VAPID = { pub: v.pub, key: await crypto.subtle.importKey('jwk', v.jwk, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']) };
+  return VAPID;
+}
+async function vapidHeader(env, endpoint, cache) {
+  const aud = new URL(endpoint).origin;
+  if (cache[aud]) return cache[aud];
+  const v = await vapid(env), enc = o => b64url(new TextEncoder().encode(JSON.stringify(o)));
+  const unsigned = enc({ typ: 'JWT', alg: 'ES256' }) + '.' + enc({ aud, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: 'https://keismey.github.io/' });
+  const sig = new Uint8Array(await crypto.subtle.sign({ name: 'ECDSA', hash: 'SHA-256' }, v.key, new TextEncoder().encode(unsigned)));
+  return (cache[aud] = 'vapid t=' + unsigned + '.' + b64url(sig) + ', k=' + v.pub);
+}
+
+async function pushTick(env, now) {
+  let job = await meta(env, 'push_job');
+  const minute = Math.floor(now / 60000);
+  if (!job && minute % 5 !== 0) return;   // au calme : on ne relit les annonces que toutes les 5 minutes
+  if (!job) {
+    const hub = env.HUB || 'https://keismey.github.io';
+    const r = await fetch(hub + '/announcements.json?t=' + minute, { headers: { 'Cache-Control': 'no-cache' } });
+    if (!r.ok) return;
+    const list = await r.json();
+    const last = Array.isArray(list) && list.length ? list[list.length - 1] : null;
+    if (!last || !last.id) return;
+    const done = await meta(env, 'push_last');
+    if (done === last.id) return;
+    await setMeta(env, 'push_last', last.id);
+    if (done === null) return;            // tout premier passage : on retient l'annonce actuelle sans l'envoyer
+    job = { id: last.id, after: '' };
+  }
+  const subs = (await env.DB.prepare('SELECT endpoint FROM push WHERE endpoint > ? ORDER BY endpoint LIMIT ?').bind(job.after, PUSH_BATCH).all()).results || [];
+  const cache = {}, gone = [];
+  await Promise.all(subs.map(async s => {
+    try {
+      const res = await fetch(s.endpoint, { method: 'POST', headers: {
+        Authorization: await vapidHeader(env, s.endpoint, cache), TTL: '86400', Urgency: 'normal', 'Content-Length': '0'
+      } });
+      if (res.status === 404 || res.status === 410) gone.push(s.endpoint);   // abonnement expiré ou retiré
+    } catch (e) {}
+  }));
+  if (gone.length) await env.DB.batch(gone.map(ep => env.DB.prepare('DELETE FROM push WHERE endpoint = ?').bind(ep)));
+  if (subs.length < PUSH_BATCH) await setMeta(env, 'push_job', null);
+  else await setMeta(env, 'push_job', { id: job.id, after: subs[subs.length - 1].endpoint });
+}
 
 function allowedOrigin(origin, env) {
   if (origin === 'https://keismey.github.io') return true;

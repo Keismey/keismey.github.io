@@ -538,7 +538,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       notifOnBg: "C'est noté : tu seras prévenu des nouveaux jeux et des grosses mises à jour.",
       notifOnOpen: "C'est noté. Installe le hub pour être prévenu même quand il est fermé ; sinon, les alertes arrivent à l'ouverture du hub.",
       notifOff: 'Alertes coupées.',
-      notifBlocked: 'Les notifications sont bloquées pour ce site. Autorise-les dans les réglages de Chrome, puis réessaie.',
+      notifBlocked: 'Les notifications sont bloquées pour ce site. Autorise-les dans les réglages du navigateur, puis réessaie.',
       supText: "Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.",
       supAi: "Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.",
       ctTitle: 'Un avis, un bug, une idée ?', ctText: "Je lis tous les messages. C'est grâce à tes retours que les jeux s'améliorent.",
@@ -602,7 +602,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       notifOnBg: "Done: you'll be notified about new games and big updates.",
       notifOnOpen: 'Done. Install the hub to be notified even when it is closed; otherwise alerts show up when you open the hub.',
       notifOff: 'Alerts turned off.',
-      notifBlocked: 'Notifications are blocked for this site. Allow them in Chrome settings, then try again.',
+      notifBlocked: 'Notifications are blocked for this site. Allow them in your browser settings, then try again.',
       supText: 'Every game is free and will stay that way. If one of them gave you a good time, you can help fund the next ones.',
       supAi: 'Games designed and tested by me, built with the help of AI.',
       ctTitle: 'Feedback, a bug, an idea?', ctText: 'I read every message. Your feedback is what makes the games better.',
@@ -929,8 +929,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   }
 
   /* ---------- alertes : nouveaux jeux et grosses mises à jour ----------
-     Pas de serveur : le service worker relit announcements.json en arrière-plan
-     (Periodic Background Sync, hub installé sur Android/Chrome) et à chaque ouverture du hub.
+     Notifications push : le navigateur donne une adresse d'abonnement, gardée par le serveur ks-sync
+     (aucune donnée sur la personne). Quand une annonce est ajoutée à announcements.json, le serveur
+     réveille chaque abonné ; le service worker lit l'annonce et l'affiche, même hub fermé.
+     En plus : Periodic Background Sync (Android, hub installé) et vérification à chaque ouverture du hub.
      L'état (activé, langue, annonces déjà vues) est rangé dans le Cache Storage, lisible par le service worker. */
   const bell = $('#bell'), toastEl = $('#toast');
   bellReady = true;
@@ -955,6 +957,33 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     try { await (await caches.open(STATE_CACHE)).put(STATE_KEY, new Response(JSON.stringify(st), { headers: { 'content-type': 'application/json' } })); } catch (e) {}
     return st;
   }
+  const PUSH_API = 'https://ks-sync.keismeystudio.workers.dev/v1/';   // le même serveur que la synchro (ks-studio.js)
+  const pushPost = (a, b) => fetch(PUSH_API + a, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(b || {}), credentials: 'omit' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status));
+  let pushKey = null;
+  const loadKey = () => pushKey || (pushKey = pushPost('push/key').then(j => j.key).catch(e => { pushKey = null; throw e; }));
+  const keyBytes = k => Uint8Array.from(atob(k.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((k.length + 3) % 4)), c => c.charCodeAt(0));
+  async function ensurePush(reg, force) {
+    if (!reg || !reg.pushManager) return false;
+    try {
+      let sub = await reg.pushManager.getSubscription();
+      const st = await readState();
+      if (sub && !force && st.pushAt && Date.now() - st.pushAt < 7 * 86400e3) return true;   // déjà signalé au serveur récemment
+      if (!sub) sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: keyBytes(await loadKey()) });
+      await pushPost('push/subscribe', { endpoint: sub.endpoint });
+      await updateState({ pushAt: Date.now() });
+      return true;
+    } catch (e) { return false; }
+  }
+  async function dropPush() {
+    try {
+      const reg = await navigator.serviceWorker.ready, sub = reg.pushManager && await reg.pushManager.getSubscription();
+      if (!sub) return;
+      await pushPost('push/unsubscribe', { endpoint: sub.endpoint }).catch(() => {});
+      await sub.unsubscribe();
+    } catch (e) {}
+    await updateState({ pushAt: 0 });
+  }
   async function ensurePeriodic(reg) {
     if (!('periodicSync' in reg)) return false;
     try {
@@ -975,15 +1004,18 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     // les annonces déjà publiées ne déclenchent rien : seules les prochaines seront notifiées
     await updateState({ on: true, lang, seen: [...new Set([...(st.seen || []), ...ids])] });
     notifOn = true; paintBell();
-    toast((await ensurePeriodic(reg)) ? T().notifOnBg : T().notifOnOpen);
+    const push = await ensurePush(reg, true), periodic = await ensurePeriodic(reg);
+    toast(push || periodic ? T().notifOnBg : T().notifOnOpen);
   }
   async function disableAlerts() {
     await updateState({ on: false });
+    await dropPush();
     try { const reg = await navigator.serviceWorker.ready; if ('periodicSync' in reg) await reg.periodicSync.unregister('ks-news'); } catch (e) {}
     notifOn = false; paintBell(); toast(T().notifOff);
   }
   if ('Notification' in window && 'serviceWorker' in navigator && 'caches' in window) {
     bell.hidden = false; paintBell();
+    if ('PushManager' in window && Notification.permission !== 'denied') loadKey().catch(() => {});   // clé prête avant le clic (iPhone)
     bell.addEventListener('click', () => (notifOn ? disableAlerts() : enableAlerts()));
     readState().then(async st => {
       notifOn = !!st.on && Notification.permission === 'granted';
@@ -991,6 +1023,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       if (!notifOn) return;
       const reg = await navigator.serviceWorker.ready;
       await ensurePeriodic(reg);                       // si le hub a été installé depuis
+      await ensurePush(reg);                           // abonnement push (créé ou rappelé au serveur chaque semaine)
       if (reg.active) reg.active.postMessage({ type: 'ks-check' });
     });
   }

@@ -2,7 +2,7 @@
 // Ne gère QUE les fichiers du hub (et les images qu'il affiche).
 // Les jeux gardent leurs propres service workers dans leurs dossiers.
 // Changer VERSION à chaque mise en ligne qui touche les polices ou les icônes.
-const VERSION = 'hub-1.2.0';
+const VERSION = 'hub-1.3.0';
 const SHELL = 'shell-' + VERSION;
 const IMGS = 'img-v1';
 
@@ -69,8 +69,10 @@ self.addEventListener('fetch', e => {
 
 // ---------- Alertes : nouveaux jeux et grosses mises à jour ----------
 // Le hub range son état dans le Cache Storage ({ on, lang, seen: [ids] }).
-// À chaque réveil (periodicsync) ou ouverture du hub (message), on relit announcements.json
-// et on notifie les annonces pas encore vues.
+// Réveils : notification push du serveur (push sans contenu, quand une annonce est publiée),
+// periodicsync (Android, hub installé) et ouverture du hub (message). On relit alors
+// announcements.json et on notifie les annonces pas encore vues.
+const PUSH_API = 'https://ks-sync.keismeystudio.workers.dev/v1/';
 const STATE_CACHE = 'ks-state', STATE_KEY = '/__ks-state';
 
 async function readState() {
@@ -80,19 +82,31 @@ async function writeState(st) {
   try { await (await caches.open(STATE_CACHE)).put(STATE_KEY, new Response(JSON.stringify(st), { headers: { 'content-type': 'application/json' } })); } catch (e) {}
 }
 
-async function checkNews() {
+// fromPush : réveillé par le serveur. Le navigateur exige alors d'afficher une notification :
+// s'il n'y a rien de neuf (déjà vue à l'ouverture du hub), on remontre la dernière annonce (même tag, pas de doublon).
+async function checkNews(fromPush) {
   const st = await readState();
-  if (!st.on) return;
+  if (!st.on) {
+    if (fromPush) try { const s = await self.registration.pushManager.getSubscription(); if (s) await s.unsubscribe(); } catch (e) {}
+    return;
+  }
+  const lang = st.lang === 'en' ? 'en' : 'fr';
   let list;
   try {
     const r = await fetch('/announcements.json', { cache: 'no-store' });
-    if (!r.ok) return;
+    if (!r.ok) throw 0;
     list = await r.json();
-  } catch (e) { return; }
+  } catch (e) {
+    if (fromPush) await self.registration.showNotification('Keismey Studio', {
+      body: lang === 'en' ? 'Something new on the hub.' : 'Du nouveau sur le hub.', icon: '/icons/icon-192.png', badge: '/icons/badge-96.png', tag: 'ks-news', data: { url: '/' }
+    }).catch(() => {});
+    return;
+  }
+  list = (Array.isArray(list) ? list : []).filter(n => n && n.id);
   const seen = new Set(st.seen || []);
-  const fresh = (Array.isArray(list) ? list : []).filter(n => n && n.id && !seen.has(n.id));
+  let fresh = list.filter(n => !seen.has(n.id));
+  if (!fresh.length && fromPush && list.length) fresh = list.slice(-1);
   if (!fresh.length) return;
-  const lang = st.lang === 'en' ? 'en' : 'fr';
   for (const n of fresh.slice(-3)) {                 // au plus 3 d'un coup : les plus récentes
     const m = n[lang] || n.fr || n.en || {};
     try {
@@ -111,6 +125,19 @@ async function checkNews() {
 }
 
 self.addEventListener('periodicsync', e => { if (e.tag === 'ks-news') e.waitUntil(checkNews()); });
+self.addEventListener('push', e => { e.waitUntil(checkNews(true)); });
+// le navigateur a renouvelé l'abonnement : on donne la nouvelle adresse au serveur
+self.addEventListener('pushsubscriptionchange', e => {
+  e.waitUntil((async () => {
+    const post = (a, b) => fetch(PUSH_API + a, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(b) }).catch(() => {});
+    if (e.oldSubscription) await post('push/unsubscribe', { endpoint: e.oldSubscription.endpoint });
+    let sub = e.newSubscription;
+    if (!sub && e.oldSubscription && e.oldSubscription.options) {
+      try { sub = await self.registration.pushManager.subscribe(e.oldSubscription.options); } catch (err) {}
+    }
+    if (sub) await post('push/subscribe', { endpoint: sub.endpoint });
+  })());
+});
 self.addEventListener('message', e => { if (e.data && e.data.type === 'ks-check') e.waitUntil(checkNews()); });
 
 self.addEventListener('notificationclick', e => {
