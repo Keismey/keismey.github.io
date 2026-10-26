@@ -2,18 +2,18 @@
 // Ne gère QUE les fichiers du hub (et les images qu'il affiche).
 // Les jeux gardent leurs propres service workers dans leurs dossiers.
 // Changer VERSION à chaque mise en ligne qui touche les polices ou les icônes.
-const VERSION = 'hub-1.1.1';
+const VERSION = 'hub-1.2.0';
 const SHELL = 'shell-' + VERSION;
 const IMGS = 'img-v1';
 
 const CORE = [
-  '/', '/index.html', '/games.js', '/manifest.webmanifest',
+  '/', '/index.html', '/games.js', '/ks-studio.js', '/confidentialite.html', '/manifest.webmanifest',
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/maskable-512.png',
   '/icons/apple-touch-icon.png', '/icons/favicon.png', '/icons/badge-96.png',
   '/fonts/alegreya.woff', '/fonts/alegreya-italic.woff',
   '/fonts/alegreya-sans-400.woff', '/fonts/alegreya-sans-700.woff'
 ];
-const NETWORK_FIRST = new Set(['/', '/index.html', '/games.js', '/manifest.webmanifest']);
+const NETWORK_FIRST = new Set(['/', '/index.html', '/games.js', '/ks-studio.js', '/confidentialite.html', '/manifest.webmanifest']);
 const HUB_PAGES = new Set(['/', '/index.html']);
 
 self.addEventListener('install', e => {

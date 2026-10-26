@@ -216,6 +216,35 @@ header .grow{flex:1}
 .fab:focus-visible{border-radius:999px}
 .support.flash{animation:flash 1.2s ease}
 @keyframes flash{0%,100%{box-shadow:0 0 0 1px var(--faint) inset}30%{box-shadow:0 0 0 2px var(--parch) inset}}
+/* ---------- compte : synchro des sauvegardes ---------- */
+.account{margin-top:56px;padding:22px 20px;border-radius:22px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset;
+  display:grid;gap:14px;justify-items:start}
+.account[hidden]{display:none}
+.account h2{margin:0;font:700 1.5rem/1.15 var(--serif)}
+.account p{margin:0;color:var(--muted);max-width:48ch}
+.account .warn{padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.28);color:var(--parch);font-size:.9375rem}
+.account .row{display:flex;flex-wrap:wrap;gap:10px}
+.account .part{display:grid;gap:14px;justify-items:start}
+.account .msg{padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.28);box-shadow:0 0 0 1px #e8743a inset;color:var(--parch)}
+.account .status{color:var(--parch);font-weight:700}
+.account .conf{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 14px;border-radius:14px;
+  box-shadow:0 0 0 1px var(--ember) inset;color:var(--parch)}
+.account .conf[hidden],.account [hidden]{display:none}
+.account small{color:var(--muted);font-size:.8125rem}
+.account small a,footer a{color:inherit}
+.account .del{padding:0;border:0;background:none;color:var(--muted);font:400 .875rem/1.4 var(--sans);text-decoration:underline;cursor:pointer}
+.account:not([hidden]) + .support{margin-top:18px}
+.gbtn{min-height:44px}
+.sync .game-c{display:grid;gap:10px;padding:14px 0;border-top:1px solid var(--faint)}
+.sync .game-c:first-of-type{border-top:0;padding-top:0}
+.sync .game-c h3{margin:0;font:700 1.125rem/1.2 var(--serif)}
+.sync .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sync .opt{display:grid;gap:6px;align-content:start;padding:12px;border-radius:14px;background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset}
+.sync .opt b{font-size:.9375rem}
+.sync .opt span{color:var(--muted);font-size:.875rem;line-height:1.35}
+.sync .opt .btn{min-height:40px;padding:0 14px;justify-content:center;font-size:.9375rem;margin-top:4px}
+.sync .opt.chosen{box-shadow:0 0 0 2px var(--parch) inset}
+@media (max-width:360px){.sync .opts{grid-template-columns:1fr}}
 /* ---------- contact : avis, bug, idée + réseaux ---------- */
 .contact{margin-top:18px;padding:22px 20px;border-radius:22px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset;
   display:grid;gap:14px;justify-items:start}
@@ -313,6 +342,29 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 
   <main class="games enter" id="games"></main>
 
+  <section class="account" id="account" aria-labelledby="acc-title" hidden>
+    <h2 id="acc-title" data-i18n="accTitle">Tes parties sur tous tes appareils</h2>
+    <div id="acc-out" class="part">
+      <p data-i18n="accText">Connecte-toi pour retrouver tes parties sur ton téléphone, ton ordinateur, ou après avoir vidé ton navigateur. Le compte sert uniquement à ça : on ne garde ni ton nom, ni ton e-mail.</p>
+      <p class="warn" data-i18n="accWarn">Les parties de cet appareil seront ajoutées à ton compte. Si tu joues déjà sur un autre appareil, tu choisiras, jeu par jeu, quelle partie garder.</p>
+      <div class="gbtn" id="g-btn"></div>
+      <p class="msg" id="acc-err" role="alert" hidden></p>
+    </div>
+    <div id="acc-in" class="part" hidden>
+      <p><span class="status" id="acc-status"></span><br><span data-i18n="accAuto">Tes parties se synchronisent toutes seules quand tu joues.</span></p>
+      <div class="conf" id="acc-conf" hidden>
+        <span id="acc-conf-txt"></span>
+        <button type="button" class="btn solid" id="acc-choose" data-i18n="accChoose">Choisir</button>
+      </div>
+      <div class="row">
+        <button type="button" class="btn ghost" id="acc-sync" data-i18n="accSync">Synchroniser maintenant</button>
+        <button type="button" class="btn ghost" id="acc-out-btn" data-i18n="accLogout">Se déconnecter</button>
+      </div>
+      <button type="button" class="del" id="acc-del" data-i18n="accDelete">Supprimer mon compte et mes sauvegardes en ligne</button>
+    </div>
+    <small><a href="confidentialite.html" id="acc-privacy" data-i18n="accPrivacy">Confidentialité</a></small>
+  </section>
+
   <section class="support" aria-labelledby="support-title">
     <h2 id="support-title" data-i18n="supTitle">Gratuit, sans pub</h2>
     <p data-i18n="supText">Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.</p>
@@ -378,6 +430,31 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     </form>
   </dialog>
 
+  <dialog class="form sync" id="sync-dlg" aria-labelledby="sync-title">
+    <div class="in">
+      <div class="top">
+        <h2 id="sync-title" data-i18n="syTitle">Quelle partie garder ?</h2>
+        <button type="button" class="x" id="sync-x" data-i18n-aria="fmClose" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <p class="note" data-i18n="syText">Ces jeux ont une partie différente sur cet appareil et sur ton compte. Pour chacun, choisis celle à garder : l'autre sera remplacée.</p>
+      <div id="sync-list"></div>
+      <p class="note" data-i18n="syLater">Tu peux aussi décider plus tard : rien n'est remplacé tant que tu n'as pas choisi.</p>
+    </div>
+  </dialog>
+
+  <dialog class="form" id="ask-dlg" aria-labelledby="ask-title">
+    <div class="in">
+      <h2 id="ask-title" style="margin:0;font:700 1.375rem/1.2 var(--serif)"></h2>
+      <p class="note" id="ask-text" style="font-size:.9375rem"></p>
+      <div class="row" style="display:flex;flex-wrap:wrap;gap:10px">
+        <button type="button" class="btn solid" id="ask-yes"></button>
+        <button type="button" class="btn ghost" id="ask-no" data-i18n="cancel">Annuler</button>
+      </div>
+    </div>
+  </dialog>
+
   <button type="button" class="fab off" id="fab" aria-controls="support-title">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="currentColor"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3.5c0 1 1 1 1 2M11.5 3.5c0 1 1 1 1 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
     <span data-i18n="fab">Soutenir</span>
@@ -388,10 +465,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   <footer>
     <p class="ios" id="ios-hint" data-i18n="ios" hidden>Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.</p>
     <p data-i18n="foot">Les jeux s'ouvrent dans le hub. Dans un jeu, le bouton retour revient au menu précédent ; depuis l'écran titre, il te ramène ici.</p>
-    <p data-i18n="privacy">Mesure d'audience anonyme (Cloudflare), sans cookie.</p>
+    <p><span data-i18n="privacy">Mesure d'audience anonyme (Cloudflare), sans cookie.</span> <a href="confidentialite.html" id="foot-privacy" data-i18n="accPrivacy">Confidentialité</a></p>
   </footer>
 </div>
 
+<script src="ks-studio.js"></script>
 <script src="games.js"></script>
 <script>
 (() => {
@@ -409,7 +487,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   const games = (window.GAMES || []).slice();
 
   /* ---------- langue ---------- */
-  var bellReady = false;
+  var bellReady = false, accReady = false;
   const STR = {
     fr: {
       home: 'Keismey Studio, accueil', lang: 'Langue', install: 'Installer',
@@ -449,7 +527,29 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       games: n => n + (n > 1 ? ' jeux' : ' jeu'),
       play: 'Jouer', resume: 'Reprendre', inProgress: 'Partie en cours', noSave: 'Pas encore de partie',
       fresh: 'Nouvelle version', updated: 'Mis à jour ', frOnly: '', sep: ' : ',
-      today: "aujourd'hui", yesterday: 'hier', daysAgo: n => 'il y a ' + n + ' jours', on: d => 'le ' + d, locale: 'fr-FR'
+      today: "aujourd'hui", yesterday: 'hier', daysAgo: n => 'il y a ' + n + ' jours', on: d => 'le ' + d, locale: 'fr-FR',
+      accTitle: 'Tes parties sur tous tes appareils',
+      accText: "Connecte-toi pour retrouver tes parties sur ton téléphone, ton ordinateur, ou après avoir vidé ton navigateur. Le compte sert uniquement à ça : on ne garde ni ton nom, ni ton e-mail.",
+      accWarn: "Les parties de cet appareil seront ajoutées à ton compte. Si tu joues déjà sur un autre appareil, tu choisiras, jeu par jeu, quelle partie garder.",
+      accAuto: 'Tes parties se synchronisent toutes seules quand tu joues.',
+      accOn: 'Compte connecté', accSynced: w => 'Compte connecté · synchronisé ' + w, accNow: "à l'instant", accMin: n => 'il y a ' + n + ' min',
+      accAt: d => 'le ' + d, accSyncing: 'Synchronisation…',
+      accConf: n => n > 1 ? n + ' jeux ont une partie différente ici et sur ton compte.' : 'Un jeu a une partie différente ici et sur ton compte.',
+      accChoose: 'Choisir', accSync: 'Synchroniser maintenant', accLogout: 'Se déconnecter',
+      accDelete: 'Supprimer mon compte et mes sauvegardes en ligne', accPrivacy: 'Confidentialité',
+      accFirst: 'Tes parties sont maintenant sauvegardées sur ton compte.',
+      accGot: 'Parties récupérées depuis ton compte.', accDone: 'Tout est à jour.',
+      accLoginErr: "La connexion n'a pas marché. Vérifie ta connexion à Internet et réessaie.",
+      accSyncErr: "Synchronisation impossible pour l'instant. Tes parties restent sur cet appareil, on réessaiera.",
+      accBye: 'Déconnecté. Tes parties restent sur cet appareil.',
+      accDelTitle: 'Supprimer ton compte ?',
+      accDelText: "Tes sauvegardes en ligne seront effacées définitivement. Les parties de cet appareil restent, mais tes appareils ne seront plus synchronisés.",
+      accDelYes: 'Supprimer', accDeleted: 'Compte supprimé. Tes parties restent sur cet appareil.', cancel: 'Annuler',
+      syTitle: 'Quelle partie garder ?',
+      syText: "Ces jeux ont une partie différente sur cet appareil et sur ton compte. Pour chacun, choisis celle à garder : l'autre sera remplacée.",
+      syLater: "Tu peux aussi décider plus tard : rien n'est remplacé tant que tu n'as pas choisi.",
+      syHere: 'Sur cet appareil', syOnline: 'Sur ton compte', syKeep: 'Garder celle-ci', syMod: d => 'Modifiée ' + d,
+      syAllDone: "C'est réglé : tes appareils ont maintenant les mêmes parties."
     },
     en: {
       home: 'Keismey Studio, home', lang: 'Language', install: 'Install',
@@ -489,7 +589,29 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       games: n => n + (n === 1 ? ' game' : ' games'),
       play: 'Play', resume: 'Resume', inProgress: 'Game in progress', noSave: 'No save yet',
       fresh: 'New version', updated: 'Updated ', frOnly: 'In French only for now.', sep: ': ',
-      today: 'today', yesterday: 'yesterday', daysAgo: n => n + ' days ago', on: d => 'on ' + d, locale: 'en-GB'
+      today: 'today', yesterday: 'yesterday', daysAgo: n => n + ' days ago', on: d => 'on ' + d, locale: 'en-GB',
+      accTitle: 'Your games on every device',
+      accText: "Sign in to get your games back on your phone, your computer, or after clearing your browser. That's all the account is for: we keep neither your name nor your email.",
+      accWarn: "The games on this device will be added to your account. If you already play on another device, you'll choose, game by game, which one to keep.",
+      accAuto: 'Your games sync on their own while you play.',
+      accOn: 'Signed in', accSynced: w => 'Signed in · synced ' + w, accNow: 'just now', accMin: n => n + ' min ago',
+      accAt: d => 'on ' + d, accSyncing: 'Syncing…',
+      accConf: n => n > 1 ? n + ' games have a different save here and on your account.' : 'One game has a different save here and on your account.',
+      accChoose: 'Choose', accSync: 'Sync now', accLogout: 'Sign out',
+      accDelete: 'Delete my account and my online saves', accPrivacy: 'Privacy',
+      accFirst: 'Your games are now saved to your account.',
+      accGot: 'Games restored from your account.', accDone: 'Everything is up to date.',
+      accLoginErr: "Signing in didn't work. Check your Internet connection and try again.",
+      accSyncErr: "Can't sync right now. Your games stay on this device; we'll try again.",
+      accBye: 'Signed out. Your games stay on this device.',
+      accDelTitle: 'Delete your account?',
+      accDelText: 'Your online saves will be erased for good. The games on this device stay, but your devices will no longer be synced.',
+      accDelYes: 'Delete', accDeleted: 'Account deleted. Your games stay on this device.', cancel: 'Cancel',
+      syTitle: 'Which game do you keep?',
+      syText: 'These games have a different save on this device and on your account. For each one, pick the one to keep: the other will be replaced.',
+      syLater: 'You can also decide later: nothing is replaced until you choose.',
+      syHere: 'On this device', syOnline: 'On your account', syKeep: 'Keep this one', syMod: d => 'Changed ' + d,
+      syAllDone: 'All set: your devices now have the same games.'
     }
   };
   // Langue : ?lang=fr|en dans l'adresse, sinon le choix déjà fait sur le bouton FR/EN,
@@ -507,6 +629,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     $('#count').textContent = t.games(games.length);
     if (bellReady) paintBell();
+    if (accReady) paintAccount(true);
+    document.querySelectorAll('#acc-privacy,#foot-privacy').forEach(a => { a.href = 'confidentialite.html' + (lang === 'en' ? '?lang=en' : ''); });
     renderIntro();
   }
   /* ---------- présentation qui défile ---------- */
@@ -840,6 +964,150 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       await ensurePeriodic(reg);                       // si le hub a été installé depuis
       if (reg.active) reg.active.postMessage({ type: 'ks-check' });
     });
+  }
+
+  /* ---------- compte : synchro des sauvegardes ----------
+     Toute la logique est dans ks-studio.js (KS.account), commun aux jeux : ici, seulement l'affichage.
+     Le bouton Google n'est chargé que si l'encart est visible et que personne n'est connecté.
+     Tant que SYNC_API et GOOGLE_ID sont vides dans ks-studio.js, l'encart reste caché. */
+  const ACC = window.KS && window.KS.account;
+  let conflicts = [], syncing = false, lastRec = 0, gLoad = null, gInit = false, gLang = null;
+  function when(ts) {
+    const t = T(), m = Math.round((Date.now() - ts) / 60000);
+    if (m < 1) return t.accNow;
+    if (m < 60) return t.accMin(m);
+    return t.accAt(new Date(ts).toLocaleString(t.locale, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }));
+  }
+  function paintAccount() {
+    const t = T(), on = ACC.signedIn();
+    $('#acc-out').hidden = on; $('#acc-in').hidden = !on;
+    if (!on) { googleButton(); return; }
+    const s = ACC.lastSync();
+    $('#acc-status').textContent = syncing ? t.accSyncing : s ? t.accSynced(when(s)) : t.accOn;
+    $('#acc-conf').hidden = !conflicts.length;
+    if (conflicts.length) $('#acc-conf-txt').textContent = t.accConf(conflicts.length);
+  }
+  function loadGoogle() {
+    if (!gLoad) gLoad = new Promise((ok, ko) => {
+      const s = document.createElement('script');
+      s.src = 'https://accounts.google.com/gsi/client'; s.async = true;
+      s.onload = ok; s.onerror = () => { gLoad = null; ko(); };
+      document.head.appendChild(s);
+    });
+    return gLoad;
+  }
+  function googleButton() {
+    if (gLang === lang) return;
+    loadGoogle().then(() => {
+      if (!gInit) { google.accounts.id.initialize({ client_id: ACC.clientId, callback: onCredential, ux_mode: 'popup', auto_select: false, itp_support: true }); gInit = true; }
+      const el = $('#g-btn'); el.innerHTML = '';
+      google.accounts.id.renderButton(el, { type: 'standard', theme: 'filled_black', size: 'large', shape: 'pill', text: 'continue_with', locale: lang === 'en' ? 'en' : 'fr' });
+      gLang = lang;
+    }).catch(() => {});
+  }
+  function after(r, firstTime) {
+    syncing = false; lastRec = Date.now();
+    conflicts = r.conflicts;
+    if (r.changed) render();
+    paintAccount();
+    if (conflicts.length) openSync();
+    else if (firstTime) toast(r.changed ? T().accGot : T().accFirst);
+  }
+  async function onCredential(resp) {
+    $('#acc-err').hidden = true;
+    syncing = true;
+    try { after(await ACC.login(resp.credential), true); }
+    catch (e) {
+      syncing = false; paintAccount();
+      if (ACC.signedIn()) { toast(T().accSyncErr); return; }   // connecté, mais le rapprochement a échoué : on réessaiera
+      $('#acc-err').textContent = T().accLoginErr; $('#acc-err').hidden = false;
+    }
+  }
+  async function reconcile(manual) {
+    if (!ACC.signedIn() || syncing) return;
+    syncing = true; paintAccount();
+    try {
+      const r = await ACC.reconcile();
+      after(r, false);
+      if (manual && !r.conflicts.length) toast(r.changed ? T().accGot : T().accDone);
+    } catch (e) {
+      syncing = false; lastRec = Date.now(); paintAccount();
+      if (manual && ACC.signedIn()) toast(T().accSyncErr);
+    }
+  }
+
+  // Écran de choix : pour chaque jeu en conflit, les deux parties côte à côte, avec le résumé de la carte du jeu
+  const sdlg = $('#sync-dlg');
+  const gameOf = jeu => games.find(g => (g.path || '').indexOf('/' + jeu + '/') === 0);
+  function openSync() {
+    const t = T(), list = $('#sync-list');
+    list.innerHTML = conflicts.map((c, i) => {
+      const g = gameOf(c.jeu), name = g ? (lang === 'en' && g.en && g.en.name) || g.name : c.jeu;
+      const opt = (side, title, ts) => '<div class="opt" data-i="' + i + '" data-side="' + side + '"><b>' + esc(title) + '</b>' +
+        '<span class="sum">' + esc(t.inProgress) + '</span>' + (ts ? '<span>' + esc(t.syMod(when(ts))) + '</span>' : '') +
+        '<button type="button" class="btn solid"' + (c.done ? ' disabled' : '') + '>' + esc(t.syKeep) + '</button></div>';
+      return '<div class="game-c"><h3>' + esc(name) + '</h3><div class="opts">' + opt('local', t.syHere, c.lt) + opt('remote', t.syOnline, c.updated) + '</div></div>';
+    }).join('');
+    conflicts.forEach((c, i) => ['local', 'remote'].forEach(side => {
+      ACC.summary(c.jeu, side === 'local' ? c.local : c.remote, lang).then(s => {
+        const el = list.querySelector('.opt[data-i="' + i + '"][data-side="' + side + '"] .sum');
+        if (el && s) el.textContent = s.join(' · ');
+      });
+    }));
+    if (sdlg.showModal) { if (!sdlg.open) sdlg.showModal(); } else sdlg.setAttribute('open', '');
+  }
+  function closeSync() { if (sdlg.close) sdlg.close(); else { sdlg.removeAttribute('open'); afterSync(); } }
+  function afterSync() { conflicts = conflicts.filter(c => !c.done); paintAccount(); }
+  $('#sync-list').addEventListener('click', async e => {
+    const b = e.target.closest('.opt .btn'); if (!b) return;
+    const opt = b.closest('.opt'), c = conflicts[+opt.dataset.i];
+    if (!c || c.done) return;
+    b.disabled = true;
+    const ok = await ACC.resolve(c, opt.dataset.side).catch(() => false);
+    if (!ok) { b.disabled = false; toast(T().accSyncErr); return; }
+    c.done = true;
+    opt.classList.add('chosen');
+    opt.closest('.game-c').querySelectorAll('.btn').forEach(x => { x.disabled = true; });
+    if (opt.dataset.side === 'remote') render();
+    if (conflicts.every(x => x.done)) { setTimeout(closeSync, 500); toast(T().syAllDone); }
+  });
+  $('#sync-x').addEventListener('click', closeSync);
+  sdlg.addEventListener('click', e => { if (e.target === sdlg) closeSync(); });
+  sdlg.addEventListener('close', afterSync);
+
+  // Petite fenêtre de confirmation (suppression du compte)
+  const adlg = $('#ask-dlg');
+  function ask(title, text, yes) {
+    return new Promise(ok => {
+      let done = false;
+      const end = v => { if (done) return; done = true; if (adlg.close && adlg.open) adlg.close(); else adlg.removeAttribute('open'); ok(v); };
+      $('#ask-title').textContent = title; $('#ask-text').textContent = text; $('#ask-yes').textContent = yes;
+      $('#ask-yes').onclick = () => end(true);
+      $('#ask-no').onclick = () => end(false);
+      adlg.onclick = e => { if (e.target === adlg) end(false); };
+      adlg.onclose = () => end(false);
+      if (adlg.showModal) adlg.showModal(); else adlg.setAttribute('open', '');
+      setTimeout(() => $('#ask-no').focus(), 50);
+    });
+  }
+
+  if (ACC && ACC.enabled) {
+    $('#account').hidden = false;
+    accReady = true;
+    paintAccount();
+    $('#acc-choose').addEventListener('click', openSync);
+    $('#acc-sync').addEventListener('click', () => reconcile(true));
+    $('#acc-out-btn').addEventListener('click', async () => { await ACC.logout(); conflicts = []; paintAccount(); toast(T().accBye); });
+    $('#acc-del').addEventListener('click', async () => {
+      const t = T();
+      if (!(await ask(t.accDelTitle, t.accDelText, t.accDelYes))) return;
+      try { await ACC.remove(); conflicts = []; paintAccount(); toast(t.accDeleted); }
+      catch (e) { toast(t.accSyncErr); }
+    });
+    if (ACC.signedIn()) reconcile(false);
+    // retour sur le hub : on rattrape ce qui a été joué ailleurs (au plus toutes les 30 s)
+    document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - lastRec > 30000) reconcile(false); });
+    setInterval(() => { if (ACC.signedIn() && !syncing) paintAccount(); }, 60000);   // « il y a N min »
   }
 
   /* ---------- formulaire de contact ----------

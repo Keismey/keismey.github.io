@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Confidentialité · Keismey Studio</title>
+<meta name="description" content="Ce que Keismey Studio garde (et ne garde pas) quand tu joues, quand tu te connectes ou quand tu écris au studio.">
+<link rel="canonical" href="https://keismey.github.io/confidentialite.html">
+<meta name="theme-color" content="#10181b">
+<link rel="icon" href="icons/favicon.png" type="image/png">
+<style>
+@font-face{font-family:"Alegreya";src:url(fonts/alegreya.woff) format("woff");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Alegreya Sans";src:url(fonts/alegreya-sans-400.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Alegreya Sans";src:url(fonts/alegreya-sans-700.woff) format("woff");font-weight:700;font-display:swap}
+:root{--ink:#10181b;--parch:#efe6d0;--muted:rgba(239,230,208,.72);--faint:rgba(239,230,208,.14);--ember:#e8923a;
+  --serif:"Alegreya",Georgia,serif;--sans:"Alegreya Sans",system-ui,sans-serif}
+html{-webkit-text-size-adjust:100%;background:var(--ink)}
+body{margin:0;background:var(--ink);color:var(--parch);font:400 1.0625rem/1.55 var(--sans)}
+.wrap{max-width:720px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 48px)}
+header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-height:48px}
+.mark{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;font:700 1.125rem/1 var(--serif)}
+.mark img{width:36px;height:36px;border-radius:10px}
+.grow{flex:1}
+.lang{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset}
+.lang a{min-width:38px;min-height:34px;padding:0 9px;border-radius:999px;color:var(--muted);text-decoration:none;font:700 .9375rem/34px var(--sans);text-align:center}
+.lang a[aria-current=true]{background:var(--parch);color:var(--ink)}
+h1{margin:28px 0 6px;font:700 2rem/1.15 var(--serif)}
+.date{margin:0 0 26px;color:var(--muted);font-size:.9375rem}
+h2{margin:30px 0 8px;font:700 1.3125rem/1.2 var(--serif)}
+p,li{color:var(--muted)}
+p{margin:0 0 12px}
+ul{margin:0 0 12px;padding-left:20px}
+li{margin:4px 0}
+b{color:var(--parch)}
+a{color:var(--parch)}
+.box{padding:16px 18px;border-radius:18px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset}
+.box p:last-child{margin:0}
+[hidden]{display:none}
+a:focus-visible{outline:3px solid var(--parch);outline-offset:3px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="mark" href="./" id="home"><img src="icons/icon-192.png" alt="" width="36" height="36"><span>Keismey Studio</span></a>
+    <div class="grow"></div>
+    <nav class="lang" aria-label="Langue / Language">
+      <a href="?lang=fr" lang="fr" data-l="fr">FR</a>
+      <a href="?lang=en" lang="en" data-l="en">EN</a>
+    </nav>
+  </header>
+
+  <main lang="fr" data-l="fr">
+    <h1>Confidentialité</h1>
+    <p class="date">Mise à jour le 26 octobre 2026</p>
+    <div class="box">
+      <p><b>En bref :</b> les jeux sont gratuits, sans pub et sans cookie publicitaire. Tes parties restent sur ton appareil. Si tu crées un compte, il sert uniquement à retrouver tes parties sur tes autres appareils : on ne garde ni ton nom, ni ton e-mail. Rien n'est vendu ni partagé à des fins publicitaires.</p>
+    </div>
+
+    <h2>Qui est responsable</h2>
+    <p>Keismey Studio, un studio de jeux d'une seule personne, qui publie ses jeux sur keismey.github.io. Pour toute question sur tes données, utilise le formulaire « Écrire au studio » du hub.</p>
+
+    <h2>Sur ton appareil</h2>
+    <p>Tes parties, tes réglages (son, langue…) et tes favoris sont enregistrés dans le stockage de ton navigateur, sur ton appareil. Ils n'en sortent pas, sauf si tu exportes une sauvegarde toi-même ou si tu te connectes à un compte (voir plus bas). Effacer les données du navigateur les supprime.</p>
+
+    <h2>Le compte (facultatif)</h2>
+    <p>Le compte sert à une seule chose : synchroniser tes parties entre tes appareils, et les retrouver si tu vides ton navigateur. Tu te connectes avec ton compte Google.</p>
+    <ul>
+      <li><b>Ce que Google nous transmet</b> à la connexion : un identifiant de compte, et selon tes réglages Google ton nom, ton adresse e-mail et ta photo. Nous vérifions la connexion puis nous n'en gardons qu'une <b>empreinte de l'identifiant</b> (une suite de caractères calculée à partir de lui, qui ne permet pas de retrouver ton nom ni ton e-mail). Le nom, l'e-mail et la photo ne sont jamais enregistrés.</li>
+      <li><b>Ce que nous gardons :</b> cette empreinte, la date de création du compte, une sauvegarde par jeu (le même contenu que le code d'export « KS1… » du jeu) avec sa date, et pour chaque appareil connecté une empreinte de son jeton de connexion et sa date de dernière utilisation.</li>
+      <li><b>Pourquoi :</b> pour te fournir la synchro que tu demandes en te connectant. Rien d'autre : pas de newsletter, pas de publicité, pas de profil.</li>
+      <li><b>Où :</b> sur les serveurs de Cloudflare (Cloudflare Workers et base D1), qui héberge ce service pour nous. La connexion passe par Google. Ces deux sociétés peuvent traiter ces données en dehors de l'Union européenne, dans le cadre des garanties prévues par le RGPD.</li>
+      <li><b>Combien de temps :</b> tant que ton compte existe. Un appareil qui ne s'est pas servi du compte pendant plus d'un an est déconnecté et son jeton effacé.</li>
+      <li><b>Supprimer :</b> le bouton « Supprimer mon compte et mes sauvegardes en ligne » du hub efface immédiatement le compte, les sauvegardes en ligne et les appareils connectés. Les parties de ton appareil restent.</li>
+    </ul>
+
+    <h2>Le formulaire « Écrire au studio »</h2>
+    <p>Ton message, son titre et son type, la langue du hub, le type de navigateur et le mode (hub installé ou non) sont transmis par e-mail au studio via le service FormSubmit. Le formulaire ne demande pas ton adresse e-mail : n'en indique une dans le message que si tu veux une réponse.</p>
+
+    <h2>Mesure d'audience</h2>
+    <p>Le hub et les jeux utilisent Cloudflare Web Analytics pour compter les visites (pages vues, pays, type d'appareil). Cet outil ne dépose pas de cookie et ne suit pas les personnes d'un site à l'autre.</p>
+
+    <h2>Notifications</h2>
+    <p>Si tu actives la cloche du hub, ton navigateur vérifie de temps en temps s'il y a une nouvelle annonce et t'affiche une notification. Aucune information te concernant n'est envoyée pour cela. Tu peux les couper à tout moment avec la même cloche.</p>
+
+    <h2>Tes droits</h2>
+    <p>Tu peux demander l'accès à tes données, leur correction ou leur suppression, ou t'opposer à leur traitement, avec le formulaire « Écrire au studio ». Pour le compte, la suppression est immédiate avec le bouton prévu. Si tu estimes que tes droits ne sont pas respectés, tu peux t'adresser à la CNIL (cnil.fr).</p>
+  </main>
+
+  <main lang="en" data-l="en" hidden>
+    <h1>Privacy</h1>
+    <p class="date">Updated 26 October 2026</p>
+    <div class="box">
+      <p><b>In short:</b> the games are free, ad-free and use no advertising cookies. Your games stay on your device. If you create an account, it is only used to get your games back on your other devices: we keep neither your name nor your email. Nothing is sold or shared for advertising.</p>
+    </div>
+
+    <h2>Who is responsible</h2>
+    <p>Keismey Studio, a one-person game studio that publishes its games on keismey.github.io. For any question about your data, use the “Write to the studio” form on the hub.</p>
+
+    <h2>On your device</h2>
+    <p>Your saves, your settings (sound, language…) and your favorites are stored in your browser's storage, on your device. They do not leave it, unless you export a save yourself or sign in to an account (see below). Clearing your browser data deletes them.</p>
+
+    <h2>The account (optional)</h2>
+    <p>The account does one thing: it syncs your games between your devices, and lets you get them back if you clear your browser. You sign in with your Google account.</p>
+    <ul>
+      <li><b>What Google sends us</b> when you sign in: an account identifier and, depending on your Google settings, your name, email address and picture. We check the sign-in, then keep only a <b>fingerprint of the identifier</b> (a string computed from it, which cannot be used to find your name or email). Your name, email and picture are never stored.</li>
+      <li><b>What we keep:</b> that fingerprint, the date the account was created, one save per game (the same content as the game's “KS1…” export code) with its date, and for each signed-in device a fingerprint of its sign-in token and the date it was last used.</li>
+      <li><b>Why:</b> to provide the sync you ask for by signing in. Nothing else: no newsletter, no advertising, no profiling.</li>
+      <li><b>Where:</b> on Cloudflare's servers (Cloudflare Workers and D1 database), which host this service for us. Sign-in goes through Google. Both companies may process this data outside the European Union, under the safeguards provided by the GDPR.</li>
+      <li><b>How long:</b> as long as your account exists. A device that has not used the account for over a year is signed out and its token erased.</li>
+      <li><b>Deleting:</b> the “Delete my account and my online saves” button on the hub immediately erases the account, the online saves and the signed-in devices. The games on your device stay.</li>
+    </ul>
+
+    <h2>The “Write to the studio” form</h2>
+    <p>Your message, its title and type, the hub language, your browser type and mode (installed hub or not) are emailed to the studio through the FormSubmit service. The form does not ask for your email address: only put one in the message if you want a reply.</p>
+
+    <h2>Visit statistics</h2>
+    <p>The hub and the games use Cloudflare Web Analytics to count visits (page views, country, device type). This tool sets no cookie and does not track people across sites.</p>
+
+    <h2>Notifications</h2>
+    <p>If you turn on the hub's bell, your browser checks for a new announcement from time to time and shows you a notification. No information about you is sent for this. You can turn them off at any time with the same bell.</p>
+
+    <h2>Your rights</h2>
+    <p>You can ask to access, correct or delete your data, or object to its processing, using the “Write to the studio” form. For the account, deletion is immediate with the dedicated button. If you believe your rights are not respected, you can contact your data protection authority (in France, the CNIL: cnil.fr).</p>
+  </main>
+</div>
+<script>
+(() => {
+  let l = null;
+  try { const q = new URLSearchParams(location.search).get('lang'); if (q === 'en' || q === 'fr') l = q; } catch (e) {}
+  if (!l) { try { const h = JSON.parse(localStorage.getItem('keismey-hub') || '{}'); if (h.lang === 'en' || h.lang === 'fr') l = h.lang; } catch (e) {} }
+  if (!l) l = /^fr/i.test((navigator.languages && navigator.languages[0]) || navigator.language || 'fr') ? 'fr' : 'en';
+  document.documentElement.lang = l;
+  document.querySelectorAll('main').forEach(m => { m.hidden = m.dataset.l !== l; });
+  document.querySelectorAll('.lang a').forEach(a => a.setAttribute('aria-current', String(a.dataset.l === l)));
+  document.getElementById('home').href = './?lang=' + l;
+  if (l === 'en') document.title = 'Privacy · Keismey Studio';
+})();
+</script>
+</body>
+</html>
