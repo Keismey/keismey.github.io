@@ -18,10 +18,10 @@ Voir `confidentialite.html`.
 ## Mise en place (une fois)
 
 1. **Base D1** : tableau de bord Cloudflare → Storage & Databases → D1 → Create, nom `ks-sync`.
-   Onglet Console : coller `schema.sql`, exécuter.
+   Onglet Console : coller `schema.sql`, exécuter, puis vérifier avec `/tables` (users, sessions, saves).
 2. **Worker** : Workers & Pages → Create → Worker (« Hello World »), nom `ks-sync` → Deploy,
-   puis Edit code : remplacer tout par `worker.js` → Deploy.
-3. **Liaison** : le Worker → Settings → Bindings → Add → D1 database, nom de variable `DB`, base `ks-sync`.
+   puis Edit code : remplacer tout par `worker.js` copié depuis sa version brute (raw.githubusercontent.com) → Deploy.
+3. **Liaison** (indispensable, sinon erreur 500) : le Worker → Settings → Bindings → Add → D1 database, nom de variable `DB`, base `ks-sync`.
 4. **Variable** : Settings → Variables and Secrets → Add, type Text, nom `GOOGLE_CLIENT_ID`,
    valeur = l'identifiant client Google (…apps.googleusercontent.com).
 5. Dans `ks-studio.js` (hub et jeux) : `SYNC_API = 'https://ks-sync.<sous-domaine>.workers.dev/v1/'`
