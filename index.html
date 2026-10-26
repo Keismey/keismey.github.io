@@ -249,6 +249,8 @@ header .grow{flex:1}
 .account:not([hidden]) + .support{margin-top:18px}
 .account{scroll-margin-top:16px}
 .gbtn{width:100%;max-width:400px;min-height:44px;display:flex;justify-content:center}
+/* le bouton Google est une page en thème clair : sans ceci, le navigateur peint un fond blanc derrière (le hub est en thème sombre) */
+.gbtn,.gbtn iframe{color-scheme:light}
 .account.flash{animation:flash 1.2s ease}
 .sync .game-c{display:grid;gap:10px;padding:14px 0;border-top:1px solid var(--faint)}
 .sync .game-c:first-of-type{border-top:0;padding-top:0}
