@@ -11,5 +11,18 @@
       "title": "Keismey Studio",
       "body": "The hub is live: all my games in one place."
     }
+  },
+  {
+    "id": "2026-10-26-comptes",
+    "date": "2026-10-26",
+    "url": "/#account",
+    "fr": {
+      "title": "Tes parties sur tous tes appareils",
+      "body": "Connecte-toi sur le hub pour retrouver ta progression sur ton téléphone, ton ordinateur, ou après avoir vidé ton navigateur."
+    },
+    "en": {
+      "title": "Your games on every device",
+      "body": "Sign in on the hub to get your progress back on your phone, your computer, or after clearing your browser."
+    }
   }
 ]
