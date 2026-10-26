@@ -248,9 +248,12 @@ header .grow{flex:1}
 .account .del{padding:0;border:0;background:none;color:var(--muted);font:400 .875rem/1.4 var(--sans);text-decoration:underline;cursor:pointer}
 .account:not([hidden]) + .support{margin-top:18px}
 .account{scroll-margin-top:16px}
-.gbtn{width:100%;max-width:400px;min-height:44px;display:flex;justify-content:center}
-/* le bouton Google est une page en thème clair : sans ceci, le navigateur peint un fond blanc derrière (le hub est en thème sombre) */
-.gbtn,.gbtn iframe{color-scheme:light}
+.gbtn-w{width:100%;max-width:400px}
+/* Bouton Google : cadre découpé à la forme exacte de la pilule (40 px de haut). La page de Google déborde
+   de quelques pixels autour du bouton, et ce débord apparaît en blanc dans la version « Continuer en tant que… ».
+   Thème clair déclaré : sinon le navigateur peint un fond blanc derrière (le hub est en thème sombre). */
+.gbtn{height:40px;max-width:100%;border-radius:20px;overflow:hidden;color-scheme:light;isolation:isolate;background:#202124}
+.gbtn iframe{color-scheme:light}
 .account.flash{animation:flash 1.2s ease}
 .sync .game-c{display:grid;gap:10px;padding:14px 0;border-top:1px solid var(--faint)}
 .sync .game-c:first-of-type{border-top:0;padding-top:0}
@@ -369,7 +372,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     <div id="acc-out" class="part">
       <p data-i18n="accText">Connecte-toi pour retrouver tes parties sur ton téléphone, ton ordinateur, ou après avoir vidé ton navigateur. Le compte sert uniquement à ça : on ne garde ni ton nom, ni ton e-mail.</p>
       <p class="warn" data-i18n="accWarn">Les parties de cet appareil seront ajoutées à ton compte. Si tu joues déjà sur un autre appareil, tu choisiras, jeu par jeu, quelle partie garder.</p>
-      <div class="gbtn" id="g-btn"></div>
+      <div class="gbtn-w" id="g-wrap"><div class="gbtn" id="g-btn"></div></div>
       <p class="msg" id="acc-err" role="alert" hidden></p>
     </div>
     <div id="acc-in" class="part" hidden>
@@ -1030,7 +1033,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     loadGoogle().then(() => {
       if (!gInit) { google.accounts.id.initialize({ client_id: ACC.clientId, callback: onCredential, ux_mode: 'popup', auto_select: false, itp_support: true }); gInit = true; }
       const el = $('#g-btn'); el.innerHTML = '';
-      const w = Math.max(220, Math.min(400, Math.floor(el.clientWidth || 320)));
+      const w = Math.max(220, Math.min(400, Math.floor($('#g-wrap').clientWidth || 320)));
+      el.style.width = w + 'px';
       google.accounts.id.renderButton(el, { type: 'standard', theme: 'filled_black', size: 'large', shape: 'pill', text: 'continue_with', logo_alignment: 'center', width: w, locale: lang === 'en' ? 'en' : 'fr' });
       gLang = lang;
     }).catch(() => {});
