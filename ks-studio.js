@@ -149,7 +149,7 @@
   //  Sur le hub : connexion, rapprochement de tous les jeux, choix en cas de conflit (voir KS.account).
   var SYNC_API = 'https://ks-sync.keismeystudio.workers.dev/v1/';   // adresse du Worker ; vide = synchro coupée
   var GOOGLE_ID = '1040718435129-qdccld83hipf8bek5nehb0n8ecmqec9a.apps.googleusercontent.com';  // identifiant client Google (public)
-  var PUBLIC = false;  // false = encart Compte du hub visible seulement sur les appareils de test (adresse du hub avec ?compte=test une fois)
+  var PUBLIC = true;   // false = encart Compte du hub visible seulement sur les appareils de test (adresse du hub avec ?compte=test une fois)
   var SAVES = {        // clés de sauvegarde de chaque jeu (dossier → clés), les mêmes que l'export
     'Abysses': ['ab_save', 'ab_rec'],
     'Les-Chasseurs-de-Brume-Haute': ['grande-traque-v1', 'grande-traque-chasse'],
@@ -361,11 +361,17 @@
     }
     check();
     setInterval(function () { tick(false); }, EVERY);
-    document.addEventListener('visibilitychange', function () {
-      if (document.visibilityState === 'hidden') tick(true);
-      else if (ready && Date.now() - lastCheck > 10000) { ready = false; check(); }   // retour sur le jeu : un autre appareil a peut-être joué
-    });
-    window.addEventListener('pagehide', function () { tick(true); });
+    // Écouteurs de sortie posés APRÈS ceux du jeu (une fois la page chargée) : beaucoup de jeux
+    // sauvegardent en passant en arrière-plan ; on envoie ainsi leur toute dernière sauvegarde.
+    function bindLeave() {
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'hidden') tick(true);
+        else if (ready && Date.now() - lastCheck > 10000) { ready = false; check(); }   // retour sur le jeu : un autre appareil a peut-être joué
+      });
+      window.addEventListener('pagehide', function () { tick(true); });
+    }
+    if (document.readyState === 'complete') bindLeave();
+    else window.addEventListener('load', function () { setTimeout(bindLeave, 0); });
     window.addEventListener('online', function () { tick(false); });
   }
   if (ON && SAVES[DIR] && typeof fetch === 'function') gameSync(DIR);
