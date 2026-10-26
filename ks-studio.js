@@ -147,8 +147,9 @@
   //  ont changé → le joueur choisit. Ensuite, envoi toutes les minutes, au passage en arrière-plan et
   //  à la fermeture, seulement si la partie a changé. Sans réseau, le jeu marche comme avant.
   //  Sur le hub : connexion, rapprochement de tous les jeux, choix en cas de conflit (voir KS.account).
-  var SYNC_API = '';   // adresse du Worker, ex. 'https://ks-sync.keismey.workers.dev/v1/' ; vide = synchro coupée
-  var GOOGLE_ID = '';  // identifiant client Google (public)
+  var SYNC_API = 'https://ks-sync.keismeystudio.workers.dev/v1/';   // adresse du Worker ; vide = synchro coupée
+  var GOOGLE_ID = '1040718435129-qdccld83hipf8bek5nehb0n8ecmqec9a.apps.googleusercontent.com';  // identifiant client Google (public)
+  var PUBLIC = false;  // false = encart Compte du hub visible seulement sur les appareils de test (adresse du hub avec ?compte=test une fois)
   var SAVES = {        // clés de sauvegarde de chaque jeu (dossier → clés), les mêmes que l'export
     'Abysses': ['ab_save', 'ab_rec'],
     'Les-Chasseurs-de-Brume-Haute': ['grande-traque-v1', 'grande-traque-chasse'],
@@ -164,6 +165,10 @@
     'Lanterval': ['lanterval-v1', 'lanterval-v1.bak'],
     'Pico-Clinic': ['pico_save_v1']
   };
+  try {   // appareil de test : ?compte=test (active) ou ?compte=off (désactive), retenu sur l'appareil
+    var qb = new URLSearchParams(location.search).get('compte');
+    if (qb === 'test') localStorage.setItem('ks-beta', '1'); else if (qb === 'off') localStorage.removeItem('ks-beta');
+  } catch (e) {}
   var ON = !!SYNC_API, ACC = 'ks-account', STK = 'ks-sync.', APPLIED = 'ks-sync-applied:' + DIR;
   var MAX = 1000000, BEACON = 60000, EVERY = 60000;
 
@@ -367,7 +372,7 @@
 
   // ---- sur le hub ----
   var account = {
-    enabled: ON && !!GOOGLE_ID,
+    enabled: ON && !!GOOGLE_ID && (PUBLIC || !!token() || lsGet('ks-beta') === '1'),
     clientId: GOOGLE_ID,
     games: Object.keys(SAVES),
     signedIn: function () { return !!token(); },
