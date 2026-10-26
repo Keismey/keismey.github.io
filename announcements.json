@@ -24,5 +24,18 @@
       "title": "Your games on every device",
       "body": "Sign in on the hub to get your progress back on your phone, your computer, or after clearing your browser."
     }
+  },
+  {
+    "id": "2026-10-26-nouveau-jeu",
+    "date": "2026-10-26",
+    "url": "/",
+    "fr": {
+      "title": "Nouveaux jeux disponibles !",
+      "body": "Lanterval, RPG à scénario au tour par tour & Pico-Clinic, réparation de robots mignons !"
+    },
+    "en": {
+      "title": "New games available!",
+      "body": "Lanterval, a turn-based scenario RPG & Pico-Clinic, cute robot repair!"
+    }
   }
 ]
