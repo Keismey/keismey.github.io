@@ -122,6 +122,18 @@ header .grow{flex:1}
 .bell[aria-pressed=true]{background:var(--parch);color:var(--ink);box-shadow:none}
 .bell[aria-pressed=true] .on{display:block}.bell[aria-pressed=true] .off{display:none}
 .bell:focus-visible{border-radius:999px}
+.accbtn{position:relative}
+/* petits écrans : l'en-tête tient sur une ligne (le sélecteur de langue ne montre que l'autre langue) */
+@media (max-width:440px){
+  header{gap:10px 6px}
+  header .grow{display:none}
+  .mark{margin-right:auto}
+  .lang button[aria-pressed=true]{display:none}
+}
+.accbtn .dot{position:absolute;top:3px;right:3px;width:10px;height:10px;border-radius:99px;background:var(--ember);box-shadow:0 0 0 2px var(--ink)}
+.accbtn.ok{color:var(--parch)}
+.accbtn.ok .dot{background:#5fc28a}
+.accbtn.warn .dot{background:var(--ember)}
 .toast{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 76px);transform:translate(-50%,10px);
   width:min(420px,calc(100% - 32px));padding:14px 16px;border-radius:16px;background:var(--parch);color:var(--ink);
   font-size:.9375rem;line-height:1.4;box-shadow:0 14px 34px -10px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
@@ -235,7 +247,9 @@ header .grow{flex:1}
 .account small a,footer a{color:inherit}
 .account .del{padding:0;border:0;background:none;color:var(--muted);font:400 .875rem/1.4 var(--sans);text-decoration:underline;cursor:pointer}
 .account:not([hidden]) + .support{margin-top:18px}
-.gbtn{min-height:44px}
+.account{scroll-margin-top:16px}
+.gbtn{width:100%;max-width:400px;min-height:44px;display:flex;justify-content:center}
+.account.flash{animation:flash 1.2s ease}
 .sync .game-c{display:grid;gap:10px;padding:14px 0;border-top:1px solid var(--faint)}
 .sync .game-c:first-of-type{border-top:0;padding-top:0}
 .sync .game-c h3{margin:0;font:700 1.125rem/1.2 var(--serif)}
@@ -316,6 +330,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     </a>
     <div class="grow"></div>
     <button class="install" id="install" data-i18n="install" hidden>Installer</button>
+    <button type="button" class="bell accbtn" id="accbtn" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7.1 9.1 4.5 4.5 0 0 0 7 18Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 15.5v-5m0 0-2.2 2.2M12 10.5l2.2 2.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="dot" aria-hidden="true"></span>
+      <span class="sr" id="accbtn-label">Tes parties sur tous tes appareils</span>
+    </button>
     <button type="button" class="bell" id="bell" aria-pressed="false" hidden>
       <svg class="off" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       <svg class="on" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15Z" fill="currentColor"/><path d="M10 20.5a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -530,6 +549,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       fresh: 'Nouvelle version', updated: 'Mis à jour ', frOnly: '', sep: ' : ',
       today: "aujourd'hui", yesterday: 'hier', daysAgo: n => 'il y a ' + n + ' jours', on: d => 'le ' + d, locale: 'fr-FR',
       accTitle: 'Tes parties sur tous tes appareils',
+      accBtnOff: 'Tes parties sur tous tes appareils : se connecter', accBtnOn: 'Compte connecté : tes parties sont synchronisées',
+      accBtnConf: 'Compte : une partie attend ton choix',
       accText: "Connecte-toi pour retrouver tes parties sur ton téléphone, ton ordinateur, ou après avoir vidé ton navigateur. Le compte sert uniquement à ça : on ne garde ni ton nom, ni ton e-mail.",
       accWarn: "Les parties de cet appareil seront ajoutées à ton compte. Si tu joues déjà sur un autre appareil, tu choisiras, jeu par jeu, quelle partie garder.",
       accAuto: 'Tes parties se synchronisent toutes seules quand tu joues.',
@@ -592,6 +613,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       fresh: 'New version', updated: 'Updated ', frOnly: 'In French only for now.', sep: ': ',
       today: 'today', yesterday: 'yesterday', daysAgo: n => n + ' days ago', on: d => 'on ' + d, locale: 'en-GB',
       accTitle: 'Your games on every device',
+      accBtnOff: 'Your games on every device: sign in', accBtnOn: 'Signed in: your games are synced',
+      accBtnConf: 'Account: a game is waiting for your choice',
       accText: "Sign in to get your games back on your phone, your computer, or after clearing your browser. That's all the account is for: we keep neither your name nor your email.",
       accWarn: "The games on this device will be added to your account. If you already play on another device, you'll choose, game by game, which one to keep.",
       accAuto: 'Your games sync on their own while you play.',
@@ -981,6 +1004,9 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   }
   function paintAccount() {
     const t = T(), on = ACC.signedIn();
+    const ab = $('#accbtn'), lbl = on ? (conflicts.length ? t.accBtnConf : t.accBtnOn) : t.accBtnOff;
+    ab.classList.toggle('ok', on && !conflicts.length); ab.classList.toggle('warn', on && !!conflicts.length);
+    $('#accbtn-label').textContent = lbl; ab.title = lbl;
     $('#acc-out').hidden = on; $('#acc-in').hidden = !on;
     if (!on) { googleButton(); return; }
     const s = ACC.lastSync();
@@ -1002,7 +1028,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     loadGoogle().then(() => {
       if (!gInit) { google.accounts.id.initialize({ client_id: ACC.clientId, callback: onCredential, ux_mode: 'popup', auto_select: false, itp_support: true }); gInit = true; }
       const el = $('#g-btn'); el.innerHTML = '';
-      google.accounts.id.renderButton(el, { type: 'standard', theme: 'filled_black', size: 'large', shape: 'pill', text: 'continue_with', locale: lang === 'en' ? 'en' : 'fr' });
+      const w = Math.max(220, Math.min(400, Math.floor(el.clientWidth || 320)));
+      google.accounts.id.renderButton(el, { type: 'standard', theme: 'filled_black', size: 'large', shape: 'pill', text: 'continue_with', logo_alignment: 'center', width: w, locale: lang === 'en' ? 'en' : 'fr' });
       gLang = lang;
     }).catch(() => {});
   }
@@ -1094,7 +1121,14 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 
   if (ACC && ACC.enabled) {
     $('#account').hidden = false;
+    $('#accbtn').hidden = false;
     accReady = true;
+    $('#accbtn').addEventListener('click', () => {
+      const box = $('#account'), calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (conflicts.length && ACC.signedIn()) { openSync(); return; }
+      box.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+      box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash');
+    });
     paintAccount();
     $('#acc-choose').addEventListener('click', openSync);
     $('#acc-sync').addEventListener('click', () => reconcile(true));
