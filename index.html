@@ -949,12 +949,22 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     bell.title = notifOn ? t.bellTitleOn : t.bellTitleOff;
     bell.setAttribute('aria-label', bell.title);
   }
+  // copie de secours dans localStorage : un jeu du site peut vider le Cache Storage, qui est commun à tout keismey.github.io
+  const STATE_BACKUP = 'ks-alerts';
+  async function writeState(st) {
+    try { localStorage.setItem(STATE_BACKUP, JSON.stringify(st)); } catch (e) {}
+    try { await (await caches.open(STATE_CACHE)).put(STATE_KEY, new Response(JSON.stringify(st), { headers: { 'content-type': 'application/json' } })); } catch (e) {}
+  }
   async function readState() {
-    try { const r = await (await caches.open(STATE_CACHE)).match(STATE_KEY); return r ? await r.json() : {}; } catch (e) { return {}; }
+    try { const r = await (await caches.open(STATE_CACHE)).match(STATE_KEY); if (r) return await r.json(); } catch (e) {}
+    let st = {};
+    try { st = JSON.parse(localStorage.getItem(STATE_BACKUP) || '{}') || {}; } catch (e) {}
+    if (st.on !== undefined) await writeState(st);     // état perdu : on le remet pour le service worker
+    return st;
   }
   async function updateState(patch) {
     const st = Object.assign(await readState(), patch);
-    try { await (await caches.open(STATE_CACHE)).put(STATE_KEY, new Response(JSON.stringify(st), { headers: { 'content-type': 'application/json' } })); } catch (e) {}
+    await writeState(st);
     return st;
   }
   const PUSH_API = 'https://ks-sync.keismeystudio.workers.dev/v1/';   // le même serveur que la synchro (ks-studio.js)
