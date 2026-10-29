@@ -180,7 +180,7 @@ window.GAMES = [
     cover: '/Paper-Sniper/a/cover.webp',
     focus: '50% 48%',
     color: '#151726',
-    accent: '#b3261e',
+    accent: '#f05a4f',   // rouge du jeu (#b3261e) éclairci : lisible sur fond sombre (contraste 5,3)
     // le jeu est bilingue : ?lang= choisit la langue
     extra: [{ label: 'Play in English', path: '/Paper-Sniper/?lang=en' }],
     en: {

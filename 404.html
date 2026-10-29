@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page introuvable · Keismey Studio</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#10181b">
+<link rel="icon" href="/icons/favicon.png" type="image/png">
+<!-- Page « introuvable » de tout le site. Adresses absolues : elle s'affiche à n'importe quelle adresse.
+     Un nom de jeu mal écrit (/abysses, /le-necromancien…) renvoie tout seul vers le bon jeu ;
+     un nom proche propose le jeu ; sinon, lien vers le hub. La liste des jeux vient de games.js. -->
+<style>
+@font-face{font-family:"Alegreya";src:url(/fonts/alegreya.woff2) format("woff2");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Alegreya Sans";src:url(/fonts/alegreya-sans-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Alegreya Sans";src:url(/fonts/alegreya-sans-700.woff2) format("woff2");font-weight:700;font-display:swap}
+:root{--ink:#10181b;--parch:#efe6d0;--muted:rgba(239,230,208,.72);--faint:rgba(239,230,208,.14);--ember:#e8923a;
+  --serif:"Alegreya",Georgia,serif;--sans:"Alegreya Sans",system-ui,sans-serif;color-scheme:dark}
+html{-webkit-text-size-adjust:100%;background:var(--ink)}
+body{margin:0;background:var(--ink);color:var(--parch);font:400 1.0625rem/1.55 var(--sans)}
+.wrap{max-width:560px;margin:0 auto;padding:calc(env(safe-area-inset-top,0px) + 18px) 16px calc(env(safe-area-inset-bottom,0px) + 48px)}
+.mark{display:inline-flex;align-items:center;gap:10px;min-height:44px;color:inherit;text-decoration:none;font:italic 700 1.25rem/1 var(--serif)}
+.mark img{width:36px;height:36px;border-radius:10px}
+h1{margin:44px 0 10px;font:700 2rem/1.15 var(--serif)}
+p{margin:0 0 14px;color:var(--muted)}
+p b{color:var(--parch)}
+.box{margin:22px 0 0;padding:18px 18px 20px;border-radius:20px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset;display:grid;gap:14px;justify-items:start}
+.box[hidden]{display:none}
+.box img{width:56px;height:56px;border-radius:16px}
+.box .row{display:flex;align-items:center;gap:14px}
+.box h2{margin:0;font:700 1.375rem/1.15 var(--serif)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 22px;border-radius:999px;text-decoration:none;font:700 1rem/1 var(--sans)}
+.btn.solid{background:var(--parch);color:var(--ink)}
+.btn.ghost{background:rgba(0,0,0,.28);color:var(--parch);box-shadow:0 0 0 1px var(--faint) inset}
+a:focus-visible{outline:3px solid var(--parch);outline-offset:3px;border-radius:12px}
+.btn:focus-visible{border-radius:999px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="mark" href="/" id="home"><img src="/icons/icon-192.png" alt="" width="36" height="36"><span>Keismey Studio</span></a>
+  <main>
+    <h1 id="title">Page introuvable</h1>
+    <p id="text">Cette adresse ne mène à rien. Le lien est peut-être mal écrit, ou la page a changé de place.</p>
+    <div class="box" id="guess" hidden>
+      <div class="row"><img id="g-icon" src="" alt=""><h2 id="g-name"></h2></div>
+      <a class="btn solid" id="g-go" href="/"></a>
+    </div>
+    <div class="btns">
+      <a class="btn solid" id="hub" href="/">Voir tous les jeux</a>
+    </div>
+  </main>
+</div>
+<script src="/games.js"></script>
+<script src="/vignettes.js"></script>
+<script>
+(function () {
+  // même nom à la majuscule, à l'accent ou au tiret près
+  var norm = function (s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, ''); };
+  var en = /[?&]lang=en\b/.test(location.search);
+  if (!en && !/[?&]lang=fr\b/.test(location.search)) {
+    try { var h = JSON.parse(localStorage.getItem('keismey-hub') || '{}'); en = h.lang ? h.lang === 'en' : !/^fr/i.test((navigator.languages && navigator.languages[0]) || navigator.language || 'fr'); } catch (e) {}
+  }
+  var T = en ? {
+    title: 'Page not found', text: 'This address leads nowhere. The link may be mistyped, or the page has moved.',
+    inGame: function (n) { return 'This page does not exist in ' + n + '.'; }, maybe: 'Were you looking for this game?',
+    play: 'Play', hub: 'See all the games', doc: 'Page not found · Keismey Studio'
+  } : {
+    title: 'Page introuvable', text: 'Cette adresse ne mène à rien. Le lien est peut-être mal écrit, ou la page a changé de place.',
+    inGame: function (n) { return 'Cette page n’existe pas dans ' + n + '.'; }, maybe: 'Tu cherchais ce jeu ?',
+    play: 'Jouer', hub: 'Voir tous les jeux', doc: 'Page introuvable · Keismey Studio'
+  };
+  document.documentElement.lang = en ? 'en' : 'fr';
+  document.title = T.doc;
+  document.getElementById('title').textContent = T.title;
+  document.getElementById('text').textContent = T.text;
+  var hub = document.getElementById('hub');
+  hub.textContent = T.hub; hub.href = '/' + (en ? '?lang=en' : '');
+  document.getElementById('home').href = hub.href;
+
+  // dossiers des jeux, tels qu'écrits dans games.js (« /Le-Cartographe/?lang=fr » → « Le-Cartographe »)
+  var games = (window.GAMES || []).map(function (g) {
+    var path = (en && g.en && g.en.path) || g.path;
+    return { dir: g.path.split('/')[1], name: (en && g.en && g.en.name) || g.name, path: path,
+      icon: (window.VIGNETTES && window.VIGNETTES[g.icon]) || g.icon || '/' + g.path.split('/')[1] + '/icons/icon-192.png' };
+  });
+  var parts = location.pathname.split('/'), seg = decodeURIComponent(parts[1] || ''), rest = parts.slice(2).join('/');
+  var exact = null, near = null, best = 3;
+  games.forEach(function (g) {
+    if (norm(g.dir) === norm(seg)) exact = g;
+    var d = dist(norm(g.dir), norm(seg));
+    if (norm(seg).length > 3 && d < best) { best = d; near = g; }
+  });
+  // même jeu à la majuscule, à l'accent ou au tiret près : on y va directement
+  if (exact && exact.dir !== seg) {
+    location.replace('/' + exact.dir + '/' + rest + location.search + location.hash);
+    return;
+  }
+  var g = exact || near;
+  if (!g) return;
+  document.getElementById('guess').hidden = false;
+  hub.className = 'btn ghost';
+  document.getElementById('g-icon').src = g.icon;
+  document.getElementById('g-name').textContent = g.name;
+  var go = document.getElementById('g-go');
+  go.textContent = T.play; go.href = g.path; go.setAttribute('aria-label', T.play + ' : ' + g.name);
+  document.getElementById('text').textContent = exact ? T.inGame(g.name) : T.maybe;
+
+  function dist(a, b) {           // nombre de lettres à changer pour passer de a à b
+    var m = [], i, j;
+    for (i = 0; i <= a.length; i++) { m[i] = [i]; }
+    for (j = 0; j <= b.length; j++) { m[0][j] = j; }
+    for (i = 1; i <= a.length; i++) for (j = 1; j <= b.length; j++)
+      m[i][j] = Math.min(m[i - 1][j] + 1, m[i][j - 1] + 1, m[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return m[a.length][b.length];
+  }
+})();
+</script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "cdb82226cd1b401d9e4f4e899f9b8425"}'></script><!-- End Cloudflare Web Analytics -->
+</body>
+</html>

@@ -2,18 +2,18 @@
 // Ne gère QUE les fichiers du hub (et les images qu'il affiche).
 // Les jeux gardent leurs propres service workers dans leurs dossiers.
 // Changer VERSION à chaque mise en ligne qui touche les polices ou les icônes.
-const VERSION = 'hub-1.3.0';
+const VERSION = 'hub-1.4.0';
 const SHELL = 'shell-' + VERSION;
-const IMGS = 'img-v1';
+const IMGS = 'hub-img-' + VERSION;   // copies des images affichées : vidées à chaque nouvelle version
 
 const CORE = [
-  '/', '/index.html', '/games.js', '/ks-studio.js', '/confidentialite.html', '/manifest.webmanifest',
+  '/', '/index.html', '/games.js', '/vignettes.js', '/ks-studio.js', '/confidentialite.html', '/manifest.webmanifest',
   '/icons/icon-192.png', '/icons/icon-512.png', '/icons/maskable-512.png',
   '/icons/apple-touch-icon.png', '/icons/favicon.png', '/icons/badge-96.png',
-  '/fonts/alegreya.woff', '/fonts/alegreya-italic.woff',
-  '/fonts/alegreya-sans-400.woff', '/fonts/alegreya-sans-700.woff'
+  '/fonts/alegreya.woff2', '/fonts/alegreya-italic.woff2',
+  '/fonts/alegreya-sans-400.woff2', '/fonts/alegreya-sans-700.woff2'
 ];
-const NETWORK_FIRST = new Set(['/', '/index.html', '/games.js', '/ks-studio.js', '/confidentialite.html', '/manifest.webmanifest']);
+const NETWORK_FIRST = new Set(['/', '/index.html', '/games.js', '/vignettes.js', '/ks-studio.js', '/confidentialite.html', '/manifest.webmanifest']);
 const HUB_PAGES = new Set(['/', '/index.html']);
 
 self.addEventListener('install', e => {
@@ -23,7 +23,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => (k.startsWith('shell-') && k !== SHELL)).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => (k.startsWith('shell-') && k !== SHELL) || k === 'img-v1' || (k.startsWith('hub-img-') && k !== IMGS)).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
