@@ -86,7 +86,10 @@ async function writeState(st) {
 // s'il n'y a rien de neuf (déjà vue à l'ouverture du hub), on remontre la dernière annonce (même tag, pas de doublon).
 async function checkNews(fromPush) {
   const st = await readState();
-  if (!st.on) {
+  // état absent (Cache Storage vidé, par exemple par un jeu du site) : une alerte du serveur prouve que le joueur
+  // s'était abonné. On ne le désabonne pas ; on montre seulement la dernière annonce et on remet l'état.
+  const lost = st.on === undefined && fromPush;
+  if (!st.on && !lost) {
     if (fromPush) try { const s = await self.registration.pushManager.getSubscription(); if (s) await s.unsubscribe(); } catch (e) {}
     return;
   }
@@ -103,7 +106,8 @@ async function checkNews(fromPush) {
     return;
   }
   list = (Array.isArray(list) ? list : []).filter(n => n && n.id);
-  const seen = new Set(st.seen || []);
+  const seen = new Set(lost ? list.slice(0, -1).map(n => n.id) : (st.seen || []));
+  if (lost) st.on = true;
   let fresh = list.filter(n => !seen.has(n.id));
   if (!fresh.length && fromPush && list.length) fresh = list.slice(-1);
   if (!fresh.length) return;
