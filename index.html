@@ -236,6 +236,8 @@ header .grow{flex:1}
   background:var(--parch);color:var(--ink);font:700 .9375rem/1 var(--sans);cursor:pointer;
   box-shadow:0 10px 28px -8px rgba(0,0,0,.65);transition:opacity .25s ease,transform .25s ease}
 .fab svg{width:20px;height:20px}
+/* téléphone : au centre, là où les cartes n'ont pas de bouton (Jouer et l'étoile sont à droite en vue Liste) */
+@media (max-width:599px){.fab{left:0;right:0;width:max-content;margin:0 auto}}
 .fab.off,.fab.dodge{opacity:0;transform:translateY(12px);pointer-events:none}
 .fab:focus-visible{border-radius:999px}
 .support.flash{animation:flash 1.2s ease}
@@ -965,8 +967,10 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
         const f = fab.getBoundingClientRect(), m = 6;
         const hit = [...document.querySelectorAll('a[href],button,iframe,input,select,textarea')].some(el => {
           if (el === fab || fab.contains(el)) return false;
+          // seulement si le bouton disparaît en bonne partie : une grande image reste facile à toucher
           const r = el.getBoundingClientRect();
-          return r.width && r.height && r.left < f.right + m && r.right > f.left - m && r.top < f.bottom + m && r.bottom > f.top - m;
+          const w = Math.min(r.right, f.right + m) - Math.max(r.left, f.left - m), h = Math.min(r.bottom, f.bottom + m) - Math.max(r.top, f.top - m);
+          return w > 0 && h > 0 && w * h > 0.2 * r.width * r.height;
         });
         fab.classList.toggle('dodge', hit);
       });
