@@ -1,0 +1,31 @@
+// Fait par outils/vignettes.py : ne pas modifier à la main.
+// Image du jeu → vignette du hub (même cadrage, plus légère). Couvertures déjà recadrées en 16/10.
+window.VIGNETTES = {
+ "/Abysses/a/75e83e3367e3.webp": "/vignettes/abysses.webp?v=c25b7342",
+ "/Abysses/icons/icon-192.png": "/vignettes/abysses-icone.webp?v=0171f7a4",
+ "/Les-Chasseurs-de-Brume-Haute/img/banniere-jour.webp": "/vignettes/brume-haute-1.webp?v=06b4bd66",
+ "/Les-Chasseurs-de-Brume-Haute/img/banniere-nuit.webp": "/vignettes/brume-haute-2.webp?v=1e79ee22",
+ "/Les-Chasseurs-de-Brume-Haute/icons/icon-192.png": "/vignettes/brume-haute-icone.webp?v=5a12b1d4",
+ "/legion-eternelle/assets/title-bg.webp": "/vignettes/legion-eternelle.webp?v=64d37203",
+ "/legion-eternelle/assets/icon-192.png": "/vignettes/legion-eternelle-icone.webp?v=93d9ee03",
+ "/Oxyblox/a/title.webp": "/vignettes/oxyblox.webp?v=26bc2086",
+ "/Oxyblox/icons/icon-192.png": "/vignettes/oxyblox-icone.webp?v=b6180747",
+ "/Baffus-Maximus/a/titre.webp": "/vignettes/baffus-maximus.webp?v=07ca604a",
+ "/Baffus-Maximus/icons/icon-192.png": "/vignettes/baffus-maximus-icone.webp?v=b0f2e57e",
+ "/Paper-Sniper/a/cover.webp": "/vignettes/paper-sniper.webp?v=cc74ae9d",
+ "/Paper-Sniper/icons/icon-192.png": "/vignettes/paper-sniper-icone.webp?v=d16df4a8",
+ "/La-Derniere-Forge/assets/img/decors/titre.webp": "/vignettes/derniere-forge.webp?v=13b2f1f2",
+ "/La-Derniere-Forge/icons/icon-192.png": "/vignettes/derniere-forge-icone.webp?v=5549e610",
+ "/Pas-ce-soir/img/cover.webp": "/vignettes/pas-ce-soir.webp?v=99ff2fb1",
+ "/Pas-ce-soir/icons/icon-192.png": "/vignettes/pas-ce-soir-icone.webp?v=2406e420",
+ "/Last-Loop/assets/img/title_keyart.webp": "/vignettes/last-loop.webp?v=720b3a46",
+ "/Last-Loop/assets/icons/icon-192.png": "/vignettes/last-loop-icone.webp?v=d2f7131d",
+ "/Le-Necromancien-de-la-Crypte/assets/cover.webp": "/vignettes/necromancien.webp?v=a839c4b8",
+ "/Le-Necromancien-de-la-Crypte/icons/icon-192.png": "/vignettes/necromancien-icone.webp?v=7f1dce16",
+ "/Le-Cartographe/cover.webp": "/vignettes/cartographe.webp?v=b2ad5964",
+ "/Le-Cartographe/icon-192.png": "/vignettes/cartographe-icone.webp?v=722903d6",
+ "/Lanterval/couverture.webp": "/vignettes/lanterval.webp?v=004a1bf3",
+ "/Lanterval/icon-192.png": "/vignettes/lanterval-icone.webp?v=fae2d398",
+ "/Pico-Clinic/couverture.webp": "/vignettes/pico-clinic.webp?v=70121c09",
+ "/Pico-Clinic/icons/icon-192.png": "/vignettes/pico-clinic-icone.webp?v=51a6f8dc"
+};

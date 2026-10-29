@@ -1,0 +1,18 @@
+# Vérifie chaque lundi que les 13 jeux ont la même copie de ks-back.js et ks-studio.js que le hub.
+# En cas d'écart, la vérification échoue et GitHub envoie un e-mail. Détail : outils/verifier-copies.sh
+name: Copies communes
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  push:
+    branches: [main]
+    paths: ['ks-back.js', 'ks-studio.js', 'outils/verifier-copies.sh']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash outils/verifier-copies.sh

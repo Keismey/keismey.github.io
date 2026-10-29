@@ -6,7 +6,7 @@ Une seule appli à installer sur le téléphone. Chaque jeu s'ouvre dedans.
 
 ## Bouton retour du téléphone
 
-Chaque jeu embarque `ks-back.js` (le même fichier partout) : le bouton ou geste retour revient au menu
+Chaque jeu embarque `ks-back.js` (le même fichier partout ; la copie de référence est celle du hub) : le bouton ou geste retour revient au menu
 précédent du jeu, demande confirmation avant l'écran titre, et depuis l'écran titre propose d'aller au hub, même pour
 un joueur arrivé d'ailleurs (lien partagé, recherche). Si le joueur vient du hub, il y revient comme avec un
 retour normal ; sinon le hub remplace le jeu dans l'historique. Ce que fait le retour sur chaque écran est
@@ -30,14 +30,30 @@ lancé par le code) : Chrome saute au retour les entrées créées sans geste.
 
 1. Le jeu doit être publié sur GitHub Pages depuis son dépôt (il sera alors à `https://keismey.github.io/<Nom-du-depot>/`).
 2. Dans `games.js`, copier un bloc existant et remplir les champs (nom, chemin, couverture, couleurs).
-3. Optionnel : ajouter un raccourci dans `manifest.webmanifest` (`shortcuts`), pour l'appui long sur l'icône.
+3. Lancer `python3 outils/vignettes.py` : il fabrique la couverture et l'icône du hub (`vignettes/`, `vignettes.js`).
+   Sans ça, le hub affiche les images d'origine du jeu, plus lourdes. À relancer aussi si une couverture change.
+4. Ajouter le jeu dans `sitemap.xml` (une ligne) et dans `outils/verifier-copies.sh` (dépôt et dossier des fichiers communs).
+5. Optionnel : ajouter un raccourci dans `manifest.webmanifest` (`shortcuts`), pour l'appui long sur l'icône.
+
+Lien direct vers la fiche d'un jeu dans le hub : `https://keismey.github.io/#<id>` (l'`id` de `games.js`, par exemple `#abysses`).
+
+## Fichiers communs aux jeux
+
+`ks-back.js` et `ks-studio.js` sont recopiés tels quels dans chaque jeu. On les modifie ici, dans le hub, puis on
+recopie. Chaque lundi, GitHub vérifie que les 13 copies sont identiques à celles du hub
+(`outils/verifier-copies.sh`) et envoie un e-mail si l'une a changé.
 
 ## Fichiers
 
 - `index.html` — la page du hub
 - `games.js` — la liste des jeux et la lecture de leur progression
-- `sw.js` — mode hors ligne du hub (ne touche pas aux jeux)
-- `fonts/` — Alegreya et Alegreya Sans (licence SIL OFL, voir `fonts/OFL.txt`)
+- `vignettes/`, `vignettes.js` — couvertures et icônes allégées pour le hub (faites par `outils/vignettes.py`)
+- `sw.js` — mode hors ligne du hub (ne touche pas aux jeux) ; changer `VERSION` à chaque mise en ligne qui touche
+  les polices ou les icônes
+- `404.html` — page « introuvable » de tout le site : un nom de jeu mal écrit (`/abysses`) renvoie vers le bon jeu
+- `robots.txt`, `sitemap.xml` — pour les moteurs de recherche
+- `ks-back.js`, `ks-studio.js` — fichiers communs aux jeux (copies de référence)
+- `fonts/` — Alegreya et Alegreya Sans en .woff2 (licence SIL OFL, voir `fonts/OFL.txt`)
 
 ## Prévenir les joueurs (alertes)
 

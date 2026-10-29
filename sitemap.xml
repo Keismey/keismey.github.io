@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Plan du site pour les moteurs de recherche : ajouter une ligne pour chaque nouveau jeu. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://keismey.github.io/</loc></url>
+  <url><loc>https://keismey.github.io/confidentialite.html</loc></url>
+  <url><loc>https://keismey.github.io/Abysses/</loc></url>
+  <url><loc>https://keismey.github.io/Abysses/en.html</loc></url>
+  <url><loc>https://keismey.github.io/Les-Chasseurs-de-Brume-Haute/</loc></url>
+  <url><loc>https://keismey.github.io/legion-eternelle/</loc></url>
+  <url><loc>https://keismey.github.io/Oxyblox/</loc></url>
+  <url><loc>https://keismey.github.io/Baffus-Maximus/</loc></url>
+  <url><loc>https://keismey.github.io/Baffus-Maximus/en.html</loc></url>
+  <url><loc>https://keismey.github.io/Paper-Sniper/</loc></url>
+  <url><loc>https://keismey.github.io/La-Derniere-Forge/</loc></url>
+  <url><loc>https://keismey.github.io/Pas-ce-soir/</loc></url>
+  <url><loc>https://keismey.github.io/Last-Loop/</loc></url>
+  <url><loc>https://keismey.github.io/Le-Necromancien-de-la-Crypte/</loc></url>
+  <url><loc>https://keismey.github.io/Le-Cartographe/</loc></url>
+  <url><loc>https://keismey.github.io/Lanterval/</loc></url>
+  <url><loc>https://keismey.github.io/Pico-Clinic/</loc></url>
+</urlset>
