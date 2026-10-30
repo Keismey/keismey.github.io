@@ -82,7 +82,7 @@
     '#ks-dlg textarea{width:100%;box-sizing:border-box;height:84px;margin:0 0 8px;background:#0f0d12;color:#f3ecdf;border:1px solid #4a4452;border-radius:8px;padding:8px;font:12px/1.3 monospace;resize:none}' +
     '#ks-dlg button{display:block;width:100%;margin:0 0 8px;padding:11px 10px;border-radius:10px;border:0;font:inherit;font-weight:700;font-size:15px;background:#3a3442;color:#f3ecdf;cursor:pointer}' +
     '#ks-dlg button.ks-main{background:var(--ks-accent,#c9a45c);color:#16121a}#ks-dlg hr{border:0;border-top:1px solid #3a3442;margin:12px 0}' +
-    '#ks-dlg .ks-err{color:#ff8f7a}';
+    '#ks-dlg .ks-err{color:#ff8f7a}#ks-dlg .ks-err:empty{margin:0}';
 
   function saveDialog(o) {
     var L = TX[o.lang === 'en' ? 'en' : 'fr'], keys = o.keys;
@@ -90,13 +90,13 @@
     if (!document.getElementById('ks-css')) { var st = document.createElement('style'); st.id = 'ks-css'; st.textContent = CSS; document.head.appendChild(st); }
     if (o.save) try { o.save(); } catch (e) {}
     var code = makeCode(keys);
-    var d = document.createElement('div'); d.id = 'ks-dlg'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true');
+    var d = document.createElement('div'); d.id = 'ks-dlg'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-labelledby', 'ks-t');
     if (o.accent) d.style.setProperty('--ks-accent', o.accent);
-    d.innerHTML = '<div class="kb"><h2>' + L.title + '</h2>' +
-      (code ? '<p>' + L.intro + '</p><textarea readonly id="ks-out"></textarea><button class="ks-main" id="ks-copy">' + L.copy + '</button><button id="ks-file">' + L.file + '</button>' : '<p>' + L.empty + '</p>') +
-      '<hr><h2>' + L.load + '</h2><p>' + L.paste + '</p><textarea id="ks-in" autocomplete="off" spellcheck="false" placeholder="KS1…"></textarea>' +
-      '<button id="ks-pick">' + L.pick + '</button><button class="ks-main" id="ks-go">' + L.go + '</button><p class="ks-err" id="ks-msg" hidden></p>' +
-      '<hr><button id="ks-close">' + L.close + '</button><input type="file" id="ks-f" accept=".txt,text/plain" hidden></div>';
+    d.innerHTML = '<div class="kb"><h2 id="ks-t">' + L.title + '</h2>' +
+      (code ? '<p id="ks-out-l">' + L.intro + '</p><textarea readonly id="ks-out" aria-labelledby="ks-out-l"></textarea><button class="ks-main" id="ks-copy">' + L.copy + '</button><button id="ks-file">' + L.file + '</button>' : '<p>' + L.empty + '</p>') +
+      '<hr><h2>' + L.load + '</h2><p id="ks-in-l">' + L.paste + '</p><textarea id="ks-in" aria-labelledby="ks-in-l" autocomplete="off" spellcheck="false" placeholder="KS1…"></textarea>' +
+      '<button id="ks-pick">' + L.pick + '</button><button class="ks-main" id="ks-go">' + L.go + '</button><p class="ks-err" id="ks-msg" role="alert"></p>' +
+      '<hr><button id="ks-close">' + L.close + '</button><input type="file" id="ks-f" accept=".txt,text/plain" aria-label="' + L.pick + '" hidden></div>';
     document.body.appendChild(d);
     var $ = function (id) { return d.querySelector('#' + id); };
     var close = function () { d.remove(); };
@@ -255,7 +255,7 @@
     var L = TS[o.lang] || TS.fr;
     if (!document.getElementById('ks-css')) { var st = document.createElement('style'); st.id = 'ks-css'; st.textContent = CSS; document.head.appendChild(st); }
     var old = document.getElementById('ks-dlg'); if (old) old.remove();
-    var d = document.createElement('div'); d.id = 'ks-dlg'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true');
+    var d = document.createElement('div'); d.id = 'ks-dlg'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-labelledby', 'ks-t');
     if (o.accent) d.style.setProperty('--ks-accent', o.accent);
     var box = function (id, title, when) {
       return '<div style="border:1px solid #4a4452;border-radius:10px;padding:10px 12px 2px;margin:0 0 10px">' +
@@ -264,7 +264,7 @@
         (when ? '<p style="margin:0 0 8px;font-size:13px;opacity:.7">' + L.mod + fmtDate(when, o.lang) + '</p>' : '') +
         '<button class="ks-main" id="ks-keep-' + id + '">' + L.keep + '</button></div>';
     };
-    d.innerHTML = '<div class="kb"><h2>' + (o.name ? o.name + ' · ' : '') + L.ctitle + '</h2><p>' + L.cintro + '</p>' +
+    d.innerHTML = '<div class="kb"><h2 id="ks-t">' + (o.name ? o.name + ' · ' : '') + L.ctitle + '</h2><p>' + L.cintro + '</p>' +
       box('here', L.here, o.localTime) + box('online', L.online, o.remoteTime) +
       (o.canLater ? '<button id="ks-later">' + L.later + '</button>' : '') + '</div>';
     document.body.appendChild(d);
