@@ -82,7 +82,47 @@
     '#ks-dlg textarea{width:100%;box-sizing:border-box;height:84px;margin:0 0 8px;background:#0f0d12;color:#f3ecdf;border:1px solid #4a4452;border-radius:8px;padding:8px;font:12px/1.3 monospace;resize:none}' +
     '#ks-dlg button{display:block;width:100%;margin:0 0 8px;padding:11px 10px;border-radius:10px;border:0;font:inherit;font-weight:700;font-size:15px;background:#3a3442;color:#f3ecdf;cursor:pointer}' +
     '#ks-dlg button.ks-main{background:var(--ks-accent,#c9a45c);color:#16121a}#ks-dlg hr{border:0;border-top:1px solid #3a3442;margin:12px 0}' +
-    '#ks-dlg .ks-err{color:#ff8f7a}#ks-dlg .ks-err:empty{margin:0}';
+    '#ks-dlg .ks-err{color:#ff8f7a}#ks-dlg .ks-err:empty{margin:0}#ks-dlg .kb:focus:not(:focus-visible){outline:0}';
+
+  /* Clavier et lecteur d'écran : à l'ouverture d'une fenêtre (Sauvegarde ou Conflit), le focus y entre,
+     Tab reste dedans, et à la fermeture le focus revient au bouton qui l'a ouverte. Échap la ferme, même depuis un champ. */
+  var back = null, backT = 0;
+  function items(box) {
+    return [].slice.call(box.querySelectorAll('button, [href], input, select, textarea, [tabindex]')).filter(function (e) {
+      return e.tabIndex >= 0 && !e.disabled && e.getClientRects().length;   // rien de caché
+    });
+  }
+  function opened(d) {
+    clearTimeout(backT);
+    var a = document.activeElement, kb = d.querySelector('.kb');
+    if (a && a !== document.body && !(a.closest && a.closest('#ks-dlg'))) back = a;   // sinon : on garde le bouton d'avant (fenêtre remplacée)
+    kb.tabIndex = -1;
+    try { kb.focus({ preventScroll: true }); } catch (e) {}
+    var mo = new MutationObserver(function () {
+      if (d.parentNode) return;
+      mo.disconnect();
+      backT = setTimeout(function () {   // après le rendu du jeu : une autre fenêtre a pu s'ouvrir, le bouton a pu disparaître
+        if (document.getElementById('ks-dlg')) return;
+        var b = back, a = document.activeElement; back = null;
+        if (a && a !== document.body && !a.contains(b)) return;   // le jeu a déjà placé le focus ailleurs
+        if (b && document.contains(b) && b.getClientRects().length && !b.disabled) try { b.focus({ preventScroll: true }); } catch (e) {}
+      }, 0);
+    });
+    mo.observe(d.parentNode, { childList: true });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.defaultPrevented) return;
+    var d = document.getElementById('ks-dlg'); if (!d) return;
+    // Échap : ks-back.js l'ignore dans un champ de texte ; ici elle ferme la fenêtre partout
+    if (e.key === 'Escape' && !e.repeat && d.contains(e.target)) { e.preventDefault(); window.KS.closeDialog(); return; }
+    if (e.key !== 'Tab') return;
+    var box = d.querySelector('.kb') || d, list = items(box), a = document.activeElement;
+    if (!list.length) { e.preventDefault(); return; }
+    if (!box.contains(a) || a === box) { e.preventDefault(); list[e.shiftKey ? list.length - 1 : 0].focus(); return; }
+    // au bout de la fenêtre, on repart de l'autre côté
+    if (e.shiftKey && a === list[0]) { e.preventDefault(); list[list.length - 1].focus(); }
+    else if (!e.shiftKey && a === list[list.length - 1]) { e.preventDefault(); list[0].focus(); }
+  }, true);
 
   function saveDialog(o) {
     var L = TX[o.lang === 'en' ? 'en' : 'fr'], keys = o.keys;
@@ -98,6 +138,7 @@
       '<button id="ks-pick">' + L.pick + '</button><button class="ks-main" id="ks-go">' + L.go + '</button><p class="ks-err" id="ks-msg" role="alert"></p>' +
       '<hr><button id="ks-close">' + L.close + '</button><input type="file" id="ks-f" accept=".txt,text/plain" aria-label="' + L.pick + '" hidden></div>';
     document.body.appendChild(d);
+    opened(d);
     var $ = function (id) { return d.querySelector('#' + id); };
     var close = function () { d.remove(); };
     if (code) {
@@ -268,6 +309,7 @@
       box('here', L.here, o.localTime) + box('online', L.online, o.remoteTime) +
       (o.canLater ? '<button id="ks-later">' + L.later + '</button>' : '') + '</div>';
     document.body.appendChild(d);
+    opened(d);
     summary(o.jeu, o.localData, o.lang).then(function (s) { var p = d.querySelector('#ks-sum-here'); if (s && p) p.textContent = s.join(' · '); });
     summary(o.jeu, o.remoteData, o.lang).then(function (s) { var p = d.querySelector('#ks-sum-online'); if (s && p) p.textContent = s.join(' · '); });
     var done = function (c) { d.remove(); o.onChoice(c); };
