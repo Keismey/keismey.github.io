@@ -82,10 +82,10 @@
     '#ks-dlg textarea{width:100%;box-sizing:border-box;height:84px;margin:0 0 8px;background:#0f0d12;color:#f3ecdf;border:1px solid #4a4452;border-radius:8px;padding:8px;font:12px/1.3 monospace;resize:none}' +
     '#ks-dlg button{display:block;width:100%;margin:0 0 8px;padding:11px 10px;border-radius:10px;border:0;font:inherit;font-weight:700;font-size:15px;background:#3a3442;color:#f3ecdf;cursor:pointer}' +
     '#ks-dlg button.ks-main{background:var(--ks-accent,#c9a45c);color:#16121a}#ks-dlg hr{border:0;border-top:1px solid #3a3442;margin:12px 0}' +
-    '#ks-dlg .ks-err{color:#ff8f7a}#ks-dlg .ks-err:empty{margin:0}#ks-dlg .kb:focus{outline:0}';
+    '#ks-dlg .ks-err{color:#ff8f7a}#ks-dlg .ks-err:empty{margin:0}#ks-dlg .kb:focus:not(:focus-visible){outline:0}';
 
   /* Clavier et lecteur d'écran : à l'ouverture d'une fenêtre (Sauvegarde ou Conflit), le focus y entre,
-     Tab reste dedans, et à la fermeture le focus revient au bouton qui l'a ouverte. Échap est traité par ks-back.js. */
+     Tab reste dedans, et à la fermeture le focus revient au bouton qui l'a ouverte. Échap la ferme, même depuis un champ. */
   var back = null, backT = 0;
   function items(box) {
     return [].slice.call(box.querySelectorAll('button, [href], input, select, textarea, [tabindex]')).filter(function (e) {
@@ -111,8 +111,11 @@
     mo.observe(d.parentNode, { childList: true });
   }
   document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Tab' || e.defaultPrevented) return;
+    if (e.defaultPrevented) return;
     var d = document.getElementById('ks-dlg'); if (!d) return;
+    // Échap : ks-back.js l'ignore dans un champ de texte ; ici elle ferme la fenêtre partout
+    if (e.key === 'Escape' && !e.repeat && d.contains(e.target)) { e.preventDefault(); window.KS.closeDialog(); return; }
+    if (e.key !== 'Tab') return;
     var box = d.querySelector('.kb') || d, list = items(box), a = document.activeElement;
     if (!list.length) { e.preventDefault(); return; }
     if (!box.contains(a) || a === box) { e.preventDefault(); list[e.shiftKey ? list.length - 1 : 0].focus(); return; }
