@@ -64,7 +64,12 @@
   }
 
   function finish() {
-    var url = '/' + (cfg && cfg.lang && cfg.lang() === 'en' ? '?lang=en' : '');
+    var en = cfg && cfg.lang && cfg.lang() === 'en';
+    // jeu hébergé ailleurs que sur le hub (cfg.hubUrl() renvoie l'adresse du hub) : on y va directement
+    var ext = '';
+    try { ext = cfg && cfg.hubUrl ? cfg.hubUrl() : ''; } catch (e) {}
+    if (ext) { location.replace(ext + (en ? '?lang=en' : '')); return; }
+    var url = '/' + (en ? '?lang=en' : '');
     if (fromHub) {
       history.back();
       // filet de sécurité si aucune page ne précède le jeu
