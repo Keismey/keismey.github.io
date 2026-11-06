@@ -26,6 +26,6 @@ window.VIGNETTES = {
  "/Le-Cartographe/icon-192.png": "/vignettes/cartographe-icone.webp?v=722903d6",
  "/Lanterval/couverture.webp": "/vignettes/lanterval.webp?v=004a1bf3",
  "/Lanterval/icon-192.png": "/vignettes/lanterval-icone.webp?v=fae2d398",
- "/Pico-Clinic/couverture.webp": "/vignettes/pico-clinic.webp?v=70121c09",
- "/Pico-Clinic/icons/icon-192.png": "/vignettes/pico-clinic-icone.webp?v=51a6f8dc"
+ "/Pico-Clinic-Web/couverture.webp": "/vignettes/pico-clinic.webp?v=70121c09",
+ "/Pico-Clinic-Web/icons/icon-192.png": "/vignettes/pico-clinic-icone.webp?v=51a6f8dc"
 };

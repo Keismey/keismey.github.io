@@ -392,22 +392,31 @@ window.GAMES = [
     name: 'Pico-Clinic',
     genre: 'Réparation de drones au doigt',
     tagline: 'Dévisse, soude et change les puces : soigne drones, insectes mécaniques et peluches robots, et reprends l’atelier de Maître Ohm.',
-    // hébergé sur Cloudflare (le dépôt du jeu est privé, donc sans GitHub Pages) ; la sauvegarde y est à une autre adresse :
-    // le hub ne peut pas la lire, donc pas de progression sur la fiche
-    path: 'https://pico-clinic.keismeystudio.workers.dev/?lang=fr',
-    repo: 'Pico-Clinic',
-    icon: '/Pico-Clinic/icons/icon-192.png',
-    cover: '/Pico-Clinic/couverture.webp',
+    // copie web du jeu (le dépôt d'origine est privé) : dépôt Pico-Clinic-Web, sur GitHub Pages
+    path: '/Pico-Clinic-Web/?lang=fr',
+    repo: 'Pico-Clinic-Web',
+    icon: '/Pico-Clinic-Web/icons/icon-192.png',
+    cover: '/Pico-Clinic-Web/couverture.webp',
     focus: '50% 45%',
     color: '#2a1e15',
     accent: '#3fd0bb',
     // le jeu est bilingue : ?lang= choisit la langue (et la retient)
-    extra: [{ label: 'Play in English', path: 'https://pico-clinic.keismeystudio.workers.dev/?lang=en' }],
+    extra: [{ label: 'Play in English', path: '/Pico-Clinic-Web/?lang=en' }],
     en: {
       genre: 'Fingertip drone repair',
       tagline: 'Unscrew, solder and swap chips: heal drones, mechanical insects and robot plushies, and take over Master Ohm’s workshop.',
-      path: 'https://pico-clinic.keismeystudio.workers.dev/?lang=en',
-      extra: [{ label: 'Jouer en Français', path: 'https://pico-clinic.keismeystudio.workers.dev/?lang=fr' }]
+      path: '/Pico-Clinic-Web/?lang=en',
+      extra: [{ label: 'Jouer en Français', path: '/Pico-Clinic-Web/?lang=fr' }]
+    },
+    progress(lang) {
+      const s = JSON.parse(localStorage.getItem('pico_save_v1') || 'null');
+      if (!s || !s.orders || !Object.keys(s.orders).length) return null;
+      const en = lang === 'en', out = [];
+      out.push((en ? 'Rank ' : 'Rang ') + (s.rank || 1));
+      const stars = Object.values(s.orders).reduce((n, o) => n + (o.stars || []).filter(Boolean).length, 0);
+      out.push(fmt(stars, lang) + ' ★');
+      if (typeof s.credits === 'number') out.push(fmt(s.credits, lang) + (en ? ' credits' : ' crédits'));
+      return out;
     }
   }
 ];
