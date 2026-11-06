@@ -1173,7 +1173,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 
   // Écran de choix : pour chaque jeu en conflit, les deux parties côte à côte, avec le résumé de la carte du jeu
   const sdlg = $('#sync-dlg');
-  const gameOf = jeu => games.find(g => (g.path || '').indexOf('/' + jeu + '/') === 0);
+  const gameOf = jeu => games.find(g => (g.path || '').indexOf('/' + jeu + '/') === 0 || (jeu === 'Pico-Clinic' && g.id === 'pico-clinic'));
   function openSync() {
     const t = T(), list = $('#sync-list');
     list.innerHTML = conflicts.map((c, i) => {
