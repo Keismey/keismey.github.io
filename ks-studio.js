@@ -14,6 +14,7 @@
 (function () {
   'use strict';
   var DIR = location.pathname.split('/')[1] || '';
+  if (DIR === 'Pico-Clinic-Web') DIR = 'Pico-Clinic';   // copie web du jeu (dépôt public temporaire) : même identité de sauvegarde que le jeu
   var PENDING = 'ks-import:' + DIR;
 
   // 1. import en attente : appliqué avant le jeu
