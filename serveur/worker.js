@@ -37,6 +37,7 @@ const SESSION_IDLE = 400 * 86400e3; // un appareil inutilisé plus d'un an est d
 const GOOGLE_JWKS = 'https://www.googleapis.com/oauth2/v3/certs';
 const GOOGLE_ISS = ['accounts.google.com', 'https://accounts.google.com'];
 const JEU_RE = /^[A-Za-z0-9-]{1,48}$/;
+const VOTER_RE = /^[A-Za-z0-9_-]{16,64}$/;   // identifiant tiré au hasard par l'appareil (vote du labo)
 const PUSH_BATCH = 40;             // le forfait gratuit permet 50 requêtes sortantes par exécution
 const PUSH_HOSTS = /^(fcm\.googleapis\.com|updates\.push\.services\.mozilla\.com|[a-z0-9.-]+\.push\.apple\.com|[a-z0-9.-]+\.notify\.windows\.com)$/;
 
@@ -80,6 +81,20 @@ export default {
         if (action === 'push/subscribe') await env.DB.prepare('INSERT OR IGNORE INTO push (endpoint, created) VALUES (?, ?)').bind(ep, Date.now()).run();
         else await env.DB.prepare('DELETE FROM push WHERE endpoint = ?').bind(ep).run();
         return reply(200, { ok: true });
+      }
+      // vote du labo « mérite le Play Store ? » : une voix par appareil, sans compte
+      if (action === 'vote' || action === 'vote/list') {
+        const vh = VOTER_RE.test(body.voter || '') ? await sha('vote:' + body.voter) : null;
+        if (action === 'vote') {
+          const v = body.v;
+          if (!vh || !JEU_RE.test(body.jeu || '') || ![1, -1, 0].includes(v)) return reply(400, { error: 'vote' });
+          if (v) await env.DB.prepare('INSERT INTO votes (jeu, voter, v, updated) VALUES (?, ?, ?, ?) ON CONFLICT (jeu, voter) DO UPDATE SET v = excluded.v, updated = excluded.updated')
+            .bind(body.jeu, vh, v, Date.now()).run();
+          else await env.DB.prepare('DELETE FROM votes WHERE jeu = ? AND voter = ?').bind(body.jeu, vh).run();
+        }
+        const counts = (await env.DB.prepare('SELECT jeu, SUM(v = 1) AS up, SUM(v = -1) AS down FROM votes GROUP BY jeu').all()).results || [];
+        const mine = vh ? ((await env.DB.prepare('SELECT jeu, v FROM votes WHERE voter = ?').bind(vh).all()).results || []) : [];
+        return reply(200, { counts, mine });
       }
       const uid = await auth(env, body.t);
       if (!uid) return reply(401, { error: 'session' });

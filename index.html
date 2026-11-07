@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Keismey Studio</title>
-<meta name="description" content="Jeux gratuits et sans pub, à jouer dans le navigateur ou à installer sur ton téléphone : pêche, chasse, idle RPG, gestion, enquête… En français et en anglais.">
+<title>Keismey Studio · Le Labo</title>
+<meta name="description" content="Le labo de Keismey Studio : des jeux gratuits et sans pub, en test avant leur sortie sur le Play Store. Joue avant tout le monde, donne ton avis et choisis ceux qui sortent.">
 <link rel="canonical" href="https://keismey.github.io/">
 <meta name="google-site-verification" content="TNgyUQ_GEyz5-FCoHrT6gqRLC1mB8N1XT_FPq2qZ8U8">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Keismey Studio">
-<meta property="og:title" content="Keismey Studio — jeux gratuits dans le navigateur">
-<meta property="og:description" content="Jeux gratuits et sans pub, à jouer dans le navigateur ou à installer sur ton téléphone : pêche, chasse, idle RPG, gestion, enquête… En français et en anglais.">
+<meta property="og:title" content="Keismey Studio · Le Labo — joue avant tout le monde">
+<meta property="og:description" content="Le labo de Keismey Studio : des jeux gratuits et sans pub, en test avant leur sortie sur le Play Store. Joue avant tout le monde, donne ton avis et choisis ceux qui sortent.">
 <meta property="og:url" content="https://keismey.github.io/">
 <meta property="og:image" content="https://keismey.github.io/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -19,8 +19,8 @@
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Keismey Studio — jeux gratuits dans le navigateur">
-<meta name="twitter:description" content="Jeux gratuits et sans pub, à jouer dans le navigateur ou à installer sur ton téléphone : pêche, chasse, idle RPG, gestion, enquête… En français et en anglais.">
+<meta name="twitter:title" content="Keismey Studio · Le Labo — joue avant tout le monde">
+<meta name="twitter:description" content="Le labo de Keismey Studio : des jeux gratuits et sans pub, en test avant leur sortie sur le Play Store. Joue avant tout le monde, donne ton avis et choisis ceux qui sortent.">
 <meta name="twitter:image" content="https://keismey.github.io/og.jpg">
 <meta name="theme-color" content="#10181b">
 <link rel="manifest" href="manifest.webmanifest">
@@ -72,6 +72,7 @@ header{display:flex;align-items:center;flex-wrap:wrap;gap:10px 8px;min-height:48
 .mark{display:flex;align-items:center;gap:10px;min-height:44px;text-decoration:none;color:inherit}
 .mark img{width:36px;height:36px;border-radius:10px;display:block}
 .mark span{font:italic 700 1.375rem/1 var(--serif);letter-spacing:.01em}
+.mark .lab{font-style:normal;color:var(--accent)}
 .mark small{display:block;font:400 .8125rem/1.2 var(--sans);color:var(--muted);font-style:normal;letter-spacing:0;margin-top:3px}
 header .grow{flex:1}
 .install{font:700 .9375rem/1 var(--sans);color:var(--ink);background:var(--parch);border:0;border-radius:999px;
@@ -196,6 +197,15 @@ header .grow{flex:1}
 .star:active{transform:scale(.92)}
 .star:focus-visible{border-radius:999px}
 .empty{margin:8px 0 0;padding:22px 20px;border-radius:20px;color:var(--muted);background:rgba(0,0,0,.22);box-shadow:0 0 0 1px var(--faint) inset;max-width:52ch}
+.vote{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:16px 0 0;padding-top:14px;border-top:1px solid var(--faint)}
+.vote .q{font-weight:700;font-size:.9375rem;margin-right:4px}
+.vb{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border:0;border-radius:999px;cursor:pointer;
+  background:rgba(0,0,0,.28);box-shadow:0 0 0 1px var(--faint) inset;color:var(--parch);font:700 .9375rem/1 var(--sans)}
+.vb[aria-pressed=true]{background:var(--g-accent);color:var(--ink);box-shadow:none}
+.vb:active{transform:scale(.95)}
+.vb:disabled{opacity:.6}
+.vote .avis{min-height:44px;padding:0 6px;border:0;background:none;color:var(--muted);font:700 .9375rem/1 var(--sans);
+  text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .updated{width:100%;margin:12px 0 0;color:var(--muted);font-size:.875rem}
 
 /* ---------- mode liste ---------- */
@@ -214,7 +224,11 @@ header .grow{flex:1}
 .list .state li{display:inline;padding:0;background:none;font-size:inherit}
 .list .state li.lead{display:none}
 .list .state li:not(.lead):not(:last-child)::after{content:", "}
-.list .tagline,.list .alt,.list .updated{display:none}
+.list .tagline,.list .alt,.list .updated,.list .vote .avis{display:none}
+.list .vote{grid-column:1/-1;margin:10px 0 0;padding-top:8px;gap:6px}
+.list .vote .q{font-size:.875rem;color:var(--muted);margin-right:auto}
+.list .vb{min-height:40px;padding:0 12px;font-size:.875rem}
+.list .vote:not([role]){display:none}
 .list .actions{display:contents}
 .list .star{grid-area:fav;width:44px;height:44px;background:none;box-shadow:none;margin-right:-8px}
 .list .play{grid-area:play;width:52px;min-height:52px;padding:0;box-shadow:0 8px 20px -10px var(--g-accent)}
@@ -231,15 +245,6 @@ header .grow{flex:1}
 .kofi:active{transform:scale(.97)}
 .kofi:focus-visible{border-radius:999px}
 .support small{color:var(--muted);font-size:.8125rem}
-.fab{position:fixed;z-index:5;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);
-  display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 18px 0 14px;border:0;border-radius:999px;
-  background:var(--parch);color:var(--ink);font:700 .9375rem/1 var(--sans);cursor:pointer;
-  box-shadow:0 10px 28px -8px rgba(0,0,0,.65);transition:opacity .25s ease,transform .25s ease}
-.fab svg{width:20px;height:20px}
-/* téléphone : au centre, là où les cartes n'ont pas de bouton (Jouer et l'étoile sont à droite en vue Liste) */
-@media (max-width:599px){.fab{left:0;right:0;width:max-content;margin:0 auto}}
-.fab.off,.fab.dodge{opacity:0;transform:translateY(12px);pointer-events:none}
-.fab:focus-visible{border-radius:999px}
 .support.flash{animation:flash 1.2s ease}
 @keyframes flash{0%,100%{box-shadow:0 0 0 1px var(--faint) inset}30%{box-shadow:0 0 0 2px var(--parch) inset}}
 /* ---------- compte : synchro des sauvegardes ---------- */
@@ -344,7 +349,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   <header>
     <a class="mark" href="./" data-i18n-aria="home" aria-label="Keismey Studio, accueil">
       <img src="icons/icon-192.png" alt="" width="36" height="36">
-      <span>Keismey Studio<small id="count"></small></span>
+      <span>Keismey Studio <i class="lab">Labo</i><small id="count"></small></span>
     </a>
     <div class="grow"></div>
     <button class="install" id="install" data-i18n="install" hidden>Installer</button>
@@ -366,7 +371,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     </div>
   </header>
 
-  <h1 class="pitch" data-i18n="siteTitle">Des jeux gratuits et sans pub, à jouer dans ton navigateur.</h1>
+  <h1 class="pitch" data-i18n="siteTitle">Joue avant tout le monde. Ton avis décide de la suite.</h1>
   <section class="intro" id="intro" aria-roledescription="carousel" data-i18n-aria="introLabel" aria-label="Présentation du studio">
     <div class="slides" id="slides" tabindex="0"></div>
     <div class="dots" id="dots" role="group"></div>
@@ -406,8 +411,8 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   </section>
 
   <section class="support" aria-labelledby="support-title">
-    <h2 id="support-title" data-i18n="supTitle">Gratuit, sans pub</h2>
-    <p data-i18n="supText">Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.</p>
+    <h2 id="support-title" data-i18n="supTitle">Soutenir le labo</h2>
+    <p data-i18n="supText">Le labo reste gratuit et sans pub. Si tu veux aider à faire sortir plus de jeux, c'est ici.</p>
     <a class="kofi" href="https://ko-fi.com/keismey" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="currentColor"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3.5c0 1 1 1 1 2M11.5 3.5c0 1 1 1 1 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
       <span data-i18n="supBtn">Soutenir sur Ko-fi</span>
@@ -417,7 +422,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
 
   <section class="contact" aria-labelledby="contact-title">
     <h2 id="contact-title" data-i18n="ctTitle">Un avis, un bug, une idée&nbsp;?</h2>
-    <p data-i18n="ctText">Je lis tous les messages. C'est grâce à tes retours que les jeux s'améliorent.</p>
+    <p data-i18n="ctText">Je lis tous les messages. Ton avis compte vraiment : c'est lui qui décide quels jeux partent sur le Play Store.</p>
     <div class="row">
       <button type="button" class="btn solid" id="open-form">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -495,10 +500,6 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     </div>
   </dialog>
 
-  <button type="button" class="fab off" id="fab" aria-controls="support-title">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h12v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z" fill="currentColor"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 3.5c0 1 1 1 1 2M11.5 3.5c0 1 1 1 1 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    <span data-i18n="fab">Soutenir</span>
-  </button>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -534,11 +535,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   const STR = {
     fr: {
       home: 'Keismey Studio, accueil', lang: 'Langue', install: 'Installer',
-      siteTitle: 'Des jeux gratuits et sans pub, à jouer dans ton navigateur.', introLabel: 'Présentation du studio',
+      siteTitle: 'Joue avant tout le monde. Ton avis décide de la suite.', introLabel: 'Présentation du labo',
       s1Title: 'À quoi on joue\u00a0?',
       s1Text: "Pêche de nuit, chasse aux monstres, arène de gladiateurs, forge, taverne… Choisis selon ton humeur. Tes favoris restent en haut et ta progression t'attend sur chaque carte.",
-      s2Title: 'Qui je suis\u00a0?',
-      s2Text: "Un studio d'une seule personne\u00a0: j'imagine les jeux, je les teste, et je les construis avec l'aide de l'IA. Gratuits, sans pub, faits pour tenir dans une poche.",
+      s2Title: 'Comment ça marche\u00a0?',
+      s2Text: "Chaque jeu sort d'abord ici, en test, gratuit et sans pub. Tu joues, tu votes et tu me dis ce qui coince. Ceux que vous préférez partent sur le Play Store. Derrière le labo, un studio d'une seule personne, aidé par l'IA.",
       newsTitle: 'Quoi de neuf\u00a0?', newsGo: 'Voir',
       tipTitle: 'Dans ta poche',
       tipText: "Installe le hub sur ton écran d'accueil\u00a0: la plupart des jeux se lancent même sans réseau, et tes parties restent sur ton appareil.",
@@ -547,7 +548,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
       foot: "Les jeux s'ouvrent dans le hub. Dans un jeu, le bouton retour revient au menu précédent ; depuis l'écran titre, il te ramène ici.",
       privacy: "Mesure d'audience anonyme (Cloudflare), sans cookie.",
-      supTitle: 'Gratuit, sans pub', supBtn: 'Soutenir sur Ko-fi', fab: 'Soutenir',
+      supTitle: 'Soutenir le labo', supBtn: 'Soutenir sur Ko-fi',
       favFilter: 'Favoris', favAdd: n => 'Ajouter ' + n + ' aux favoris', favRemove: n => 'Retirer ' + n + ' des favoris',
       favEmpty: "Aucun favori pour l'instant. Touche l'étoile d'un jeu pour le retrouver ici, toujours en haut de la liste.",
       bellOff: 'Me prévenir', bellOn: 'Alertes activées', bellWord: 'Alertes', accWord: 'Compte',
@@ -557,9 +558,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       notifOnOpen: "C'est noté. Installe le hub pour être prévenu même quand il est fermé ; sinon, les alertes arrivent à l'ouverture du hub.",
       notifOff: 'Alertes coupées.',
       notifBlocked: 'Les notifications sont bloquées pour ce site. Autorise-les dans les réglages du navigateur, puis réessaie.',
-      supText: "Tous les jeux sont gratuits et le resteront. Si l'un d'eux t'a fait passer un bon moment, tu peux soutenir la suite.",
+      supText: "Le labo reste gratuit et sans pub. Si tu veux aider à faire sortir plus de jeux, c'est ici.",
       supAi: "Jeux imaginés et testés par moi, réalisés avec l'aide de l'IA.",
-      ctTitle: 'Un avis, un bug, une idée ?', ctText: "Je lis tous les messages. C'est grâce à tes retours que les jeux s'améliorent.",
+      voteQ: 'Mérite le Play Store\u00a0?', voteUp: 'Oui, il mérite le Play Store', voteDown: 'Pas encore', voteAvis: 'Donner mon avis',
+      voteErr: "Le vote n'est pas passé. Vérifie ta connexion et réessaie.",
+      ctTitle: 'Un avis, un bug, une idée ?', ctText: "Je lis tous les messages. Ton avis compte vraiment : c'est lui qui décide quels jeux partent sur le Play Store.",
       ctBtn: 'Écrire au studio', ctX: 'Suivre sur X', ctThreads: 'Suivre sur Threads',
       fmTitle: 'Écrire au studio', fmClose: 'Fermer', fmType: 'Type de message', fmSubject: 'Titre', fmBody: 'Message',
       tFeedback: "Retour d'expérience", tBug: 'Bug', tRequest: "Demande d'ajout", tIdea: 'Idée de jeu', tOther: 'Autre',
@@ -598,11 +601,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
     },
     en: {
       home: 'Keismey Studio, home', lang: 'Language', install: 'Install',
-      siteTitle: 'Free games with no ads, to play right in your browser.', introLabel: 'About the studio',
+      siteTitle: 'Play before anyone else. Your feedback decides what\'s next.', introLabel: 'About the lab',
       s1Title: 'What are we playing?',
       s1Text: 'Night fishing, monster hunting, a gladiator arena, a forge, a tavern… Pick by mood. Your favorites stay on top and your progress waits on every card.',
-      s2Title: 'Who am I?',
-      s2Text: 'A one-person studio: I come up with the games, I playtest them, and I build them with the help of AI. Free, ad-free, made to fit in a pocket.',
+      s2Title: 'How does it work?',
+      s2Text: 'Every game comes out here first, in testing, free and ad-free. You play, you vote and you tell me what feels off. The ones you like best move on to the Play Store. Behind the lab: a one-person studio, helped by AI.',
       newsTitle: "What's new?", newsGo: 'See',
       tipTitle: 'In your pocket',
       tipText: 'Add the hub to your home screen: most games start even without a connection, and your saves stay on your device.',
@@ -611,7 +614,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
       foot: "Games open inside the hub. In a game, the back button returns to the previous menu; from the title screen, it brings you back here.",
       privacy: 'Anonymous visit statistics (Cloudflare), no cookies.',
-      supTitle: 'Free, no ads', supBtn: 'Support me on Ko-fi', fab: 'Support',
+      supTitle: 'Support the lab', supBtn: 'Support me on Ko-fi',
       favFilter: 'Favorites', favAdd: n => 'Add ' + n + ' to favorites', favRemove: n => 'Remove ' + n + ' from favorites',
       favEmpty: 'No favorites yet. Tap the star on a game to keep it here, always at the top of the list.',
       bellOff: 'Notify me', bellOn: 'Alerts on', bellWord: 'Alerts', accWord: 'Account',
@@ -621,9 +624,11 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       notifOnOpen: 'Done. Install the hub to be notified even when it is closed; otherwise alerts show up when you open the hub.',
       notifOff: 'Alerts turned off.',
       notifBlocked: 'Notifications are blocked for this site. Allow them in your browser settings, then try again.',
-      supText: 'Every game is free and will stay that way. If one of them gave you a good time, you can help fund the next ones.',
+      supText: 'The lab stays free and ad-free. If you want to help more games make it out, this is the place.',
       supAi: 'Games designed and tested by me, built with the help of AI.',
-      ctTitle: 'Feedback, a bug, an idea?', ctText: 'I read every message. Your feedback is what makes the games better.',
+      voteQ: 'Ready for the Play Store?', voteUp: 'Yes, it deserves the Play Store', voteDown: 'Not yet', voteAvis: 'Give feedback',
+      voteErr: "Your vote didn't go through. Check your connection and try again.",
+      ctTitle: 'Feedback, a bug, an idea?', ctText: 'I read every message. Your feedback really counts: it decides which games move on to the Play Store.',
       ctBtn: 'Write to the studio', ctX: 'Follow on X', ctThreads: 'Follow on Threads',
       fmTitle: 'Write to the studio', fmClose: 'Close', fmType: 'Message type', fmSubject: 'Title', fmBody: 'Message',
       tFeedback: 'Feedback', tBug: 'Bug', tRequest: 'Feature request', tIdea: 'Game idea', tOther: 'Other',
@@ -791,6 +796,41 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   const starIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>';
   const playIcon = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>';
 
+  /* ---------- vote du labo « mérite le Play Store ? » : une voix par appareil, sans compte ---------- */
+  const VOTE_API = 'https://ks-sync.keismeystudio.workers.dev/v1/';
+  let votes = null;   // { counts: { jeu: { up, down } }, mine: { jeu: 1 | -1 } } une fois chargé
+  const voterId = (() => {
+    try {
+      let v = localStorage.getItem('ks-voter');
+      if (!/^[a-f0-9]{32}$/.test(v || '')) {
+        v = [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, '0')).join('');
+        localStorage.setItem('ks-voter', v);
+      }
+      return v;
+    } catch (e) { return null; }
+  })();
+  function votePost(jeu, v) {
+    const body = jeu ? { voter: voterId, jeu, v } : { voter: voterId };
+    return fetch(VOTE_API + (jeu ? 'vote' : 'vote/list'), { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(body), credentials: 'omit' })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(j => {
+        const counts = {}, mine = {};
+        (j.counts || []).forEach(c => { counts[c.jeu] = { up: c.up || 0, down: c.down || 0 }; });
+        (j.mine || []).forEach(c => { mine[c.jeu] = c.v; });
+        votes = { counts, mine };
+      });
+  }
+  function voteHtml(g, t, name) {
+    if (!voterId) return '';
+    const c = (votes && votes.counts[g.id]) || { up: 0, down: 0 }, my = votes && votes.mine[g.id];
+    const avis = '<button type="button" class="avis" data-avis="' + esc(name) + '">' + t.voteAvis + '</button></div>';
+    if (!votes) return '<div class="vote">' + avis;   // serveur injoignable : seulement le lien d'avis
+    return '<div class="vote" role="group" aria-label="' + esc(t.voteQ + t.sep + name) + '"><span class="q" aria-hidden="true">' + t.voteQ + '</span>' +
+      '<button type="button" class="vb" data-vote="' + esc(g.id) + '" data-v="1" aria-pressed="' + (my === 1) + '" aria-label="' + esc(t.voteUp) + '"><span aria-hidden="true">👍</span><span>' + c.up + '</span></button>' +
+      '<button type="button" class="vb" data-vote="' + esc(g.id) + '" data-v="-1" aria-pressed="' + (my === -1) + '" aria-label="' + esc(t.voteDown) + '"><span aria-hidden="true">👎</span><span>' + c.down + '</span></button>' +
+      avis;
+  }
+
   function card(g, pushedAt) {
     const t = T();
     const L = (lang === 'en' && g.en) || {};
@@ -824,7 +864,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       '<div class="actions">' +
         '<a class="play" data-launch="' + esc(g.id) + '" href="' + esc(path) + '" aria-label="' + esc(cta + t.sep + pick('name')) + '">' + playIcon + '<span class="lbl">' + cta + '</span></a>' + starBtn + extra +
         (pushedAt ? '<p class="updated">' + t.updated + ago(pushedAt) + '</p>' : '') +
-      '</div>' +
+      '</div>' + voteHtml(g, t, pick('name')) +
     '</article>';
   }
 
@@ -951,40 +991,6 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   // retour depuis un jeu : rafraîchir la progression
   addEventListener('pageshow', e => { if (e.persisted) render(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
-
-  /* ---------- bouton flottant « Soutenir » : visible tant que l'encart Ko-fi n'est pas à l'écran ---------- */
-  const fab = $('#fab'), support = document.querySelector('.support');
-  if (fab && support) {
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(es => es.forEach(e => fab.classList.toggle('off', e.isIntersecting)), { threshold: 0.15 }).observe(support);
-    } else fab.classList.remove('off');
-    // il s'efface tant qu'un bouton ou un lien passe dessous (Jouer d'une carte, langue, liens du bas)
-    let raf = 0;
-    const dodge = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        if (fab.classList.contains('off')) return;
-        const f = fab.getBoundingClientRect(), m = 6;
-        const hit = [...document.querySelectorAll('a[href],button,iframe,input,select,textarea')].some(el => {
-          if (el === fab || fab.contains(el)) return false;
-          // seulement si le bouton disparaît en bonne partie : une grande image reste facile à toucher
-          const r = el.getBoundingClientRect();
-          const w = Math.min(r.right, f.right + m) - Math.max(r.left, f.left - m), h = Math.min(r.bottom, f.bottom + m) - Math.max(r.top, f.top - m);
-          return w > 0 && h > 0 && w * h > 0.2 * r.width * r.height;
-        });
-        fab.classList.toggle('dodge', hit);
-      });
-    };
-    addEventListener('scroll', dodge, { passive: true });
-    addEventListener('resize', dodge);
-    new MutationObserver(dodge).observe(fab, { attributes: true, attributeFilter: ['class'] });
-    fab.addEventListener('click', () => {
-      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      support.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'center' });
-      support.classList.remove('flash'); void support.offsetWidth; support.classList.add('flash');
-      setTimeout(() => support.querySelector('.kofi').focus({ preventScroll: true }), calm ? 0 : 500);
-    });
-  }
 
   /* ---------- alertes : nouveaux jeux et grosses mises à jour ----------
      Notifications push : le navigateur donne une adresse d'abonnement, gardée par le serveur ks-sync
@@ -1274,6 +1280,26 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   }
   function closeForm() { if (dlg.close) dlg.close(); else dlg.removeAttribute('open'); }
   $('#open-form').addEventListener('click', openForm);
+  // vote du labo et « Donner mon avis » sur chaque carte
+  if (voterId) votePost().then(() => { lastHtml = ''; render(); }).catch(() => {});
+  document.addEventListener('click', e => {
+    const av = e.target.closest('[data-avis]');
+    if (av) {
+      openForm();
+      $('#fm-type').value = "Retour d'expérience";
+      $('#fm-subject').value = av.dataset.avis + ' : ';
+      return;
+    }
+    const b = e.target.closest('button[data-vote]');
+    if (!b || b.disabled) return;
+    const jeu = b.dataset.vote, v = b.getAttribute('aria-pressed') === 'true' ? 0 : +b.dataset.v;
+    b.disabled = true;
+    votePost(jeu, v).then(() => {
+      lastHtml = ''; render();
+      const nb = document.querySelector('button[data-vote="' + jeu + '"][data-v="' + b.dataset.v + '"]');
+      if (nb) nb.focus({ preventScroll: true });
+    }).catch(() => { b.disabled = false; toast(T().voteErr); });
+  });
   // lien « Signaler un bug » des jeux : /?contact=bug&jeu=Nom du jeu → formulaire prérempli
   (() => {
     let q; try { q = new URLSearchParams(location.search); } catch (e) { return; }
