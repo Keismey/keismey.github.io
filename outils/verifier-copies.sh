@@ -20,6 +20,7 @@ Le-Necromancien-de-la-Crypte js/
 Le-Cartographe src/
 Lanterval commun/
 Pico-Clinic commun/
+Souquez
 "
 ecarts=0
 while read -r depot dossier; do

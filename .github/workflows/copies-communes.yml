@@ -1,4 +1,4 @@
-# Vérifie chaque lundi que les 13 jeux ont la même copie de ks-back.js et ks-studio.js que le hub.
+# Vérifie chaque lundi que les 14 jeux ont la même copie de ks-back.js et ks-studio.js que le hub.
 # En cas d'écart, la vérification échoue et GitHub envoie un e-mail. Détail : outils/verifier-copies.sh
 name: Copies communes
 on:

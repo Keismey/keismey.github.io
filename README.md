@@ -40,7 +40,7 @@ Lien direct vers la fiche d'un jeu dans le hub : `https://keismey.github.io/#<id
 ## Fichiers communs aux jeux
 
 `ks-back.js` et `ks-studio.js` sont recopiés tels quels dans chaque jeu. On les modifie ici, dans le hub, puis on
-recopie. Chaque lundi, GitHub vérifie que les 13 copies sont identiques à celles du hub
+recopie. Chaque lundi, GitHub vérifie que les 14 copies sont identiques à celles du hub
 (`outils/verifier-copies.sh`) et envoie un e-mail si l'une a changé.
 
 ## Fichiers
