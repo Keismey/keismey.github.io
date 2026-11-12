@@ -133,7 +133,7 @@ window.GAMES = [
       if (!s) return null;
       const en = lang === 'en', out = [];
       const n = s.cleared ? Object.keys(s.cleared).filter(k => s.cleared[k]).length : 0;
-      out.push((en ? 'Sectors ' : 'Secteurs ') + n + '/5');
+      out.push((en ? 'Sectors ' : 'Secteurs ') + n + '/7');
       const best = s.arena ? Math.max(s.arena.bestC || 0, s.arena.bestA || 0, s.arena.best || 0) : 0;
       if (best) out.push((en ? 'Record ' : 'Record ') + fmt(best, lang));
       return out;
