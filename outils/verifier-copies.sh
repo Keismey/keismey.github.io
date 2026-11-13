@@ -10,7 +10,6 @@ JEUX="
 Abysses
 Les-Chasseurs-de-Brume-Haute
 legion-eternelle
-Oxyblox src/
 Baffus-Maximus
 Paper-Sniper src/
 La-Derniere-Forge
