@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Confidentialité · Pico-Clinic</title>
-<meta name="description" content="Pico-Clinic ne collecte aucune donnée personnelle : pas de compte, pas de publicité, pas de mesure d'audience.">
+<meta name="description" content="Pico-Clinic : le studio ne reçoit aucune donnée sur toi. Les pubs passent par Google AdMob avec ton consentement, l'achat « Sans pubs » par Google Play, les succès et la sauvegarde cloud par Google Play Jeux.">
 <link rel="canonical" href="https://keismey.github.io/confidentialite-pico-clinic.html">
 <meta name="theme-color" content="#10181b">
 <link rel="icon" href="icons/favicon.png" type="image/png">
@@ -52,9 +52,9 @@ a:focus-visible{outline:3px solid var(--parch);outline-offset:3px;border-radius:
 
   <main lang="fr" data-l="fr">
     <h1>Confidentialité · Pico-Clinic</h1>
-    <p class="date">Mise à jour le 3 novembre 2026</p>
+    <p class="date">Mise à jour le 23 novembre 2026 (version 1.1)</p>
     <div class="box">
-      <p><b>En bref :</b> l'application Pico-Clinic (Android) ne collecte aucune donnée personnelle. Pas de compte, pas de publicité, pas de mesure d'audience, aucun envoi de données au studio. Ta progression reste sur ton téléphone.</p>
+      <p><b>En bref :</b> l'application Pico-Clinic (Android) ne te demande aucun compte et le studio ne reçoit aucune donnée sur toi. Ta progression reste sur ton téléphone. Depuis la version 1.1, trois services de Google traitent certaines données : les publicités (Google AdMob), l'achat « Sans pubs » (Google Play) et, si tu t'y connectes, Google Play Jeux (succès et sauvegarde dans le cloud).</p>
     </div>
 
     <h2>Qui est responsable</h2>
@@ -72,21 +72,47 @@ a:focus-visible{outline:3px solid var(--parch);outline-offset:3px;border-radius:
     <h2>Partage du défi du jour</h2>
     <p>Si tu appuies sur « Partager mon résultat », un texte (date, médaille, étoiles, temps, lien du jeu) est transmis à l'application que tu choisis, par exemple une messagerie. Rien n'est envoyé au studio.</p>
 
-    <h2>Réseau et autorisations</h2>
-    <p>L'application fonctionne entièrement hors ligne et n'envoie aucune donnée sur Internet. Elle ne demande aucune autorisation sensible (position, contacts, micro, appareil photo, photos) : seulement la vibration, pour le réglage « Vibrations ».</p>
+    <h2>Publicités (Google AdMob)</h2>
+    <p>Le jeu est gratuit grâce à une publicité plein écran de temps en temps : aucune avant le rang 2, puis au plus une toutes les trois réparations réussies, jamais deux à moins de trois minutes d'écart, et jamais pendant une réparation.</p>
+    <p>Ces pubs sont fournies par <b>Google AdMob</b> (Google Ireland Limited / Google LLC). Pour afficher une pub, mesurer son affichage et lutter contre la fraude, le kit AdMob intégré à l'application collecte automatiquement et transmet à Google :</p>
+    <ul>
+      <li>l'<b>adresse IP</b> de ton téléphone, qui peut servir à estimer ta position approximative (pays, région) ;</li>
+      <li>des <b>interactions avec l'application</b> : lancement, pubs affichées et touchées ;</li>
+      <li>des <b>données de diagnostic</b> : temps de lancement, blocages, consommation d'énergie de l'application et du kit ;</li>
+      <li>des <b>identifiants de l'appareil</b> : l'identifiant publicitaire Android et l'identifiant App Set.</li>
+    </ul>
+    <p>Ces données sont chiffrées pendant leur transfert. Elles sont traitées par Google selon ses propres règles : <a href="https://policies.google.com/technologies/partner-sites">comment Google utilise les données des applications partenaires</a> et <a href="https://policies.google.com/privacy">règles de confidentialité de Google</a>. Le studio ne les reçoit pas : il ne voit que des totaux (nombre de pubs affichées, revenus).</p>
 
-    <h2>Publicités et achats</h2>
-    <p>Cette version ne contient ni publicité ni achat intégré. Si cela change dans une version future, cette page sera mise à jour avant la publication de la nouvelle version.</p>
+    <h2>Ton consentement</h2>
+    <p>Si tu es dans l'Espace économique européen, au Royaume-Uni ou en Suisse, l'application te demande ton choix au premier lancement, avec le formulaire de consentement de Google, avant de charger la moindre pub. Tu peux refuser les pubs personnalisées : tu verras alors des pubs non personnalisées. Tu peux changer d'avis quand tu veux avec le bouton « Confidentialité des pubs » des Options (onglet Partie).</p>
+    <p>Dans les réglages d'Android (Google › Annonces, ou Confidentialité › Annonces), tu peux aussi réinitialiser ou supprimer ton identifiant publicitaire.</p>
+
+    <h2>Achat « Sans pubs » (Google Play)</h2>
+    <p>Un achat unique, dans Options › Partie, supprime toutes les pubs pour toujours : l'application ne charge alors plus AdMob. Le paiement est géré entièrement par Google Play : le studio ne voit ni tes coordonnées bancaires ni ton identité. L'application demande seulement à Google Play si l'achat a été fait, pour le retrouver après une réinstallation ou sur un autre téléphone.</p>
+
+    <h2>Google Play Jeux (succès et sauvegarde dans le cloud)</h2>
+    <p>Se connecter à Google Play Jeux est facultatif : le jeu fonctionne entièrement sans. Si tu t'y connectes (Options › Partie) :</p>
+    <ul>
+      <li>les succès que tu gagnes sont envoyés à ton profil Play Jeux ;</li>
+      <li>une copie de ta progression est gardée dans l'espace de ton compte Google réservé aux applications (invisible dans ton Drive), pour la retrouver sur un autre téléphone ou après une réinstallation.</li>
+    </ul>
+    <p>Ces données sont gérées par Google et liées à ton compte : le studio n'y a pas accès. Tu peux les supprimer depuis l'application Google Play Jeux ou dans les paramètres de ton compte Google.</p>
+
+    <h2>Réseau et autorisations</h2>
+    <p>Le jeu se joue hors ligne. Internet ne sert qu'aux pubs, à l'achat « Sans pubs » et à Google Play Jeux. L'application ne demande aucune autorisation sensible (position précise, contacts, micro, appareil photo, photos). Elle utilise l'accès à Internet, l'identifiant publicitaire (pour les pubs), la facturation Google Play (pour l'achat) et la vibration (pour le réglage « Vibrations »).</p>
+
+    <h2>Âge</h2>
+    <p>Pico-Clinic s'adresse aux personnes de 13 ans et plus.</p>
 
     <h2>Tes droits</h2>
-    <p>Le studio ne détenant aucune donnée sur toi, il n'y a rien à consulter ni à supprimer de son côté. Pour toute question, écris au studio avec le formulaire du hub. Si tu estimes que tes droits ne sont pas respectés, tu peux t'adresser à la CNIL (cnil.fr).</p>
+    <p>Le studio ne détenant aucune donnée sur toi, il n'y a rien à consulter ni à supprimer de son côté. Pour les données publicitaires, tu peux retirer ton consentement dans les Options du jeu et gérer ton identifiant publicitaire dans les réglages d'Android ; pour le reste, Google propose ses propres outils (<a href="https://myadcenter.google.com/">Mon centre publicitaire</a>, <a href="https://myaccount.google.com/">ton compte Google</a>). Pour toute question, écris au studio avec le formulaire du hub. Si tu estimes que tes droits ne sont pas respectés, tu peux t'adresser à la CNIL (cnil.fr).</p>
   </main>
 
   <main lang="en" data-l="en" hidden>
     <h1>Privacy · Pico-Clinic</h1>
-    <p class="date">Updated 3 November 2026</p>
+    <p class="date">Updated 23 November 2026 (version 1.1)</p>
     <div class="box">
-      <p><b>In short:</b> the Pico-Clinic app (Android) collects no personal data. No account, no ads, no analytics, nothing is sent to the studio. Your progress stays on your phone.</p>
+      <p><b>In short:</b> the Pico-Clinic app (Android) asks for no account and the studio receives no data about you. Your progress stays on your phone. Since version 1.1, three Google services process some data: ads (Google AdMob), the “No ads” purchase (Google Play) and, if you sign in, Google Play Games (achievements and cloud save).</p>
     </div>
 
     <h2>Who is responsible</h2>
@@ -104,14 +130,40 @@ a:focus-visible{outline:3px solid var(--parch);outline-offset:3px;border-radius:
     <h2>Sharing the daily challenge</h2>
     <p>If you tap “Share my result”, a text (date, medal, stars, time, game link) is handed to the app you choose, for example a messaging app. Nothing is sent to the studio.</p>
 
-    <h2>Network and permissions</h2>
-    <p>The app works entirely offline and sends no data over the Internet. It asks for no sensitive permission (location, contacts, microphone, camera, photos): only vibration, for the “Vibrations” setting.</p>
+    <h2>Ads (Google AdMob)</h2>
+    <p>The game is free thanks to a full-screen ad now and then: none before rank 2, then at most one every three successful repairs, never two less than three minutes apart, and never during a repair.</p>
+    <p>These ads are provided by <b>Google AdMob</b> (Google Ireland Limited / Google LLC). To show an ad, measure it and prevent fraud, the AdMob kit built into the app automatically collects and sends to Google:</p>
+    <ul>
+      <li>your phone's <b>IP address</b>, which may be used to estimate your approximate location (country, region);</li>
+      <li><b>app interactions</b>: app launch, ads shown and tapped;</li>
+      <li><b>diagnostic data</b>: launch time, hangs, energy use of the app and the kit;</li>
+      <li><b>device identifiers</b>: the Android advertising ID and the app set ID.</li>
+    </ul>
+    <p>This data is encrypted in transit. Google processes it under its own policies: <a href="https://policies.google.com/technologies/partner-sites">how Google uses information from partner apps</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. The studio does not receive it: it only sees totals (number of ads shown, revenue).</p>
 
-    <h2>Ads and purchases</h2>
-    <p>This version contains no ads and no in-app purchases. If that changes in a future version, this page will be updated before the new version is published.</p>
+    <h2>Your consent</h2>
+    <p>If you are in the European Economic Area, the United Kingdom or Switzerland, the app asks for your choice on first launch, with Google's consent form, before loading any ad. You can refuse personalised ads: you will then see non-personalised ads. You can change your mind at any time with the “Ad privacy choices” button in Options (Save tab).</p>
+    <p>In Android's settings (Google › Ads, or Privacy › Ads), you can also reset or delete your advertising ID.</p>
+
+    <h2>“No ads” purchase (Google Play)</h2>
+    <p>A one-time purchase, in Options › Save, removes all ads for good: the app then no longer loads AdMob. Payment is handled entirely by Google Play: the studio sees neither your payment details nor your identity. The app only asks Google Play whether the purchase was made, to restore it after a reinstall or on another phone.</p>
+
+    <h2>Google Play Games (achievements and cloud save)</h2>
+    <p>Signing in to Google Play Games is optional: the game works fully without it. If you sign in (Options › Save):</p>
+    <ul>
+      <li>the achievements you earn are sent to your Play Games profile;</li>
+      <li>a copy of your progress is kept in your Google account's app-only storage (not visible in your Drive), so you can get it back on another phone or after a reinstall.</li>
+    </ul>
+    <p>This data is managed by Google and tied to your account: the studio has no access to it. You can delete it from the Google Play Games app or in your Google account settings.</p>
+
+    <h2>Network and permissions</h2>
+    <p>The game plays offline. The Internet is only used for ads, the “No ads” purchase and Google Play Games. The app asks for no sensitive permission (precise location, contacts, microphone, camera, photos). It uses Internet access, the advertising ID (for ads), Google Play billing (for the purchase) and vibration (for the “Vibrations” setting).</p>
+
+    <h2>Age</h2>
+    <p>Pico-Clinic is meant for people aged 13 and over.</p>
 
     <h2>Your rights</h2>
-    <p>Since the studio holds no data about you, there is nothing to access or delete on its side. For any question, write to the studio using the hub form. If you believe your rights are not respected, you can contact your data protection authority (in France, the CNIL: cnil.fr).</p>
+    <p>Since the studio holds no data about you, there is nothing to access or delete on its side. For ad data, you can withdraw your consent in the game's Options and manage your advertising ID in Android's settings; for the rest, Google provides its own tools (<a href="https://myadcenter.google.com/">My Ad Center</a>, <a href="https://myaccount.google.com/">your Google account</a>). For any question, write to the studio using the hub form. If you believe your rights are not respected, you can contact your data protection authority (in France, the CNIL: cnil.fr).</p>
   </main>
 </div>
 <script>
