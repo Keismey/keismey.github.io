@@ -247,6 +247,20 @@ header .grow{flex:1}
 .support small{color:var(--muted);font-size:.8125rem}
 .support.flash{animation:flash 1.2s ease}
 @keyframes flash{0%,100%{box-shadow:0 0 0 1px var(--faint) inset}30%{box-shadow:0 0 0 2px var(--parch) inset}}
+/* ---------- sortis sur le Play Store ---------- */
+.store{margin-top:56px;display:grid;gap:12px}
+.store h2{margin:0;font:700 1.5rem/1.15 var(--serif)}
+.store>p{margin:0;color:var(--muted);max-width:46ch}
+.store ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.store li{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;padding:10px 12px 10px 18px;
+  border-radius:18px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset}
+.store b{font:700 1.125rem/1.2 var(--serif)}
+.store .gp{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:999px;flex-shrink:0;
+  background:var(--parch);color:var(--ink);text-decoration:none;font:700 .9375rem/1 var(--sans)}
+.store .gp svg{width:18px;height:18px}
+.store .gp:active{transform:scale(.97)}
+.store .soon{flex-shrink:0;padding:8px 14px;border-radius:999px;box-shadow:0 0 0 1px var(--faint) inset;color:var(--muted);font:600 .875rem/1 var(--sans)}
+.store + .account:not([hidden]){margin-top:18px}
 /* ---------- compte : synchro des sauvegardes ---------- */
 .account{margin-top:56px;padding:22px 20px;border-radius:22px;background:rgba(0,0,0,.24);box-shadow:0 0 0 1px var(--faint) inset;
   display:grid;gap:14px;justify-items:start}
@@ -386,6 +400,15 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
   </div>
 
   <main class="games enter" id="games"></main>
+
+  <section class="store" id="store" aria-labelledby="store-title">
+    <h2 id="store-title" data-i18n="stTitle">Sortis sur le Play Store</h2>
+    <p data-i18n="stText">Ces jeux sont passés par le labo. Ils l'ont quitté pour vivre sur Android.</p>
+    <ul>
+      <li><b>Pico-Clinic</b><span class="soon" data-i18n="stSoon">Bientôt</span></li>
+      <li><b>Oxyblox</b><span class="soon" data-i18n="stSoon">Bientôt</span></li>
+    </ul>
+  </section>
 
   <section class="account" id="account" aria-labelledby="acc-title" hidden>
     <h2 id="acc-title" data-i18n="accTitle">Tes parties sur tous tes appareils</h2>
@@ -548,6 +571,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       ios: "Sur iPhone : touche Partager puis « Sur l'écran d'accueil » pour installer le hub.",
       foot: "Les jeux s'ouvrent dans le hub. Dans un jeu, le bouton retour revient au menu précédent ; depuis l'écran titre, il te ramène ici.",
       privacy: "Mesure d'audience anonyme (Cloudflare), sans cookie.",
+      stTitle: 'Sortis sur le Play Store', stText: 'Ces jeux sont passés par le labo. Ils l'ont quitté pour vivre sur Android.', stSoon: 'Bientôt', stGet: 'Voir sur Google Play',
       supTitle: 'Soutenir le labo', supBtn: 'Soutenir sur Ko-fi',
       favFilter: 'Favoris', favAdd: n => 'Ajouter ' + n + ' aux favoris', favRemove: n => 'Retirer ' + n + ' des favoris',
       favEmpty: "Aucun favori pour l'instant. Touche l'étoile d'un jeu pour le retrouver ici, toujours en haut de la liste.",
@@ -614,6 +638,7 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--parch);outline-offs
       ios: 'On iPhone: tap Share, then “Add to Home Screen” to install the hub.',
       foot: "Games open inside the hub. In a game, the back button returns to the previous menu; from the title screen, it brings you back here.",
       privacy: 'Anonymous visit statistics (Cloudflare), no cookies.',
+      stTitle: 'Out on the Play Store', stText: 'These games went through the lab. They left it to live on Android.', stSoon: 'Coming soon', stGet: 'Get it on Google Play',
       supTitle: 'Support the lab', supBtn: 'Support me on Ko-fi',
       favFilter: 'Favorites', favAdd: n => 'Add ' + n + ' to favorites', favRemove: n => 'Remove ' + n + ' from favorites',
       favEmpty: 'No favorites yet. Tap the star on a game to keep it here, always at the top of the list.',
