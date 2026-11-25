@@ -17,7 +17,6 @@ Pas-ce-soir
 Last-Loop js/
 Le-Necromancien-de-la-Crypte js/
 Le-Cartographe src/
-Lanterval commun/
 Pico-Clinic commun/
 Souquez
 "
